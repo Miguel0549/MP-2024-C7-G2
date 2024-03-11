@@ -10,7 +10,7 @@ typedef struct {
     int id_cliente;          // 7 digitos
     char lugar_entrega[9];   // Domicilio o Locker
     char id_locker[10];      // Lock###
-    char id_cod[10];
+    char id_cod_prom[10];
 
 }Pedido;
 
