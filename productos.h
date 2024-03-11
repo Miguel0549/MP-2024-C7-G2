@@ -2,7 +2,6 @@
 #define PRODUCTOS_H
 #define F_PRODUCTO "Productos.txt"
 #define F_CATEGORIAS "Categorias.txt"
-#include <stdio.h>
 typedef struct {
     char[51] descrip;
     int id_prod,id_gestor,id_categ,stock,entrega,importe;
