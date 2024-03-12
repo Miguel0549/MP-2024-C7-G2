@@ -19,7 +19,7 @@ typedef struct descuentos
 typedef struct descuentos_clientes
 {
     char Id_cliente[7],Id_cod[10], 
-    f_asignacion[11], f_caducidad[11];
+    f_asignacion[11], f_caducidad[11]; //por comodidad las fechas serán del tipo "00/00/0000\0" que posteriormente será pasada al tipo fecha
     opciones Estado; //si para aplicado y no en caso contrario
 }Descuentos_clientes;
 

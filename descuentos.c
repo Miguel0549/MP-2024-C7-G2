@@ -67,4 +67,7 @@ fecha fecha_actual()
 /*POR HACER 
     Función que compare fechas(para comparar la caducidad de los descuentos)
     Función que inicialice cada uno de los tipos(2) 
-    Función */
+    Función que convierta de cadena de 11 carácteres al tipo fecha para poder compararlo con la actual y a la inversa
+    Función que compruebe si el descuento está vigente
+    --más funciones en adelante--
+*/
