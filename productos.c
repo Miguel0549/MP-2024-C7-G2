@@ -1,7 +1,7 @@
 #include "productos.h"
 #include <string.h>
 #include <stdio.h>
-void escritura_producto(producto *p)
+void alta_producto()//Por hacer
 {
     FILE *f;
     char nulo='\n';
@@ -10,7 +10,7 @@ void escritura_producto(producto *p)
         id=buscar_id(f,&nulo);
     }
 }
-int buscar_id(FILE *f,char *n)
+int buscar_id(FILE *f,char *n)//Posible error, necesita ser probado
 {
     char d[51];
     char i;
@@ -32,6 +32,7 @@ int buscar_id(FILE *f,char *n)
         }while(i!='-'||i!='\n'||i!=EOF);
         d[j-1]='\0';
 
-    }while(strcmp(n,d)!=0);//comparacion
+    }while(strcmp(n,d)!=0);//comparacion de cadena actual con la cadena introducida
+    fclose(f);
     return id;
 }
