@@ -28,4 +28,9 @@ typedef struct {
 
 
 
+
+void carga_lockers( Locker **lock ,int *);
+
+
+
 #endif //PROYECTO_MP_LOCKERS_H
