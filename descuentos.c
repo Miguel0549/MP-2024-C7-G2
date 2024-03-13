@@ -15,6 +15,7 @@ void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
+
 crear_fichero_descuentos;
 crear_fichero_descuentos_clientes;
 return 0;
@@ -33,13 +34,13 @@ void crear_fichero_descuentos()
 }
 //cabecera: crear_fichero_descuentos_clientes()
 //preconción: ninguna
-//postconción: crea el fichero descuentos
+//postconción: crea el fichero descuentos_clientes
 void crear_fichero_descuentos_clientes()
 {
-    FILE* f;
-    if ((f = fopen("../Descuentos/descuentos_clientes.txt", "w")) == NULL)
+    FILE* f2;
+    if ((f2 = fopen("../Descuentos/descuentos_clientes.txt", "w")) == NULL)
         printf("Error al abrir el archivo\n");
-    fclose(f);
+    fclose(f2);
 }
 
 
