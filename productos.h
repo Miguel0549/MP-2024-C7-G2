@@ -2,13 +2,14 @@
 #define PRODUCTOS_H
 #define F_PRODUCTO "Productos.txt"
 #define F_CATEGORIAS "Categorias.txt"
+#include <stdio.h>
 typedef struct {
-    char[51] descrip;
+    char descrip[51];
     int id_prod,id_gestor,id_categ,stock,entrega,importe;
 }producto;
 typedef struct {
     int id_cat;
-    char[51] descrip;
+    char descrip[51];
 }categoria;
 
 //void escritura_producto(producto *p)
@@ -19,5 +20,6 @@ void escritura_producto(producto *);
 //int buscar_id (FILE *f,char *n)
 //Precondicion: f debe ser F_PRODUCTO o F_CATEGORIAS y estar abierto para lectura
 //poscondicion: Devuelve la id de n dentro del fichero
-int buscar_id (FILE *,char *);
+int buscar_id(FILE *f,char *n);
+
 #endif
