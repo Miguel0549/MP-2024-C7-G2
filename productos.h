@@ -2,6 +2,7 @@
 #define PRODUCTOS_H
 #define F_PRODUCTO "Productos.txt"
 #define F_CATEGORIAS "Categorias.txt"
+#include <stdio.h>
 typedef struct {
     char descrip[51];
     char id_prod[8];
@@ -31,7 +32,7 @@ void mod_prod(producto);
 //Cabecera: int buscar_id (FILE *f,char *n)
 //Precondicion: f debe ser F_PRODUCTO o F_CATEGORIAS y estar abierto para lectura
 //poscondicion: Devuelve la id de n dentro del fichero
-int buscar_id(FILE *f,char *n);
+int buscar_id(FILE **f,char *n);
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe seruna cadena ya definida
 //Poscondicion: Escribe por pantalla todos los productos cuya descripcion coincida con nombre
