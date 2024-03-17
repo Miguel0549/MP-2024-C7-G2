@@ -20,4 +20,17 @@ typedef enum {
 }estado;
 
 
+typedef enum{
+
+    cliente,
+    admin,
+    proveedor,
+    transportista,
+
+
+}usu;
+
+
+
+
 #endif //AMAZON_MP_ESTADO_H

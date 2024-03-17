@@ -14,7 +14,7 @@
 void carga_lockers( Locker **lock ,int *n_lock){
 
     int i;
-    char line[LINEA];
+    char line[LINEA]="0";
     char n_comp_t[3]={0},n_comp_ocup[3]={0};
     char *ptr;
 
