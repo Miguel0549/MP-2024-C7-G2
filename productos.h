@@ -9,28 +9,28 @@ typedef struct {
     char id_prod[8];
     char id_gestor[5];
     char id_categ[5];
-    int stock,entrega,importe;
+    int stock,entrega,importe;//Estos valores no pueden tener más de 50 dígitos
 }producto;
 typedef struct {
     char id_cat[5];
     char descrip[51];
 }categoria;
-//Cabecera: void volcar_producto(producto *v)
-//Precondicion: v debe de ser una cadena de tipo producto definida de forma dinámica
-//poscondicion: Vuelca todos la informacion de los productos en el fichero
-void volcar_producto(producto *v);
+//Cabecera: producto * volcar_producto()
+//Precondicion: 
+//poscondicion: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
+producto * volcar_producto();
 //Cabecera: void guardar_producto(producto *v)
 //Precondicion: v debe de ser una cadena de tipo producto definida de forma dinámica
 //Poscondición: Guarda todos los miembros de producto en el fichero "Productos.txt"
 void guardar_producto(producto *v);
-//Cabecera: void guardar_categoria(producto *v)
-//Precondicion: v debe de ser una cadena de tipo categoria definida de forma dinámica
-//Poscondición: Guarda todos los miembros de categoria en el fichero "Productos.txt"
+//Cabecera: categoria * guardar_categoria()
+//Precondicion: 
+//Poscondición: Guarda todos los miembros de categoria en el fichero "Categorias.txt"
 void guardar_categoria(categoria *v);
 //Cabecera: void volcar_categoria(categoria *v)
 //Precondicion: v debe de ser una cadena de tipo categoria definida de forma dinamica
-//Poscondicion: Vuelca toda la informacion de las categorias en el fichero
-void volcar_categoria(categoria *v);
+//Poscondicion: Vuelca toda la informacion de las categorias en el fichero "Categorias.txt", devolviendolo en un array
+categoria * volcar_categoria();
 //Cabecera: void alta_producto(producto p)
 //Precondicion: usuario debe estar definido 
 //Poscondicion: Lee toda los campos de producto por teclado excepto por producto.id_gestor y
@@ -44,10 +44,6 @@ void baja_producto(char *id);
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod
 void mod_prod(producto);
-//Cabecera: int buscar_id (FILE *f,char *n)
-//Precondicion: f debe ser F_PRODUCTO o F_CATEGORIAS y estar abierto para lectura
-//poscondicion: Devuelve la id de n dentro del fichero
-int buscar_id_f(FILE **f,char *n);
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe seruna cadena ya definida
 //Poscondicion: Escribe por pantalla todos los productos cuya descripcion coincida con nombre
