@@ -15,6 +15,7 @@ void carga_lockers( Locker **lock ,int *n_lock){
 
     int i;
     char line[LINEA]="0";
+    char contador_lineas[LINEA]="0";
     char n_comp_t[3]={0},n_comp_ocup[3]={0};
     char *ptr;
 
@@ -28,8 +29,8 @@ void carga_lockers( Locker **lock ,int *n_lock){
 
         while(!feof(f)){
 
-            fgets(line,LINEA,f);
-            n_lock++;
+            fgets(contador_lineas,LINEA,f);
+            (*n_lock)++;
 
         }
 
@@ -46,20 +47,19 @@ void carga_lockers( Locker **lock ,int *n_lock){
 
            fgets(line,LINEA,f);
 
-            sscanf(line, "%[^-]-%[^-]-%[^-]-%[^-]-%[^-]-%[^\n]",
-                   (*lock)[i].id_locker,
-                   (*lock)[i].localidad,
-                   (*lock)[i].provincia,
-                   (*lock)[i].ubicacion,
-                   n_comp_t,
-                   n_comp_ocup);
+           strcpy((*lock)[i].id_locker, strtok(line, "-"));
+           strcpy((*lock)[i].localidad, strtok(NULL, "-"));
+           strcpy((*lock)[i].provincia, strtok(NULL, "-"));
+           strcpy((*lock)[i].ubicacion, strtok(NULL, "-"));
+           strcpy(n_comp_t, strtok(NULL, "-"));
+           strcpy(n_comp_ocup, strtok(NULL, "-"));
 
 
-            (*lock)[i].Num_compT = strtol(n_comp_t, &ptr, 10);
-            (*lock)[i].Num_compOcup = strtol(n_comp_ocup, &ptr, 10);
+           (*lock)[i].Num_compT = strtol(n_comp_t, &ptr, 10);
+           (*lock)[i].Num_compOcup = strtol(n_comp_ocup, &ptr, 10);
 
-            strcpy(n_comp_t,"00");
-            strcpy(n_comp_ocup,"00");
+           strcpy(n_comp_t,"00");
+           strcpy(n_comp_ocup,"00");
 
         }
 

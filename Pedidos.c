@@ -4,6 +4,71 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LINEA 100
+
+void carga_pedidos( Pedido **ped ,int *n_ped){
+
+    int i;
+    char line[LINEA]="0";
+    char contador_lineas[LINEA]="0";
+
+    FILE *f;
+
+    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\Pedidos.txt", "r")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        while(!feof(f)){
+
+            fgets(contador_lineas,LINEA,f);
+            (*n_ped)++;
+
+        }
+
+
+        *ped = (Pedido *)calloc(*n_ped, sizeof(Pedido));
+        if (*ped == NULL) {
+            printf("Error al crear la memoria para los lockers.\n");
+            exit(1);
+        }
+
+        rewind(f);
+
+        for ( i=0 ; i< *n_ped; i++ ) {
+
+            fgets(line,LINEA,f);
+
+            strcpy((*ped)[i].id_pedido, strtok(line, "-"));
+            strcpy((*ped)[i].fecha_ped, strtok(NULL, "-"));
+            strcpy((*ped)[i].id_cliente, strtok(NULL, "-"));
+            strcpy((*ped)[i].lugar_entrega, strtok(NULL, "-"));
+
+            if (strcmp( (*ped)[i].lugar_entrega, "domicilio") == 0 ){
+
+                strcpy((*ped)[i].id_cod_prom, strtok(NULL, "-"));
+
+            }else{
+
+                strcpy((*ped)[i].id_locker, strtok(NULL, "-"));
+
+            }
+
+
+
+        }
+
+        rewind(f);
+        fclose(f);
+
+    }
+
+}
+
+
+
+
 
 void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int *n_prod_ped, char id_cliente[7] ){
 

@@ -45,6 +45,8 @@ typedef struct {
 
 
 
+void carga_pedidos( Pedido **ped ,int *n_ped);
+
 void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int *n_prod_ped, usu tipo_usu );
 
 void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, char id_cliente[7] );
