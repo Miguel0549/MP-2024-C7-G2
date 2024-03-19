@@ -139,9 +139,16 @@ categoria * volcar_categoria()//No Probada todavia
 //Cabecera: static void obtener_dato_f(FILE **f,char *n)
 //Precondicion: El tamaño de n debe ser mayor al dato que se debe introducir, f debe estar abierto en modo lectura y el cursor debe estar situado al principio del dato a leer
 //Poscondicion: Almacena en n los caracteres leidos en f hasta que se encuentre '-' o '\n' o EOF y deja el cursor una posicion despues del dato leido
-static void obtener_dato_f(FILE **f,char *n)
+static void obtener_dato_f(FILE **f,char *n)//Por probar todavia
 {
-
+    int i;
+    char j;
+    for (i=0;(j!='-')&&(j!='\n')&&(j!=EOF)||(i==0);i++)
+    {
+        j=fgetc(*f);
+        n[i]=j;
+    }
+    n[i-1]='\0';
 }
 //Cabecera: int buscar_id (FILE *f,char *n)
 //Precondicion: f debe ser F_PRODUCTO o F_CATEGORIAS y estar abierto para lectura
