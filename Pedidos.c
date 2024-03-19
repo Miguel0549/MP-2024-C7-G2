@@ -10,6 +10,7 @@ void carga_pedidos( Pedido **ped ,int *n_ped){
 
     int i;
     char line[LINEA]="0";
+    char *token;
     char contador_lineas[LINEA]="0";
 
     FILE *f;
