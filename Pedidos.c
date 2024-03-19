@@ -6,7 +6,7 @@
 
 #define LINEA 100
 
-void carga_pedidos( Pedido **ped ,int *n_ped){
+void carga_pedidos( Pedido **ped ,int *n_ped){     // Funciona
 
     int i;
     char line[LINEA]="0";
@@ -68,7 +68,114 @@ void carga_pedidos( Pedido **ped ,int *n_ped){
 }
 
 
+void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // No funciona
 
+    int i;
+    char line[LINEA]="0";
+    char contador_lineas[LINEA]="0";
+    char unidades[2],estado[18];
+    char *ptr;
+
+    FILE *f;
+
+    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\ProductosPedidos.txt", "r")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        while(!feof(f)){
+
+            fgets(contador_lineas,LINEA,f);
+            (*n_pr_ped)++;
+
+        }
+
+
+        *pr_ped = (ProductoPedido *)calloc(*n_pr_ped, sizeof(ProductoPedido));
+        if (*pr_ped == NULL) {
+            printf("Error al crear la memoria para los lockers.\n");
+            exit(1);
+        }
+
+        rewind(f);
+
+        for ( i=0 ; i< *n_pr_ped; i++ ) {
+
+            fgets(line,LINEA,f);
+
+            strcpy((*pr_ped)[i].id_pedido, strtok(line, "-"));
+            strcpy((*pr_ped)[i].id_prod, strtok(NULL, "-"));
+            (*pr_ped)[i].unidades = strtol(strtok(NULL, "-"),&ptr,10);
+            strcpy((*pr_ped)[i].fecha_entrega, strtok(NULL, "-"));
+            (*pr_ped)[i].importe = strtol(strtok(NULL, "-"),&ptr,10);
+            strcpy(estado, strtok(NULL, "-"));
+
+            if ( strcmp(estado,"enPreparacion") == 0 ){
+
+                (*pr_ped)[i].est_pedido = enPreparacion;
+
+            }else if ( strcmp(estado,"entregado") == 0  ){
+
+                (*pr_ped)[i].est_pedido = entregado;
+
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+
+
+            }else if ( strcmp(estado,"devuelto") == 0 ){
+
+                (*pr_ped)[i].est_pedido = devuelto;
+
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+
+            }else if ( strcmp(estado,"enReparto") == 0 ){
+
+                (*pr_ped)[i].est_pedido = enReparto;
+
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+
+            }else if ( strcmp(estado,"transportista") == 0 ){
+
+                (*pr_ped)[i].est_pedido = trasnportista;
+
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+
+            }else if ( strcmp(estado,"enviado") == 0 ){
+
+                (*pr_ped)[i].est_pedido = enviado;
+
+            }else if ( strcmp(estado,"enLocker") == 0 ){
+
+                (*pr_ped)[i].est_pedido = enLocker;
+
+
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_locker, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].cod_locker, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+
+            }else{
+
+                printf("Error al ver el estado del pedido");
+
+            }
+
+
+
+        }
+
+        rewind(f);
+        fclose(f);
+
+    }
+
+}
+
+
+
+// No probado a partir de aqui
 
 
 void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int *n_prod_ped, char id_cliente[7] ){

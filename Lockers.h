@@ -5,7 +5,7 @@
 
 typedef struct {
 
-    char id_locker[10];
+    char id_locker[11];
     char localidad[20];
     char provincia[20];
     char ubicacion[20];
@@ -16,12 +16,12 @@ typedef struct {
 
 typedef struct {
 
-    char id_locker[10];
+    char id_locker[11];
     int Num_compT;
     int cod_locker;
     estado est_locker;      // Ocupado o vacio
-    char fecha_ocup[8];     // Formato dd/mm/aa
-    char fecha_cad[8];      // Formato dd/mm/aa
+    char fecha_ocup[11];     // Formato dd/mm/aa
+    char fecha_cad[11];      // Formato dd/mm/aa
 
 
 }CompartimentoLocker;

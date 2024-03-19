@@ -5,9 +5,9 @@
 
 typedef struct {
 
-    char id_pedido[7];           // 7 digitos
-    char fecha_ped[8];       // Formato dd/mm/aa
-    char id_cliente[7];          // 7 digitos
+    char id_pedido[8];           // 7 digitos
+    char fecha_ped[11];       // Formato dd/mm/aa
+    char id_cliente[8];          // 7 digitos
     char lugar_entrega[9];   // Domicilio o Locker
     char id_locker[10];      // Lock###
     char id_cod_prom[10];
@@ -18,23 +18,23 @@ typedef struct {
 
 typedef struct {
 
-    char id_pedido[7];            // 7 digitos
-    char id_prod[7];              // 7 digitos
+    char id_pedido[8];            // 7 digitos
+    char id_prod[8];              // 7 digitos
     int unidades;
-    char fecha_entrega[8];        // Formato dd/mm/aa
+    char fecha_entrega[11];        // Formato dd/mm/aa
     int importe;
     estado est_pedido;            // enPreparación, enviado, enReparto, enLocker, entregado, devuelto o transportista
-    char id_transp[4];            // 4 digitos
-    char id_locker[10];
-    int cod_locker;
-    char fecha_entr_dev[8];       // Formato dd/mm/aa
+    char id_transp[5];            // 4 digitos
+    char id_locker[11];
+    char cod_locker[7];
+    char fecha_entr_dev[11];       // Formato dd/mm/aa
 
 }ProductoPedido;
 
 
 typedef struct {
 
-    char id_transp;     // 4 digitos
+    char id_transp[5];     // 4 digitos
     char nombre[20];
     char emal[30];
     char contrasena[15];
@@ -46,6 +46,7 @@ typedef struct {
 
 
 void carga_pedidos( Pedido **ped ,int *n_ped);
+void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped);
 
 void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int *n_prod_ped, usu tipo_usu );
 

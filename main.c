@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Lockers.h"
 #include "Pedidos.h"
+#include <stdlib.h>
 
 int main(){
 
@@ -28,25 +29,33 @@ int main(){
     ProductoPedido *p_ped;
     Pedido *ped;
 
-    int pedido=0,pr_ped=4,i;
+    int pedido=0,pr_ped=0,i;
     int *n_ped,*n_prod_ped;
 
     n_ped=&pedido;
     n_prod_ped=&pr_ped;
 
+    carga_pedidos(&ped,n_ped);
+    carga_prod_pedido(&p_ped,n_prod_ped);
+
    // menu_pedidos(ped,p_ped,n_ped,n_prod_ped,cliente);
 
-    carga_pedidos(&ped,n_ped);
 
-    for ( i=0 ; i<pedido ; i++ ){
+    for ( i=0 ; i< pr_ped ; i++ ){
 
-        printf("Id_pedido: %s\nFecha_pedido: %s\nid_cliente: %s\nlugar_entrega: %s\nid_locker: %s\nid_cod_prom: %s\n",
-               ped[i].id_pedido,
-               ped[i].fecha_ped,
-               ped[i].id_cliente,
-               ped[i].lugar_entrega,
-               ped[i].id_locker,
-               ped[i].id_cod_prom);
+        printf("Id_pedido: %s\nId_prod: %s\nunidades: %i\nfecha_entrega: %s\nimporte: %i\nestado_pedido: %u\nid_trasp: %s\nid_lock: %s\ncod_lock: %s\nfecha_entr_dev: %s",
+               p_ped[i].id_pedido,
+               p_ped[i].id_prod,
+               p_ped[i].unidades,
+               p_ped[i].fecha_entrega,
+               p_ped[i].importe,
+               p_ped[i].est_pedido,
+               p_ped[i].id_transp,
+               p_ped[i].id_locker,
+               p_ped[i].cod_locker,
+               p_ped[i].fecha_entr_dev);
+
+
 
     }
 
@@ -54,5 +63,5 @@ int main(){
 
 
 
-    return 0;
 }
+

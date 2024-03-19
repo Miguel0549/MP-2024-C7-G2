@@ -5,13 +5,13 @@
 
 typedef struct {
 
-    int id_pedido;       // 7 digitos
-    int id_prod;         // 7 digitos
-    char fecha_dev[8];   // Formato dd/mm/aa
-    char motivo[50];
+    char id_pedido[8];       // 7 digitos
+    char id_prod[8];         // 7 digitos
+    char fecha_dev[11];   // Formato dd/mm/aa
+    char motivo[51];
     estado est_dev;      // Pendiente, Aceptado, Denegado, Enviado o Recibido
-    char fecha_acp[8];   // Formato dd/mm/aa
-    char fecha_cad[8];   // Formato dd/mm/aa
+    char fecha_acp[11];   // Formato dd/mm/aa
+    char fecha_cad[11];   // Formato dd/mm/aa
 
 }Devoluciones;
 

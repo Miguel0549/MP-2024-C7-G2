@@ -11,7 +11,7 @@
 // Postcondicion: Vuelca los datos del fichero en la estructura
 
 
-void carga_lockers( Locker **lock ,int *n_lock){
+void carga_lockers( Locker **lock ,int *n_lock){      // Funciona
 
     int i;
     char line[LINEA]="0";
