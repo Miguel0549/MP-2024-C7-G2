@@ -10,15 +10,14 @@ typedef enum {
 /*TIPO DESCUENTOS*/
 typedef struct
 {
-    char Id_cod[10],Descrip[50];
-    int Importe;    
+    char Id_cod[11],Descrip[51], Importe[4];
     opciones Tipo, Estado, Aplicabilidad;
 }Descuentos;
 
 /*TIPO DESCUENTOS CLIENTES*/
 typedef struct 
 {
-    char Id_cliente[7],Id_cod[10], 
+    char Id_cliente[8],Id_cod[11], 
     f_asignacion[11], f_caducidad[11]; //por comodidad las fechas serán del tipo "00/00/0000\0" que posteriormente será pasada al tipo fecha
     opciones Estado; //si para aplicado y no en caso contrario
 }Descuentos_clientes;
@@ -36,12 +35,12 @@ void crear_fichero_descuentos_clientes();
  //cabecera:void carga_descuentos(Descuentos **d )
  //precondición: recibe como doble puntero el vector de estructuras
  //postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+void carga_descuentos(Descuentos **d,int *n_desc);
 
-
- //cabecera:void carga_descuentos(Descuentos_clientes **dc)
+ //cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
  //precondición: recibe como doble puntero el vector de estructuras
  //postcondición:Carga del fichero descuentos_clientes.txt a un vector de estructuras del tipo indicado
-
+void carga_descuentos_clientes(Descuentos_clientes **dc);
  //cabecera: void volcado_descuentos(Descuentos **d)
  //precondición:  recibe como doble puntero el vector de estructuras, inicializado
  //postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt

@@ -3,9 +3,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include <time.h>
-
 #include "descuentos.h"
-
+#define LINE 100
 //Tipos 
 typedef struct fecha{
     int dia, mes, anno;
@@ -15,9 +14,16 @@ void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
+Descuentos *d;
+int n=0,*p;
+
+p = &n;
 
 crear_fichero_descuentos;
-crear_fichero_descuentos_clientes;
+//crear_fichero_descuentos_clientes;
+carga_descuentos(&d,p);
+
+printf("Id: %s\n",d[0].Id_cod);
 return 0;
 }
 
@@ -48,6 +54,7 @@ void crear_fichero_descuentos_clientes()
 
 
 
+
 // cabecera: fecha fecha_actual()
 // precondición: ninguna
 // postcondición: devuelve una estructura fecha con la fecha actual
@@ -64,6 +71,81 @@ fecha fecha_actual()
 
     return fecha_actual;
 }
+
+
+void carga_descuentos(Descuentos **d,int *n_desc){
+    int i;
+    char line[LINE]="\0";
+    char cuenta_lin[LINE]="\0";
+    char estado[10]="\0";
+    FILE *f;
+
+    if((f=fopen("descuentos.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+        while(!feof(f)){
+
+            fgets(cuenta_lin,LINE,f);
+            (*n_desc)++;
+        }
+    }
+    *d = (Descuentos *)calloc(*n_desc, sizeof(Descuentos));
+    if(*d==NULL){
+        printf("Error al reservar memoria para los Descuentos\n");
+        exit(1);
+    }
+
+    for(i=0;i<*n_desc;i++){
+
+        fgets(line,LINE,f);
+
+        strcpy((*d)[i].Id_cod, strtok(line,"-\n"));
+        strcpy((*d)[i].Descrip, strtok(NULL, "-\n"));  //cargamos los datos tipo char
+        strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
+
+        strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
+            
+
+            if(strcmp(estado,"codpro")==0){
+                (*d)[i].Tipo=codpro;
+
+            }else if(strcmp(estado, "cheqreg")==0){
+                (*d)[i].Tipo=cheqreg;
+            }else{puts("Error del campo TIPO"); }
+        
+            strcpy(estado, strtok(NULL, "-\n"));
+            
+            if(strcmp(estado,"activo")==0){
+                (*d)[i].Estado=activo;
+
+            }else if(strcmp(estado,"inactivo")==0){
+                (*d)[i].Estado=inactivo;
+            }else{puts("Error del campo ESTADO"); }
+
+            strcpy(estado, strtok(NULL, "-\n"));
+
+            if(strcmp(estado, "todos")==0){
+                (*d)[i].Aplicabilidad=todos;
+
+            }else if(strcmp(estado, "esizon")==0){
+                (*d)[i].Aplicabilidad=esizon;
+            }else{puts("Error del campo APLICABILIDAD");}; 
+        
+        for(int k=0;i<10;i++) estado[i]='\0';
+    }
+    rewind(f);
+    fclose(f);
+
+    
+}
+
+/*
+void carga_descuentos_clientes(Descuentos_clientes **dc){
+    int i;
+
+}*/
+
+
 
 /*POR HACER 
     Función que compare fechas(para comparar la caducidad de los descuentos)
