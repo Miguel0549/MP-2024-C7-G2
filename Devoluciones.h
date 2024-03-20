@@ -16,5 +16,7 @@ typedef struct {
 }Devoluciones;
 
 
+void carga_devoluciones( Devoluciones **dev ,int *n_dev);
+
 
 #endif //PROYECTO_MP_DEVOLUCIONES_H

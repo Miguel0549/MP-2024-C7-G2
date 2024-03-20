@@ -32,26 +32,13 @@ typedef struct {
 }ProductoPedido;
 
 
-typedef struct {
-
-    char id_transp[5];     // 4 digitos
-    char nombre[20];
-    char emal[30];
-    char contrasena[15];
-    char nombre_empresa[20];
-    char ciudad_reparto[20];
-
-}Transportista;
-
-
-
 void carga_pedidos( Pedido **ped ,int *n_ped);
 void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped);
 
 void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int *n_prod_ped, usu tipo_usu );
 
 void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, char id_cliente[7] );
-void menu_pedidos_admin(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos);
+void menu_pedidos_admin(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_pr_ped);
 void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos);
 void menu_pedidos_transp(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos);
 

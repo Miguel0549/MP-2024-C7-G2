@@ -6,11 +6,10 @@
 
 #define LINEA 100
 
-void carga_pedidos( Pedido **ped ,int *n_ped){     // Funciona
+void carga_pedidos( Pedido **ped ,int *n_ped){     // FUNCIONA
 
     int i;
     char line[LINEA]="0";
-    char *token;
     char contador_lineas[LINEA]="0";
 
     FILE *f;
@@ -41,18 +40,18 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // Funciona
 
             fgets(line,LINEA,f);
 
-            strcpy((*ped)[i].id_pedido, strtok(line, "-"));
-            strcpy((*ped)[i].fecha_ped, strtok(NULL, "-"));
-            strcpy((*ped)[i].id_cliente, strtok(NULL, "-"));
-            strcpy((*ped)[i].lugar_entrega, strtok(NULL, "-"));
+            strcpy((*ped)[i].id_pedido, strtok(line, "-\n"));
+            strcpy((*ped)[i].fecha_ped, strtok(NULL, "-\n"));
+            strcpy((*ped)[i].id_cliente, strtok(NULL, "-\n"));
+            strcpy((*ped)[i].lugar_entrega, strtok(NULL, "-\n"));
 
             if (strcmp( (*ped)[i].lugar_entrega, "domicilio") == 0 ){
 
-                strcpy((*ped)[i].id_cod_prom, strtok(NULL, "-"));
+                strcpy((*ped)[i].id_cod_prom, strtok(NULL, "-\n"));
 
             }else{
 
-                strcpy((*ped)[i].id_locker, strtok(NULL, "-"));
+                strcpy((*ped)[i].id_locker, strtok(NULL, "-\n"));
 
             }
 
@@ -68,12 +67,12 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // Funciona
 }
 
 
-void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // No funciona
+void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // FUNCIONA
 
-    int i;
+    int i,j;
     char line[LINEA]="0";
     char contador_lineas[LINEA]="0";
-    char unidades[2],estado[18];
+    char unidades[2],estado[18]="\0";
     char *ptr;
 
     FILE *f;
@@ -104,12 +103,12 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // No funci
 
             fgets(line,LINEA,f);
 
-            strcpy((*pr_ped)[i].id_pedido, strtok(line, "-"));
-            strcpy((*pr_ped)[i].id_prod, strtok(NULL, "-"));
-            (*pr_ped)[i].unidades = strtol(strtok(NULL, "-"),&ptr,10);
-            strcpy((*pr_ped)[i].fecha_entrega, strtok(NULL, "-"));
-            (*pr_ped)[i].importe = strtol(strtok(NULL, "-"),&ptr,10);
-            strcpy(estado, strtok(NULL, "-"));
+            strcpy((*pr_ped)[i].id_pedido, strtok(line, "-\n"));
+            strcpy((*pr_ped)[i].id_prod, strtok(NULL, "-\n"));
+            (*pr_ped)[i].unidades = strtol(strtok(NULL, "-\n"),&ptr,10);
+            strcpy((*pr_ped)[i].fecha_entrega, strtok(NULL, "-\n"));
+            (*pr_ped)[i].importe = strtol(strtok(NULL, "-\n"),&ptr,10);
+            strcpy(estado, strtok(NULL, "-\n"));
 
             if ( strcmp(estado,"enPreparacion") == 0 ){
 
@@ -119,28 +118,28 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // No funci
 
                 (*pr_ped)[i].est_pedido = entregado;
 
-                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
-                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-\n"));
 
 
             }else if ( strcmp(estado,"devuelto") == 0 ){
 
                 (*pr_ped)[i].est_pedido = devuelto;
 
-                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
-                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-\n"));
 
             }else if ( strcmp(estado,"enReparto") == 0 ){
 
                 (*pr_ped)[i].est_pedido = enReparto;
 
-                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
 
             }else if ( strcmp(estado,"transportista") == 0 ){
 
                 (*pr_ped)[i].est_pedido = trasnportista;
 
-                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
 
             }else if ( strcmp(estado,"enviado") == 0 ){
 
@@ -151,14 +150,21 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // No funci
                 (*pr_ped)[i].est_pedido = enLocker;
 
 
-                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-"));
-                strcpy((*pr_ped)[i].id_locker, strtok(NULL, "-"));
-                strcpy((*pr_ped)[i].cod_locker, strtok(NULL, "-"));
-                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-"));
+                strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
+                strcpy((*pr_ped)[i].id_locker, strtok(NULL, "-\n"));
+                strcpy((*pr_ped)[i].cod_locker, strtok(NULL, "-\n"));
+                strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-\n"));
 
             }else{
 
                 printf("Error al ver el estado del pedido");
+
+            }
+
+
+            for ( j=0 ; j<18 ; j++ ){
+
+                estado[j] = '\0';
 
             }
 
@@ -321,18 +327,18 @@ void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedid
 }
 
 
-void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos ){
+void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos , int *n_pr_ped){
 
     int i,j,tipo_ped;
     char opc,resp;
     int op_ped;
 
-    printf("¿Desea listar los pedidos segun su estado? (s/n):");
+    printf("Desea listar los pedidos segun su estado? (s/n):");
     scanf("%c",&resp);
 
     if ( resp == 's' || resp == 'S'){
 
-        printf("1.«enPreparación»\n2.«enviado»\n3.«enReparto»\n4.«enLocker»\n5.«entregado»\n6.«devuelto»\n7.«transportista»\n");
+        printf("1.enPreparacion\n2.enviado\n3.enReparto\n4.enLocker\n5.entregado\n6.devuelto\n7.transportista\n");
         printf("Elija el tipo de pedido (1-7):");
         scanf("%i",&tipo_ped);
 
@@ -342,12 +348,19 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
                 printf("--------- Pedidos en preparacion ---------\n\n");
 
-                for (i=0 ; i<*n_pedidos && prod_ped[i].est_pedido == enPreparacion ; i++ ){
+                for (i=0 ; i<*n_pr_ped && prod_ped[i].est_pedido == enPreparacion ; i++ ){
 
                     j = 0;
-                    while (strcmp(prod_ped[i].id_pedido, ped[j].id_pedido) != 0) {
+                    while (strcmp(prod_ped[i].id_pedido, ped[j].id_pedido) != 0 && j < *n_pedidos) {
                         j++;
                     }
+
+                    if ( j == *n_pedidos ){
+
+                        printf("No hay pedidos en preparacion\n");
+                        exit(1);
+                    }
+
 
                     printf("[%i].%s-%s-%s-%s-%s-%s\n", j,
                            ped[j].id_pedido,
@@ -519,7 +532,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
 
     printf("\nElija una opcion:\n");
-    printf("1.alta\n2.baja\n3.modificar\n4.asignar transportista )\n");
+    printf("1.alta\n2.baja\n3.modificar\n4.asignar transportista \n");
     scanf("%i",&op_ped);
 
     switch (op_ped) {
@@ -584,7 +597,7 @@ void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int 
             break;
         case admin:
 
-            menu_pedidos_admin(ped,prod_ped,n_pedidos);
+            menu_pedidos_admin(ped,prod_ped,n_pedidos,n_prod_ped);
 
             break;
         case proveedor:
