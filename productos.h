@@ -31,15 +31,16 @@ void guardar_categoria(categoria *v);
 //Precondicion: v debe de ser una cadena de tipo categoria definida de forma dinamica
 //Poscondicion: Vuelca toda la informacion de las categorias en el fichero "Categorias.txt", devolviendolo en un array
 categoria * volcar_categoria();
-//Cabecera: void alta_producto(producto p)
-//Precondicion: usuario debe estar definido 
-//Poscondicion: Lee toda los campos de producto por teclado excepto por producto.id_gestor y
-//escribe en el fichero el nuevo producto, tomando como id la menor disponible.
-void alta_producto(/*usuario*/);
-//Cabecera: void baja producto(char*id)
-//Precondicion: id debe pertenecer a un producto
+//Cabecera: void alta_producto(char *id,producto *v)
+//Precondicion: id tiene que ser el identificador del usuario que crea el producto,
+//debe existir y ser un administrador/proveedor
+//Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
+//otorgandole la menor id disponible
+void alta_producto(char *id,producto *v);
+//Cabecera: void baja producto(producto *v)
+//Precondicion: v debe apuntar al producto a borrar
 //Poscondicion: Borra la informacion de un producto
-void baja_producto(char *id);
+void baja_producto(producto *v);
 //Cabecera: void mod_prod(producto)
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod

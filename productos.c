@@ -2,6 +2,34 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+void alta_producto(char *id,producto *v)//Por hacer
+{
+    int tamanio=sizeof(producto)/sizeof(*v),error=0;
+    char salida;
+    producto p;//Auxiliar para guardar temporalmente el producto nuevo
+    //realloc(v,(tamanio+1)*(sizeof(producto)));//agrega espacio al vector para poner el nuevo producto
+    printf("Comienzo de registro de un producto.\n");
+    do{
+        printf("Escribe el nombre del producto (no puede contener -,maximo 15 caracteres)\nNombre: ");
+        fgets(p.nombre,16,stdin);
+        printf("\nEscribe una descripcion del producto (no puede contener -,maximo 50 caracteres)\nDescripcion: ");
+        fgets(p.descrip,51,stdin);
+        //Falta implementacion de categoria.
+        printf("\nEscribe el stock inicial del producto.\nStock: ");
+        scanf("%d",&p.stock);
+        printf("\nEscribe la cantidad de dias de compromiso de entrega.\nEntrega: ");
+        scanf("%d",&p.entrega);
+        printf("\nEscribe el importe en euros de cada producto.\nImporte: ");
+        scanf("%d",&p.importe);
+        //Falta comprobacion de que se han introducido enteros
+        if(error)//Salida en caso de error
+        {
+            printf("\nSe ha producida un error, desea volver a intentarlo? y/n\n");
+            salida=getchar();
+        }
+        //POR HACER: else confirmacion y escritura al vector
+    }while(salida=='s');
+}
 void guardar_producto(producto *v)
 {
     FILE *f;
