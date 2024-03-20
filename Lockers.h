@@ -17,7 +17,7 @@ typedef struct {
 typedef struct {
 
     char id_locker[11];
-    char Num_compT[3];
+    int Num_compT;
     char cod_locker[7];
     estado est_locker;      // Ocupado o vacio
     char fecha_ocup[11];     // Formato dd/mm/aa
@@ -32,6 +32,7 @@ typedef struct {
 void carga_lockers( Locker **lock ,int *);
 void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock);
 
-
+void volcado_lockers ( Locker **l, int *n_lock );
+void volcado_comp_lockers ( CompartimentoLocker **c_l, int *n_c_lock );
 
 #endif //PROYECTO_MP_LOCKERS_H

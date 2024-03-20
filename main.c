@@ -28,7 +28,7 @@ int main(){
     carga_devoluciones(&dev,n_dev);
 
 
-    menu_pedidos(ped,p_ped,n_ped,n_prod_ped,admin);
+    // menu_pedidos(ped,p_ped,n_ped,n_prod_ped,admin);
 
 
 
