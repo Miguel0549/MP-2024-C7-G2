@@ -15,7 +15,7 @@ void carga_devoluciones( Devoluciones **dev ,int *n_dev){    // FUNCIONA
 
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\Devoluciones.txt", "r")) == NULL) {
+    if ((f = fopen("Files\\Devoluciones.txt", "r")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -93,3 +93,90 @@ void carga_devoluciones( Devoluciones **dev ,int *n_dev){    // FUNCIONA
     }
 
 }
+
+
+
+void volcado_devoluciones ( Devoluciones *d, int *n_dev ){
+
+    int i;
+    char line[LINEA]="\0",Num_compT[4]="\0";
+    FILE *f;
+
+    if ((f = fopen("Files\\Devoluciones.txt", "w+")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        for ( i=0 ; i<*n_dev ; i++ ){
+
+            strcpy(line, d[i].id_pedido);
+            strcat(line, "-");
+            strcat(line, d[i].id_prod);
+            strcat(line, "-");
+            strcat(line, d[i].fecha_dev);
+            strcat(line, "-");
+            strcat(line, d[i].motivo);
+
+            switch (d[i].est_dev) {
+
+                case enviado:
+
+                    strcat(line, "-");
+                    strcat(line, "enviado");
+                    break;
+                case pediente:
+
+                    strcat(line, "-");
+                    strcat(line, "pendiente");
+                    strcat(line, "-");
+                    strcat(line,d[i].fecha_cad);
+                    break;
+                case aceptado:
+
+                    strcat(line, "-");
+                    strcat(line, "aceptado");
+                    strcat(line, "-");
+                    strcat(line,d[i].fecha_acp);
+                    break;
+                case denegado:
+
+                    strcat(line, "-");
+                    strcat(line, "denegado");
+                    break;
+                case recibido:
+
+                    strcat(line, "-");
+                    strcat(line, "recibido");
+                    break;
+                default:
+                    printf("Error con el estado de la devolucion ( volcado )");
+                    break;
+            }
+
+
+
+            if(i < *n_dev - 1) {
+                strcat(line, "\n");
+            }
+
+            fprintf(f, "%s", line);
+
+
+        }
+
+
+
+    }
+
+
+    fclose(f);
+
+}
+
+
+
+
+
+
+

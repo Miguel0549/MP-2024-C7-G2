@@ -21,7 +21,7 @@ void carga_lockers( Locker **lock ,int *n_lock){      // FUNCIONA
 
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\Lockers.txt", "r")) == NULL) {
+    if ((f = fopen("Files\\Lockers.txt", "r")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -81,7 +81,7 @@ void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock){ 
 
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\CompatimentoLockers.txt", "r")) == NULL) {
+    if ((f = fopen("Files\\CompatimentoLockers.txt", "r")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -152,13 +152,13 @@ void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock){ 
 }
 
 
-void volcado_lockers ( Locker **l, int *n_lock ){
+void volcado_lockers ( Locker *l, int *n_lock ){
 
     int i;
     char line[LINEA]="\0",Num_compT[4]="\0",Num_compOcup[4]="\0";
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\Lockers.txt", "w")) == NULL) {
+    if ((f = fopen("Files\\Lockers.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -166,17 +166,17 @@ void volcado_lockers ( Locker **l, int *n_lock ){
 
         for ( i=0 ; i<*n_lock ; i++ ){
 
-            strcpy(line, (*l)[i].id_locker);
+            strcpy(line, l[i].id_locker);
             strcat(line, "-");
-            strcat(line, (*l)[i].localidad);
+            strcat(line, l[i].localidad);
             strcat(line, "-");
-            strcat(line, (*l)[i].provincia);
+            strcat(line, l[i].provincia);
             strcat(line, "-");
-            strcat(line, (*l)[i].ubicacion);
+            strcat(line, l[i].ubicacion);
             strcat(line, "-");
 
-            sprintf(Num_compT,"%i",(*l)[i].Num_compT);
-            sprintf(Num_compOcup,"%i",(*l)[i].Num_compOcup);
+            sprintf(Num_compT,"%i",l[i].Num_compT);
+            sprintf(Num_compOcup,"%i",l[i].Num_compOcup);
 
             strcat(line, Num_compT);
             strcat(line, "-");
@@ -201,13 +201,13 @@ void volcado_lockers ( Locker **l, int *n_lock ){
 
 
 
-void volcado_comp_lockers ( CompartimentoLocker **c_l, int *n_c_lock ){
+void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock ){
 
     int i;
     char line[LINEA]="\0",Num_compT[4]="\0";
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\CompatimentoLockers.txt", "w")) == NULL) {
+    if ((f = fopen("Files\\CompatimentoLockers.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -215,27 +215,27 @@ void volcado_comp_lockers ( CompartimentoLocker **c_l, int *n_c_lock ){
 
         for ( i=0 ; i<*n_c_lock ; i++ ){
 
-            strcpy(line, (*c_l)[i].id_locker);
+            strcpy(line, c_l[i].id_locker);
             strcat(line, "-");
 
-            sprintf(Num_compT,"%i",(*c_l)[i].Num_compT);
+            sprintf(Num_compT,"%i",c_l[i].Num_compT);
 
             strcat(line, Num_compT);
             strcat(line, "-");
-            strcat(line, (*c_l)[i].cod_locker);
+            strcat(line, c_l[i].cod_locker);
             strcat(line, "-");
 
-            if ( (*c_l)[i].est_locker == vacio ){
+            if ( c_l[i].est_locker == vacio ){
 
                 strcat(line, "vacio");
 
-            }else if ( (*c_l)[i].est_locker == ocupado ){
+            }else if ( c_l[i].est_locker == ocupado ){
 
                 strcat(line, "ocupado");
                 strcat(line, "-");
-                strcat(line, (*c_l)[i].fecha_ocup);
+                strcat(line, c_l[i].fecha_ocup);
                 strcat(line, "-");
-                strcat(line, (*c_l)[i].fecha_cad);
+                strcat(line, c_l[i].fecha_cad);
 
 
             }else printf("Error con el esatdo del locker ( volcado )");

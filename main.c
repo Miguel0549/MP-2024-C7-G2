@@ -28,9 +28,23 @@ int main(){
     carga_devoluciones(&dev,n_dev);
 
 
+
+
+
+
+    // volcado_pedidos(ped,n_ped);
+    // volcado_prod_pedidos(p_ped,n_prod_ped);
+    // volcado_devoluciones(dev,n_dev);
+    // volcado_lockers(l,n_lock);
+    //volcado_comp_lockers(c_l,n_c_lock);
+
     // menu_pedidos(ped,p_ped,n_ped,n_prod_ped,admin);
 
 
+
+
+
+    return 0;
 
 }
 

@@ -18,5 +18,7 @@ typedef struct {
 
 void carga_devoluciones( Devoluciones **dev ,int *n_dev);
 
+void volcado_devoluciones ( Devoluciones *d, int *n_dev );
+
 
 #endif //PROYECTO_MP_DEVOLUCIONES_H

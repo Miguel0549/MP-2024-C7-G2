@@ -14,7 +14,7 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // FUNCIONA
 
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\Pedidos.txt", "r")) == NULL) {
+    if ((f = fopen("Files\\Pedidos.txt", "r")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -77,7 +77,7 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // FUNCIONA
 
     FILE *f;
 
-    if ((f = fopen("C:\\Users\\migue\\Desktop\\CLASE\\AMAZON_MP\\Proyecto_MP\\Files\\ProductosPedidos.txt", "r")) == NULL) {
+    if ((f = fopen("Files\\ProductosPedidos.txt", "r")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -178,6 +178,181 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // FUNCIONA
     }
 
 }
+
+
+
+void volcado_pedidos ( Pedido *p, int *n_ped ){
+
+    int i,j;
+    char line[LINEA]="\0";
+    FILE *f;
+
+    if ((f = fopen("Files\\Pedidos.txt", "w+")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        for ( i=0 ; i<*n_ped ; i++ ){
+
+            strcpy(line, p[i].id_pedido);
+            strcat(line, "-");
+            strcat(line, p[i].fecha_ped);
+            strcat(line, "-");
+            strcat(line, p[i].id_cliente);
+            strcat(line, "-");
+            strcat(line, p[i].lugar_entrega);
+
+            if (strcmp( p[i].lugar_entrega, "domicilio") == 0 ){
+
+                if ( strcmp( p[i].id_cod_prom,"\0") != 0 ){
+
+                    strcat(line, "-");
+                    strcat(line, p[i].id_cod_prom);
+
+                }
+
+
+            }else if ( strcmp( p[i].lugar_entrega, "locker") == 0 ){
+
+                strcat(line, "-");
+                strcat(line, p[i].id_locker);
+
+            }else printf("Error en el estado del locker ( volcado )");
+
+
+            if(i < *n_ped - 1) {
+                strcat(line, "\n");
+            }
+
+            fprintf(f, "%s", line);
+
+            for ( j=0 ; j<LINEA ; j++ ) line[j]='\0';
+
+        }
+
+
+
+    }
+
+
+    fclose(f);
+
+}
+
+
+
+
+void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped ){
+
+    int i;
+    char line[LINEA]="\0",unidades[6]="\0",importe[6]="\0";
+    FILE *f;
+
+    if ((f = fopen("Files\\ProductosPedidos.txt", "w+")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        for ( i=0 ; i<*n_pr_ped ; i++ ){
+
+            strcpy(line, pr_p[i].id_pedido);
+            strcat(line, "-");
+            strcat(line, pr_p[i].id_prod);
+            strcat(line, "-");
+
+            sprintf(unidades,"%i",pr_p[i].unidades);
+            strcat(line, unidades);
+
+            strcat(line, "-");
+            strcat(line, pr_p[i].fecha_entrega);
+            strcat(line, "-");
+
+            sprintf(importe,"%i",pr_p[i].importe);
+            strcat(line, importe);
+            strcat(line, "-");
+
+            switch (pr_p[i].est_pedido) {
+
+                case enPreparacion:
+
+                    strcat(line, "enPreparacion");
+                    break;
+                case enviado:
+
+                    strcat(line, "enviado");
+                    break;
+                case enReparto:
+
+                    strcat(line, "enReparto");
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_transp);
+                    break;
+                case enLocker:
+
+                    strcat(line, "enLocker");
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_transp);
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_locker);
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].cod_locker);
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].fecha_entr_dev);
+                    break;
+                case entregado:
+
+                    strcat(line, "entregado");
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_transp);
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].fecha_entr_dev);
+                    break;
+                case devuelto:
+
+                    strcat(line, "devuelto");
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_transp);
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].fecha_entr_dev);
+                    break;
+                case trasnportista:
+
+                    strcat(line, "transportista");
+                    strcat(line, "-");
+                    strcat(line, pr_p[i].id_transp);
+                    break;
+                default:
+                    printf("Error con el tipo de prod_pedido ( volcado )");
+                    break;
+            }
+
+            if(i < *n_pr_ped - 1) {
+                strcat(line, "\n");
+            }
+
+            fprintf(f, "%s", line);
+
+
+        }
+
+
+
+    }
+
+
+    fclose(f);
+
+}
+
+
+
+
+
+
+
+
 
 
 
