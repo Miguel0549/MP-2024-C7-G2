@@ -5,21 +5,20 @@
 #include <time.h>
 #include "descuentos.h"
 #define LINE 100
+
+Descuentos convertir_cadena_a_Descuentos(char*);
 //Tipos 
 typedef struct fecha{
     int dia, mes, anno;
 }fecha;
-
 void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
 int n=0,*p;
-
 p = &n;
-
-crear_fichero_descuentos;
+crear_fichero_descuentos();
 //crear_fichero_descuentos_clientes;
 carga_descuentos(&d,p);
 
@@ -34,7 +33,7 @@ return 0;
 void crear_fichero_descuentos()
 {
     FILE* f;
-    if ((f = fopen("../Descuentos/descuentos.txt", "w")) == NULL)
+    if ((f = fopen("descuentos.txt", "a+")) == NULL)
         printf("Error al abrir el archivo\n");
     fclose(f);
 }
@@ -73,6 +72,39 @@ fecha fecha_actual()
 }
 
 
+
+// cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
+// precondicion: fecha1 y fecha2 inicializados
+// postcondicion: devuelve => =0 - fechas iguales
+//                            >0 - fechas1 mayor que fecha2
+//                            <0 - fecha1 menor que fecha2
+int comparar_fechas(fecha fecha1, fecha fecha2)
+{ // FUNCIONA
+    int resultado = 0;
+    if (fecha1.anno == fecha2.anno)
+        if (fecha1.mes == fecha2.mes)
+            if (fecha1.dia == fecha2.dia)
+                resultado = 0;
+            else if (fecha1.dia > fecha2.dia)
+                resultado = 1;
+            else
+                resultado = -1;
+
+        else if (fecha1.mes > fecha2.mes)
+            resultado = 1;
+        else
+            resultado = -1;
+
+    else if (fecha1.anno > fecha2.anno)
+        resultado = 1;
+    else
+        resultado = -1;
+
+    return resultado;
+}
+
+
+
 void carga_descuentos(Descuentos **d,int *n_desc){
     int i;
     char line[LINE]="\0";
@@ -94,12 +126,11 @@ void carga_descuentos(Descuentos **d,int *n_desc){
         printf("Error al reservar memoria para los Descuentos\n");
         exit(1);
     }else{
-
+        rewind(f);
         for(i=0;i<*n_desc;i++){
 
-            fgets(line,LINE,f);
-
-            strcpy((*d)[i].Id_cod, strtok(line,"-\n"));
+        fgets(line,LINE,f);
+            strcpy((*d)[i].Id_cod, strtok(line,"-"));
             strcpy((*d)[i].Descrip, strtok(NULL, "-\n"));  //cargamos los datos tipo char
             strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
 
@@ -112,6 +143,8 @@ void carga_descuentos(Descuentos **d,int *n_desc){
                 }else if(strcmp(estado, "cheqreg")==0){
                     (*d)[i].Tipo=cheqreg;
                 }else{puts("Error del campo TIPO"); }
+
+                for(int k=0;k<10;k++) estado[k]='\0';
             
                 strcpy(estado, strtok(NULL, "-\n"));
                 
@@ -122,6 +155,7 @@ void carga_descuentos(Descuentos **d,int *n_desc){
                     (*d)[i].Estado=inactivo;
                 }else{puts("Error del campo ESTADO"); }
 
+                for(int k=0;k<10;k++) estado[k]='\0';
                 strcpy(estado, strtok(NULL, "-\n"));
 
                 if(strcmp(estado, "todos")==0){
@@ -131,20 +165,22 @@ void carga_descuentos(Descuentos **d,int *n_desc){
                     (*d)[i].Aplicabilidad=esizon;
                 }else{puts("Error del campo APLICABILIDAD");}; 
             
-            for(int k=0;i<10;i++) estado[i]='\0';
+            for(int k=0;k<10;k++) estado[k]='\0';
+
         }
     }
     rewind(f);
     fclose(f);
 
-    
 }
+
 
 /*
 void carga_descuentos_clientes(Descuentos_clientes **dc){
     int i;
 
 }*/
+
 
 
 
@@ -155,3 +191,6 @@ void carga_descuentos_clientes(Descuentos_clientes **dc){
     Función que compruebe si el descuento está vigente
     --más funciones en adelante--
 */
+
+
+
