@@ -93,45 +93,46 @@ void carga_descuentos(Descuentos **d,int *n_desc){
     if(*d==NULL){
         printf("Error al reservar memoria para los Descuentos\n");
         exit(1);
-    }
+    }else{
 
-    for(i=0;i<*n_desc;i++){
+        for(i=0;i<*n_desc;i++){
 
-        fgets(line,LINE,f);
+            fgets(line,LINE,f);
 
-        strcpy((*d)[i].Id_cod, strtok(line,"-\n"));
-        strcpy((*d)[i].Descrip, strtok(NULL, "-\n"));  //cargamos los datos tipo char
-        strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
+            strcpy((*d)[i].Id_cod, strtok(line,"-\n"));
+            strcpy((*d)[i].Descrip, strtok(NULL, "-\n"));  //cargamos los datos tipo char
+            strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
 
-        strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
+            strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
+                
+
+                if(strcmp(estado,"codpro")==0){
+                    (*d)[i].Tipo=codpro;
+
+                }else if(strcmp(estado, "cheqreg")==0){
+                    (*d)[i].Tipo=cheqreg;
+                }else{puts("Error del campo TIPO"); }
             
+                strcpy(estado, strtok(NULL, "-\n"));
+                
+                if(strcmp(estado,"activo")==0){
+                    (*d)[i].Estado=activo;
 
-            if(strcmp(estado,"codpro")==0){
-                (*d)[i].Tipo=codpro;
+                }else if(strcmp(estado,"inactivo")==0){
+                    (*d)[i].Estado=inactivo;
+                }else{puts("Error del campo ESTADO"); }
 
-            }else if(strcmp(estado, "cheqreg")==0){
-                (*d)[i].Tipo=cheqreg;
-            }else{puts("Error del campo TIPO"); }
-        
-            strcpy(estado, strtok(NULL, "-\n"));
+                strcpy(estado, strtok(NULL, "-\n"));
+
+                if(strcmp(estado, "todos")==0){
+                    (*d)[i].Aplicabilidad=todos;
+
+                }else if(strcmp(estado, "esizon")==0){
+                    (*d)[i].Aplicabilidad=esizon;
+                }else{puts("Error del campo APLICABILIDAD");}; 
             
-            if(strcmp(estado,"activo")==0){
-                (*d)[i].Estado=activo;
-
-            }else if(strcmp(estado,"inactivo")==0){
-                (*d)[i].Estado=inactivo;
-            }else{puts("Error del campo ESTADO"); }
-
-            strcpy(estado, strtok(NULL, "-\n"));
-
-            if(strcmp(estado, "todos")==0){
-                (*d)[i].Aplicabilidad=todos;
-
-            }else if(strcmp(estado, "esizon")==0){
-                (*d)[i].Aplicabilidad=esizon;
-            }else{puts("Error del campo APLICABILIDAD");}; 
-        
-        for(int k=0;i<10;i++) estado[i]='\0';
+            for(int k=0;i<10;i++) estado[i]='\0';
+        }
     }
     rewind(f);
     fclose(f);
