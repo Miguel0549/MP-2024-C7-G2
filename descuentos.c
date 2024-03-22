@@ -87,7 +87,40 @@ void nuevo_descuento(Descuentos **d,int n_desc){
             printf("\nIntroduzca una opción válida\n");
         }
     }while(i==0);
-
+    i=0;
+    do{
+        printf("\nElija el Estado del Descuento:\n 1.Activo\n 2.Inactivo\n");
+        scanf("%i",&sel);
+        if (sel==1)
+        {
+            (*d)[n_desc-1].Estado=activo;
+            i++;
+        }else if (sel==2)
+        {
+            (*d)[n_desc-1].Estado=inactivo;
+            i++;
+        }else
+        {
+            printf("\nIntroduzca una opción válida\n");
+        }
+    }while(i==0);
+    i=0;
+        do{
+        printf("\nElija en los productos en los que se aplica:\n 1.Todos\n 2.Esizon\n");
+        scanf("%i",&sel);
+        if (sel==1)
+        {
+            (*d)[n_desc-1].Aplicabilidad=todos;
+            i++;
+        }else if (sel==2)
+        {
+            (*d)[n_desc-1].Aplicabilidad=esizon;
+            i++;
+        }else
+        {
+            printf("\nIntroduzca una opción válida\n");
+        }
+    }while(i==0);
 
 }
 
