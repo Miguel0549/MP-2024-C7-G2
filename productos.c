@@ -2,33 +2,142 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-void alta_producto(char *id,producto *v)//Por hacer
+//TODO: implementacion de categoria. Temporalmente tendran todas 1 hasta desarrollo de categoria.
+//TODO: Quitar el '\n' cuando lee cadenas en alta_producto y alta_categoria.
+void alta_producto(char *id_user,producto *v)//Por probar
 {
-    int tamanio=sizeof(producto)/sizeof(*v),error=0;
-    char salida;
+    int tamanio=sizeof(*v)/sizeof(producto),error;
+    char salida='n',carga='n',aux[8];
     producto p;//Auxiliar para guardar temporalmente el producto nuevo
-    //realloc(v,(tamanio+1)*(sizeof(producto)));//agrega espacio al vector para poner el nuevo producto
     printf("Comienzo de registro de un producto.\n");
     do{
         printf("Escribe el nombre del producto (no puede contener -,maximo 15 caracteres)\nNombre: ");
         fgets(p.nombre,16,stdin);
         printf("\nEscribe una descripcion del producto (no puede contener -,maximo 50 caracteres)\nDescripcion: ");
         fgets(p.descrip,51,stdin);
-        //Falta implementacion de categoria.
         printf("\nEscribe el stock inicial del producto.\nStock: ");
         scanf("%d",&p.stock);
         printf("\nEscribe la cantidad de dias de compromiso de entrega.\nEntrega: ");
         scanf("%d",&p.entrega);
         printf("\nEscribe el importe en euros de cada producto.\nImporte: ");
         scanf("%d",&p.importe);
-        //Falta comprobacion de que se han introducido enteros
-        if(error)//Salida en caso de error
+        if((cadena_valida(p.nombre,16)!=0)&&(cadena_valida(p.descrip,51)!=0)&&(p.stock!=EOF)&&(p.entrega!=EOF)&&(p.importe!=EOF))//Comprobacion de los datos
         {
-            printf("\nSe ha producida un error, desea volver a intentarlo? y/n\n");
+            printf("\nDatos introducidos no validos.\n");
+            error=1;
+        }
+        else
+        {
+            printf("\nRecopilacion de los datos.\n");
+            printf("Nombre: %s\n",p.nombre);
+            printf("Descripcion: %s\n",p.descrip);
+            printf("Stock inicial: %d unidades\n",p.stock);
+            printf("Compromiso de entrega: %d dias\n",p.entrega);
+            printf("Importe: %d euros\n",p.importe);
+            printf("¿Es la informacion correcta? Escriba s para confirmar.\n");
+            carga=getchar();
+            if (carga=='s')
+            {
+                //REMOVER DESPUES
+                strcpy(p.id_prod,"0001\0");
+                //REMOVER DESPUES
+                strcpy(p.id_gestor,id_user);
+                //Obtencion de la proxima id disponible
+                strcpy(aux,v[tamanio-1].id_prod);
+                suma1(aux,7);//Suma a la cadena 1
+                strcpy(p.id_prod,aux);
+                //Subida del producto al vector
+                if(realloc(v,(tamanio+1)*(sizeof(producto)))!=NULL)//agrega espacio al vector para poner el nuevo producto
+                {
+                    v[tamanio]=p;
+                    error=0;
+                    salida='s';
+                }
+                else
+                {
+                    printf("Se ha producido un error en la carga del producto.\n");
+                    error=2;
+                }
+            }
+            else
+            {
+                printf("Alta de producto abortada.\n");
+                error=3;
+            }
+        }
+        if(error!=0)
+        {
+            printf("¿Desea cancelar el alta? Escriba s para salir.\n");
             salida=getchar();
         }
-        //POR HACER: else confirmacion y escritura al vector
+    }while(salida!='s');
+    if(error!=0)
+    {
+        printf("Alta de producto fallida. Error: %d.\n",error);
+    }
+    else
+    {
+        printf("Alta de producto con exito.\n");
+    }
+}
+void alta_categoria(categoria *v)
+{
+    int error,tamanio=sizeof(*v)/sizeof(categoria);
+    categoria c;
+    char salida,carga,aux[5];
+    printf("Comienzo de alta de una categoria.\n");
+    do{
+        printf("Escribe la descripcion de la categoria.\n Esta no puede contener guiones o ser mayor de 51 caracteres.\n");
+        fgets(c.descrip,51,stdin);
+        if (cadena_valida(c.descrip,51)==0)
+        {
+            printf("\nDatos introducidos no validos.\n");
+            error=1;
+        }
+        else
+        {
+            printf("\nConfirmacion de los datos.\n");
+            printf("Decricpcion: %s\n",c.descrip);
+            printf("Desea confirmar la categoria? Escriba s para confirmar.\n");
+            carga=getchar();
+            if (carga=='s')
+            {
+                //Obtencion de la proxima id
+                strcpy(aux,v[tamanio-1].id_cat);
+                suma1(aux,4);
+                strcpy(c.id_cat,aux);
+                if (realloc(v,(tamanio+1)*sizeof(categoria))==NULL)
+                {
+                    printf("Error de memoria.\n");
+                    error=2;
+                }
+                else
+                {
+                    v[tamanio]=c;
+                    error=0;
+                    salida='s';
+                }
+            }
+            else
+            {
+                printf("Alta de categoria abortada.\n");
+                error=3;
+            }
+        }
+        if (error!=0)
+        {
+            printf("¿Desea cancelar el alta? Escriba 's' para salir.\n");
+            salida=getchar();
+        }
     }while(salida=='s');
+    if (error==0)
+    {
+        printf("Alta de categoria con exito.\n");
+    }
+    else
+    {
+        printf("Alta de categoria fallida. Error: %d",error);
+    }
 }
 void guardar_producto(producto *v)
 {
@@ -209,4 +318,38 @@ static int buscar_id_f(FILE **f,char *n)
 
     }while(strcmp(n,d)!=0);//comparacion de cadena actual con la cadena introducida
     return id;
+}
+//Cabecera: static void suma1(char *s,int i)
+//Precondicion: La cadena s tiene que tener mayor tamaño que i.
+//i tiene que ser el numero de digitos de la cadena
+//Poscondicon: Suma 1 en base 10 a s de i digitos.
+static void suma1(char *s,int i)
+{
+    for (int j=0;(i>=0)||(j==1);i--)
+    {
+        if (s[i]=='9')
+        {
+            s[i]='0';
+        }
+        else
+        {
+            s[i]++;
+            j=1;
+        }
+    }
+}
+//Cabecera: static int cadena_valida(char *v,int size)
+//Precondicion: v tiene que ser una cadena ya definida y size el tamaño de la cadena
+//Poscondicion: Devuelve 0 si la cadena cumple con las restricciones y devuelve distinto de 0 si se produce un error
+static int cadena_valida(char *v,int size)
+{
+    int error=0;
+    for (int i=0;(i<size)||(error!=0)||(v[i]=='\0');i++)
+    {
+        if(v[i]=='-')
+        {
+            error=1;
+        }
+    }
+    return error;
 }

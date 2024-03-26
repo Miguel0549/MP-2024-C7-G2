@@ -35,7 +35,7 @@ categoria * volcar_categoria();
 //Precondicion: id tiene que ser el identificador del usuario que crea el producto,
 //debe existir y ser un administrador/proveedor
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
-//otorgandole la menor id disponible
+//otorgandole la proxima id disponible
 void alta_producto(char *id,producto *v);
 //Cabecera: void baja producto(producto *v)
 //Precondicion: v debe apuntar al producto a borrar
@@ -48,7 +48,7 @@ void mod_prod(producto);
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe seruna cadena ya definida
 //Poscondicion: Escribe por pantalla todos los productos cuya descripcion coincida con nombre
-void Busqueda_prod_nombre(char*n);
+void Busqueda_prod_nombre(char *n);
 //cabecera: void Busqueda_prod_cat(char *id)
 //Precondicion: id debe pertenecer a una categoria
 //Poscondicion: Escribe por pantalla todos los productos 
@@ -58,4 +58,9 @@ void Busqueda_prod_cat(char *id);
 //Precondicion: id debe ser una id de un producto registrado
 //Poscondicion: Devuelve todo la informacion del producto con identificador id
 producto cargar_prod(char *id);
+//Cabecera: alta_cat(categoria *v)
+//Precondicion: v es un vector definido de forma dinamica que contiene todas las categorias registradas
+//Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
+//y cuya id es la proxima disponible
+void alta_cat(categoria *v); 
 #endif
