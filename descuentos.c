@@ -11,17 +11,18 @@ typedef struct fecha{
     int dia, mes, anno;
 }fecha;
 
-//Cabeceras
+/*CABECERAS*/
 void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 void leer_string(char*,int);
 void nuevo_descuento(Descuentos**);
 int num_desc();
 
+    /*MAIN PROVISIONAL*/
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
 crear_fichero_descuentos();
-printf("\n%i\n",num_desc());
+//printf("\n%i\n",num_desc());
 //crear_fichero_descuentos_clientes();
 carga_descuentos(&d);
 //nuevo_descuento(&d);
@@ -34,6 +35,7 @@ return 0;
 
 //Cuerpos de función
 
+  /*FUNCIONES CON FICHEROS*/
 //cabecera: crear_fichero_descuentos()
 //preconción: ninguna
 //postconción: crea el fichero descuentos
@@ -130,78 +132,8 @@ void nuevo_descuento(Descuentos **d){
 
 }
 
-// cabecera: fecha fecha_actual()
-// precondición: ninguna
-// postcondición: devuelve una estructura fecha con la fecha actual
-fecha fecha_actual()
-{ // FUNCIONA
-    fecha fecha_actual;
-    time_t t = time(NULL);
-    struct tm tiempo_actual = *localtime(&t);
-
-    // Pasamos los datos desde la estructura tm a fecha
-    fecha_actual.dia = tiempo_actual.tm_mday;
-    fecha_actual.mes = tiempo_actual.tm_mon + 1;
-    fecha_actual.anno = tiempo_actual.tm_year + 1900;
-
-    return fecha_actual;
-}
-
-// cabecera: void leer_string(char * cadena, int elem)
-// precondicion: ninguna
-// postcondicion: lee en cadena la cadena introducida por el usuario
-void leer_string(char*cadena, int elem)
-{
-    int i;
-
-    fflush(stdin);
-    fgets(cadena, elem , stdin);
-    fflush(stdin);
-    //puts(cadena);
-    for (i = 0; cadena[i] != '\n' && i < elem + 1; i++)
-        if (cadena[i] == '\n')
-            cadena[i] = '\0';
-
-    i = 0;
-    while (i < elem + 1) {
-        if (cadena[i] == '\n')
-            cadena[i] = '\0';
-        i++;
-    }
-}
-
-// cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
-// precondicion: fecha1 y fecha2 inicializados
-// postcondicion: devuelve => =0 - fechas iguales
-//                            >0 - fechas1 mayor que fecha2
-//                            <0 - fecha1 menor que fecha2
-int comparar_fechas(fecha fecha1, fecha fecha2)
-{ // FUNCIONA
-    int resultado = 0;
-    if (fecha1.anno == fecha2.anno)
-        if (fecha1.mes == fecha2.mes)
-            if (fecha1.dia == fecha2.dia)
-                resultado = 0;
-            else if (fecha1.dia > fecha2.dia)
-                resultado = 1;
-            else
-                resultado = -1;
-
-        else if (fecha1.mes > fecha2.mes)
-            resultado = 1;
-        else
-            resultado = -1;
-
-    else if (fecha1.anno > fecha2.anno)
-        resultado = 1;
-    else
-        resultado = -1;
-
-    return resultado;
-}
-
 //cabecera: void carga_descuentos(Descuentos **d)
-//precondición: sea **d un doble puntero a una estructura descuentos y *n_desc un puntero a entero con el número total de descuentos
+//precondición: sea **d un doble puntero a una estructura descuentos 
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
 void carga_descuentos(Descuentos **d){
     int i,n_desc;
@@ -261,6 +193,53 @@ void carga_descuentos(Descuentos **d){
                 
                 for(int k=0;k<10;k++) estado[k]='\0';
 
+        }
+    }
+    rewind(f);
+    fclose(f);
+
+}
+
+//cabecera: void carga_descuentos(Descuentos_clientes **dc)
+//precondición: sea **d un doble puntero a una estructura descuentos_clientes 
+//postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
+void carga_descuentos(Descuentos_clientes **dc){
+    int i,n_desc_c;
+    char line[LINE]="\0";
+    char estado[10]="\0";
+    FILE *f;
+    n_desc_c=num_desc();
+
+    if((f=fopen("descuentos_clientes.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+        
+        *dc = (Descuentos_clientes *)calloc(n_desc_c, sizeof(Descuentos_clientes));
+        if(*dc==NULL){
+            printf("Error al reservar memoria para los Descuentos\n");
+            exit(1);
+        }else{
+            rewind(f);
+            for(i=0;i<n_desc_c;i++){
+
+                fgets(line,LINE,f);
+                strcpy((*dc)[i].Id_cliente, strtok(line,"-"));
+                strcpy((*dc)[i].Id_cod, strtok(NULL, "-\n"));  //cargamos los datos tipo char
+                strcpy((*dc)[i].f_asignacion, strtok(NULL, "-\n"));
+                strcpy((*dc)[i].f_caducidad, strtok(NULL, "-\n"));
+
+                strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
+                    
+
+                    if(strcmp(estado,"si")==0){
+                        (*dc)[i].Estado=si;
+
+                    }else if(strcmp(estado, "no")==0){
+                        (*dc)[i].Estado=no;
+                    }else{puts("Error del campo ESTADO"); }
+
+                 for(int k=0;k<10;k++) estado[k]='\0';
+            }   
         }
     }
     rewind(f);
@@ -338,7 +317,7 @@ void listar_descuentos(Descuentos**d){
     puts("Lista de Descuentos, por ID:");
     do
     {
-        printf("\n %i.",i+1);
+        printf(" %i.",i+1);
         puts((*d)[i].Id_cod);
         i++;
     } while (i<=n_desc-1);
@@ -377,12 +356,83 @@ if((f= fopen("descuentos.txt","r"))==NULL){
 
 
 /*POR HACER 
-    Función que compare fechas(para comparar la caducidad de los descuentos)
     Función que inicialice cada uno de los tipos(2) 
     Función que convierta de cadena de 11 carácteres al tipo fecha para poder compararlo con la actual y a la inversa
     Función que compruebe si el descuento está vigente
     --más funciones en adelante--
 */
 
+   /*FUNCIONES DE FECHAS*/
+
+// cabecera: fecha fecha_actual()
+// precondición: ninguna
+// postcondición: devuelve una estructura fecha con la fecha actual
+fecha fecha_actual()
+{ // FUNCIONA
+    fecha fecha_actual;
+    time_t t = time(NULL);
+    struct tm tiempo_actual = *localtime(&t);
+
+    // Pasamos los datos desde la estructura tm a fecha
+    fecha_actual.dia = tiempo_actual.tm_mday;
+    fecha_actual.mes = tiempo_actual.tm_mon + 1;
+    fecha_actual.anno = tiempo_actual.tm_year + 1900;
+
+    return fecha_actual;
+}
 
 
+// cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
+// precondicion: fecha1 y fecha2 inicializados
+// postcondicion: devuelve => =0 - fechas iguales
+//                            >0 - fechas1 mayor que fecha2
+//                            <0 - fecha1 menor que fecha2
+int comparar_fechas(fecha fecha1, fecha fecha2)
+{ // FUNCIONA
+    int resultado = 0;
+    if (fecha1.anno == fecha2.anno)
+        if (fecha1.mes == fecha2.mes)
+            if (fecha1.dia == fecha2.dia)
+                resultado = 0;
+            else if (fecha1.dia > fecha2.dia)
+                resultado = 1;
+            else
+                resultado = -1;
+
+        else if (fecha1.mes > fecha2.mes)
+            resultado = 1;
+        else
+            resultado = -1;
+
+    else if (fecha1.anno > fecha2.anno)
+        resultado = 1;
+    else
+        resultado = -1;
+
+    return resultado;
+}
+
+  /*FUNCIONES VARIAS*/
+
+// cabecera: void leer_string(char * cadena, int elem)
+// precondicion: ninguna
+// postcondicion: lee en cadena la cadena introducida por el usuario
+void leer_string(char*cadena, int elem)
+{
+    int i;
+
+    fflush(stdin);
+    fgets(cadena, elem , stdin);
+    fflush(stdin);
+    //puts(cadena);
+    for (i = 0; cadena[i] != '\n' && i < elem + 1; i++)
+        if (cadena[i] == '\n')
+            cadena[i] = '\0';
+
+    i = 0;
+    while (i < elem + 1) {
+        if (cadena[i] == '\n')
+            cadena[i] = '\0';
+        i++;
+    }
+}

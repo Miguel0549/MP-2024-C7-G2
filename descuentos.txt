@@ -1,2 +1,5 @@
 black001-descripcion normal-020-cheqreg-activo-esizon
 black002-descripcion breve y normal-021-cheqreg-activo-todos
+black002-descripcion breve y normal-021-cheqreg-activo-todos
+nav001-descripcion breve y normal-021-cheqreg-activo-esizon
+cod2212-descripcion breve y normal-021-cheqreg-activo-todos
