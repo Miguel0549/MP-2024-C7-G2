@@ -3,10 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 //TODO: implementacion de categoria. Temporalmente tendran todas 1 hasta desarrollo de categoria.
-//TODO: Quitar el '\n' cuando lee cadenas en alta_producto y alta_categoria.
 void alta_producto(char *id_user,producto *v)//Por probar
 {
-    int tamanio=sizeof(*v)/sizeof(producto),error;
+    int tamanio=TAMANIO_PROD(*v),error;
     char salida='n',carga='n',aux[8];
     producto p;//Auxiliar para guardar temporalmente el producto nuevo
     printf("Comienzo de registro de un producto.\n");
@@ -80,9 +79,9 @@ void alta_producto(char *id_user,producto *v)//Por probar
         printf("Alta de producto con exito.\n");
     }
 }
-void alta_categoria(categoria *v)
+void alta_categoria(categoria *v)//Por probar
 {
-    int error,tamanio=sizeof(*v)/sizeof(categoria);
+    int error,tamanio=TAMANIO_CAT(*v);
     categoria c;
     char salida,carga,aux[5];
     printf("Comienzo de alta de una categoria.\n");
@@ -143,7 +142,7 @@ void guardar_producto(producto *v)
 {
     FILE *f;
     int i;
-    int n_elem=sizeof(*v)/sizeof(producto);
+    int n_elem=TAMANIO_PROD(*v);
     if ((f=fopen(F_PRODUCTO,"w"))==NULL)
     {
         printf("Error de apertura de fichero.");
@@ -179,7 +178,7 @@ void guardar_categoria(categoria *v)
 {
     FILE *f;
     int i;
-    int n_elem=sizeof(*v)/sizeof(categoria);
+    int n_elem=TAMANIO_CAT(*v);
     if ((f=fopen(F_CATEGORIAS,"w"))==NULL)
     {
         printf("Error de apertura de fichero.");
@@ -260,13 +259,27 @@ categoria * volcar_categoria()//No Probada todavia
         {
             for(int i=0;j!=EOF;i++)//Bucle para obtener cada dato
             {
-                realloc(v,(i+1)*sizeof(producto));
+                realloc(v,(i+1)*sizeof(categoria));
                 fgets(v[i].id_cat,5,f);
                 fseek(f,1,SEEK_CUR);
                 fgets(v[i].descrip,51,f);//Dejara de leer en EOF o en '/n'
                 j=fgetc(f);
 
             }
+        }
+    }
+}
+void idacat(char *descrip,categoria *c,char *id)
+{
+    descrip[0]='-';
+    descrip[1]='\0';
+    int tamanio=TAMANIO_CAT(*c),encontrado=1;
+    for (int i=0;(i<tamanio)||(encontrado);i++)
+    {
+        if (strcmp(c[i].id_cat,id))
+        {
+            strcpy(descrip,c[i].descrip);
+            encontrado=0;
         }
     }
 }
@@ -339,17 +352,58 @@ static void suma1(char *s,int i)
     }
 }
 //Cabecera: static int cadena_valida(char *v,int size)
-//Precondicion: v tiene que ser una cadena ya definida y size el tamaño de la cadena
-//Poscondicion: Devuelve 0 si la cadena cumple con las restricciones y devuelve distinto de 0 si se produce un error
+//Precondicion: v tiene que ser una cadena obtenida mediante fgets y size el tamaño de la cadena
+//Poscondicion: Devuelve 0 si la cadena cumple con las restricciones y devuelve distinto de 0 si se produce un error 
+//y establece '/n' como fin de la cadena, si lo hay.
 static int cadena_valida(char *v,int size)
 {
     int error=0;
-    for (int i=0;(i<size)||(error!=0)||(v[i]=='\0');i++)
+    int i;
+    for (i=0;(i<size)||(error!=0)||(v[i]=='\0');i++)
     {
         if(v[i]=='-')
         {
             error=1;
         }
     }
+    if (v[i-1]=='\n')
+    {
+        v[i-1]=='\0';
+    }
     return error;
+}
+//Cabecera: static void lista_prod(producto *lista,categoria *c)
+//Precondicion: Todos los campos de lista y c deben estar inicializados
+//Poscondicion: Imprime por pantalla lista como una lista de los productos
+static void lista_prod(producto *lista,categoria *c)
+{
+    int tamanio=TAMANIO_PROD(*lista);
+    char descrip_cat[51];//auxiliar para guardar la descripcion de la categoria
+    printf("-------------------------------------------------------\n");
+    for(int i=0;i<tamanio;i++)
+    {
+        idacat(descrip_cat,c,lista[i].id_categ);
+        printf("Nombre: %s\n",lista[i].nombre);
+        printf("Descripcion: %s\n",lista[i].descrip);
+        printf("Categoria: %s\n",descrip_cat);
+        printf("Precio: %d€\n",lista[i].importe);
+        printf("Stock: %d unidades\n",lista[i].stock);
+        printf("Entrega en %d dias\n",lista[i].entrega);
+        printf("Identificador: %s\n",lista[i].id_prod);
+        printf("-------------------------------------------------------\n");
+    }
+}
+//Cabecera: static void lista_cat(categoria *lista)
+//Precondicion: Todos los campos de lista deben estar inicializados
+//Poscondicon: Imprime por pantalla lista como una lista de las categorias
+static void lista_cat(categoria *lista)
+{
+    int tamanio=TAMANIO_CAT(*lista);
+    printf("-------------------------------------------------------\n");
+    for(int i=0;i<tamanio;i++)
+    {
+        printf("Descripcion: %s\n",lista[i].descrip);
+        printf("Identificador: %s\n",lista[i].id_cat);
+        printf("-------------------------------------------------------\n");
+    }
 }

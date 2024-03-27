@@ -2,6 +2,9 @@
 #define PRODUCTOS_H
 #define F_PRODUCTO "Productos.txt"
 #define F_CATEGORIAS "Categorias.txt"
+#define TAMANIO_PROD(x) ((sizeof(x))/(sizeof(producto))) //x=vector de producto
+#define TAMANIO_CAT(x) ((sizeof(x))/(sizeof(categoria))) //x=vector de categoria
+
 #include <stdio.h>
 typedef struct {
     char nombre[16];
@@ -47,7 +50,7 @@ void baja_producto(producto *v);
 void mod_prod(producto);
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe seruna cadena ya definida
-//Poscondicion: Escribe por pantalla todos los productos cuya descripcion coincida con nombre
+//Poscondicion: Escribe por pantalla todos los productos cuyo nombre coincida con n
 void Busqueda_prod_nombre(char *n);
 //cabecera: void Busqueda_prod_cat(char *id)
 //Precondicion: id debe pertenecer a una categoria
@@ -63,4 +66,9 @@ producto cargar_prod(char *id);
 //Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
 //y cuya id es la proxima disponible
 void alta_cat(categoria *v); 
+//Cabecera: void idacat(char *descrip,categoria *c,char *id)
+//Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
+//Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
+//Si no se encuentra, se devuelve en descrp "-\0";
+void idacat(char *descrip,categoria *c,char *id);
 #endif
