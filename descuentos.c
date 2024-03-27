@@ -24,10 +24,10 @@ crear_fichero_descuentos();
 printf("\n%i\n",num_desc());
 //crear_fichero_descuentos_clientes();
 carga_descuentos(&d);
-nuevo_descuento(&d);
+//nuevo_descuento(&d);
 //carga_descuentos(&d);
-listar_descuentos(d);
-volcado_descuentos(d);
+listar_descuentos(&d);
+volcado_descuentos(&d);
 //printf("Id: %s\n",d[0].Id_cod);
 return 0;
 }
@@ -271,60 +271,55 @@ void carga_descuentos(Descuentos **d){
 //cabecera:void volcado_descuentos(Descuentos **d)
 //precondición:**d incializado y descuentos.txt creado
 //postcondición:descuentos.txt contiene la información que contenía el vector de estructuras
-void volcado_descuentos(Descuentos *d){
+void volcado_descuentos(Descuentos **d){
 
     int i,n_desc;
     char line[LINE]="\0";
     FILE *f;
     n_desc=num_desc();
 
-    if ((f = fopen("Descuentos.txt", "a+")) == NULL) {
+    if ((f = fopen("Descuentos.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
 
     } else {
 
         for ( i=0 ; i<n_desc ; i++ ){
-
-            strcpy(line, d[i].Id_cod);
+           // strcpy(line,"\n");
+            strcpy(line, (*d)[i].Id_cod);
             
             strcat(line, "-");
-            strcat(line, d[i].Descrip);
+            strcat(line, (*d)[i].Descrip);
             strcat(line, "-");
-            strcat(line, d[i].Importe);
+            strcat(line, (*d)[i].Importe);
             strcat(line, "-");
-            if(d[i].Tipo==cheqreg){
+            if((*d)[i].Tipo==cheqreg){
                 strcat(line,"cheqreg");
-            }else if(d[i].Tipo==codpro){
+            }else if((*d)[i].Tipo==codpro){
                 strcat(line,"codpro");
             }else{
                 puts("Error en el volcado de TIPO");
             }
 
              strcat(line, "-");
-            if(d[i].Estado==activo){
+            if((*d)[i].Estado==activo){
                 strcat(line,"activo");
-            }else if(d[i].Estado==inactivo){
+            }else if((*d)[i].Estado==inactivo){
                 strcat(line,"inactivo");
             }else{
                 puts("Error en el volcado de ESTADO");
             }
 
              strcat(line, "-");
-            if(d[i].Aplicabilidad==esizon){
-                strcat(line,"esizone");
-            }else if(d[i].Aplicabilidad==todos){
+            if((*d)[i].Aplicabilidad==esizon){
+                strcat(line,"esizon");
+            }else if((*d)[i].Aplicabilidad==todos){
                 strcat(line,"todos");
             }else{
                 puts("Error en el volcado de APLICABILDAD");
             }
-
-          /*  if(i < *n_desc - 1) strcat(line, "\n");
-            for(int k=0;k<*n_desc;k++)
-                if(line[k]=="/n")
-                    for(int l=k;l<*n_desc;l++)
-                        line[l]=line[l+1];
-            */
+            
+           if(i < n_desc - 1) strcat(line, "\n");
             fprintf(f, "%s", line);
         }
 
@@ -337,14 +332,14 @@ void volcado_descuentos(Descuentos *d){
 //cabecera: void listar_descuentos(Descuentos *d)
 //precondición: *d inicializado
 //postcondición: lista los descuentos actuales en el vector
-void listar_descuentos(Descuentos*d){
+void listar_descuentos(Descuentos**d){
     int n_desc,i=0;
     n_desc=num_desc();
     puts("Lista de Descuentos, por ID:");
     do
     {
         printf("\n %i.",i+1);
-        puts(d[i].Id_cod);
+        puts((*d)[i].Id_cod);
         i++;
     } while (i<=n_desc-1);
     
