@@ -35,7 +35,7 @@ void crear_fichero_descuentos_clientes();
  //cabecera:void carga_descuentos(Descuentos **d )
  //precondición: recibe como doble puntero el vector de estructuras
  //postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
-void carga_descuentos(Descuentos **d,int *n_desc);
+void carga_descuentos(Descuentos **d);
 
  //cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
  //precondición: recibe como doble puntero el vector de estructuras
@@ -44,16 +44,21 @@ void carga_descuentos_clientes(Descuentos_clientes **dc);
  //cabecera: void volcado_descuentos(Descuentos **d)
  //precondición:  recibe como doble puntero el vector de estructuras, inicializado
  //postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt
-
+void volcado_descuentos(Descuentos*);
 
  //cabecera: void volcado_descuentos_clientes(Descuentos **dc)
  //precondición:  recibe como doble puntero el vector de estructuras, inicializado
  //postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos_clientes.txt
 
+//cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
+//precondición: *d inicializado
+//postcondición: lista los descuentos actuales en el vector
+void listar_descuentos(Descuentos*);
+
 //cabecera: void listar_descuentos_cliente(char id_cliente[7],Descuentos_clientes v[])
 //precondición: Recibe el id de un cliente así como al dirección de memoria de la estructura de los descuentos 
 //postcondición: imprime(y lista) los descuentos que tiene vigente el cliente 
- 
+
 
  //cabecera:
  //precondición:
