@@ -22,12 +22,14 @@ int num_desc();
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 //Descuentos *d;
 Descuentos_clientes *dc;
+char cad[]="0020312";
 //crear_fichero_descuentos();
 //printf("\n%i\n",num_desc());
 crear_fichero_descuentos_clientes();
 carga_descuentos_clientes(&dc);
 puts(dc[0].Id_cliente);
 volcado_descuentos_clientes(&dc);
+listar_descuentos_propios(&dc,cad);
 //nuevo_descuento(&d);
 //carga_descuentos(&d);
 //listar_descuentos(&d);
@@ -61,7 +63,7 @@ void crear_fichero_descuentos_clientes()
     fclose(f2);
 }
 
-//cabecera: void nuevo_descuento(Descuentos **d)
+//cabecera: void nuevo_descuento(Descuentos **d)   MODIFICAR PARA CREAR EN descuentos_clinetes.txt su descuento asociado
 //precondición: *n_desc puntero que apunta al número total de descuentos actual
 //postcondición: crea y añade a la estructura un nuevo descuento
 void nuevo_descuento(Descuentos **d){
@@ -70,7 +72,7 @@ void nuevo_descuento(Descuentos **d){
     (*d )= (Descuentos *)calloc(n_desc, sizeof(Descuentos));
     if(d==NULL){
         printf("Error al reservar memoria para los Descuentos\n");
-        exit(1);
+        exit(1); 
     }
 
     printf("\nIntrozuca la Id del descuento:\n");     
@@ -375,6 +377,28 @@ void listar_descuentos(Descuentos**d){
 
 }
 
+//cabecera:void listar_descuentos_propios(char*Id_cliente)
+//precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
+//postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
+void listar_descuentos_propios(Descuentos_clientes **dc,char Id_cliente[]){
+    int n_desc,i=0,cont=1;
+    n_desc=num_desc();
+    //Id_a_user(*Id_cliente);
+    printf("Descuentos de %s:\n",Id_cliente);
+    do
+    {
+        if(strcmp((*dc)[i].Id_cliente,Id_cliente)==0){
+             printf(" %i.",cont);
+             puts((*dc)[i].Id_cod);
+             cont++;
+        }
+       
+        //puts((*dc)[i].Id_cod);
+        i++;
+    } while (i<=n_desc-1);
+
+}
+
 //cabecera:int num_desc()
 //precondición: archivo .txt inicializado
 //postcondición:devuelve el número de líneas que tiene el fichero
@@ -460,6 +484,40 @@ int comparar_fechas(fecha fecha1, fecha fecha2)
         resultado = -1;
 
     return resultado;
+}
+
+
+// cabecera: fecha de_string_a_fecha(char *cadena)
+// precondición: cadena inicializada con una fecha válida
+// postcondición: convierte cadena en una fecha y lo devuelve
+fecha de_string_a_fecha(char* cadena)
+{ // FUNCIONA
+    char s_dia[3], s_mes[3], s_agno[5];
+    fecha ej_fecha;
+
+    // Almacenamos el dia en una cadena
+    s_dia[0] = cadena[0];
+    s_dia[1] = cadena[1];
+    s_dia[2] = '\0';
+
+    // Almacenamos el mes en una cadena
+    s_mes[0] = cadena[3];
+    s_mes[1] = cadena[4];
+    s_mes[2] = '\0';
+
+    // Almacenamos el año en una cadena
+    s_agno[0] = cadena[6];
+    s_agno[1] = cadena[7];
+    s_agno[2] = cadena[8];
+    s_agno[3] = cadena[9];
+    s_agno[4] = '\0';
+
+    // Convertimos el dia, mes y año en enteros
+    ej_fecha.dia = (int)strtol(s_dia, NULL, 10);
+    ej_fecha.mes = (int)strtol(s_mes, NULL, 10);
+    ej_fecha.anno = (int)strtol(s_agno, NULL, 10);
+
+    return ej_fecha;
 }
 
   /*FUNCIONES VARIAS*/

@@ -57,6 +57,11 @@ void volcado_descuentos_clientes(Descuentos_clientes **);
 //postcondición: lista los descuentos actuales en el vector
 void listar_descuentos(Descuentos**);
 
+//cabecera:void listar_descuentos_propios(char*Id_cliente)
+//precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
+//postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
+void listar_descuentos_propios(Descuentos_clientes**,char Id_clientes[]);
+
 //cabecera: void listar_descuentos_cliente(char id_cliente[7],Descuentos_clientes v[])
 //precondición: Recibe el id de un cliente así como al dirección de memoria de la estructura de los descuentos 
 //postcondición: imprime(y lista) los descuentos que tiene vigente el cliente 

@@ -1,1 +1,5 @@
 black001-descripcion normal-020-cheqreg-activo-esizon
+black002-descripcion normal-020-cheqreg-activo-esizon
+black003-descripcion normal-020-cheqreg-activo-esizon
+black004-descripcion normal-020-cheqreg-activo-esizon
+black005-descripcion normal-020-cheqreg-activo-esizon
