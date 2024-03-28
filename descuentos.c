@@ -20,15 +20,18 @@ int num_desc();
 
     /*MAIN PROVISIONAL*/
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
-Descuentos *d;
-crear_fichero_descuentos();
+//Descuentos *d;
+Descuentos_clientes *dc;
+//crear_fichero_descuentos();
 //printf("\n%i\n",num_desc());
-//crear_fichero_descuentos_clientes();
-carga_descuentos(&d);
+crear_fichero_descuentos_clientes();
+carga_descuentos_clientes(&dc);
+puts(dc[0].Id_cliente);
+volcado_descuentos_clientes(&dc);
 //nuevo_descuento(&d);
 //carga_descuentos(&d);
-listar_descuentos(&d);
-volcado_descuentos(&d);
+//listar_descuentos(&d);
+//volcado_descuentos(&d);
 //printf("Id: %s\n",d[0].Id_cod);
 return 0;
 }
@@ -53,7 +56,7 @@ void crear_fichero_descuentos()
 void crear_fichero_descuentos_clientes()
 {
     FILE* f2;
-    if ((f2 = fopen("../Descuentos/descuentos_clientes.txt", "a+")) == NULL)
+    if ((f2 = fopen("descuentos_clientes.txt", "a+")) == NULL)
         printf("Error al abrir el archivo\n");
     fclose(f2);
 }
@@ -203,7 +206,7 @@ void carga_descuentos(Descuentos **d){
 //cabecera: void carga_descuentos(Descuentos_clientes **dc)
 //precondición: sea **d un doble puntero a una estructura descuentos_clientes 
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
-void carga_descuentos(Descuentos_clientes **dc){
+void carga_descuentos_clientes(Descuentos_clientes **dc){
     int i,n_desc_c;
     char line[LINE]="\0";
     char estado[10]="\0";
@@ -305,6 +308,53 @@ void volcado_descuentos(Descuentos **d){
     }
 
     fclose(f);
+
+}
+
+//cabecera:void volcado_descuentos_clientes(Descuentos_clientes **dc)
+//precondición:**dc incializado y descuentos_clientes.txt creado
+//postcondición:descuentos_clientes.txt contiene la información que contenía el vector de estructuras
+void volcado_descuentos_clientes(Descuentos_clientes **dc){
+
+    int i,n_desc;
+    char line[LINE]="\0";
+    FILE *f;
+    n_desc=num_desc();
+
+    if ((f = fopen("Descuentos_clientes.txt", "w+")) == NULL) {
+
+        printf("Error al abrir el archivo");
+
+    } else {
+
+        for ( i=0 ; i<n_desc ; i++ ){
+           // strcpy(line,"\n");
+            strcpy(line, (*dc)[i].Id_cliente);
+            
+            strcat(line, "-");
+            strcat(line, (*dc)[i].Id_cod);
+            strcat(line, "-");
+            strcat(line, (*dc)[i].f_asignacion);
+            strcat(line, "-");
+            strcat(line, (*dc)[i].f_caducidad);
+            strcat(line, "-");
+
+            if((*dc)[i].Estado==si){
+                strcat(line,"si");
+            }else if((*dc)[i].Estado==no){
+                strcat(line,"no");
+            }else{
+                puts("Error en el volcado de ESTADO");
+            }
+           if(i < n_desc - 1) strcat(line, "\n");
+            fprintf(f, "%s", line);
+        }
+
+    }
+
+    fclose(f);
+
+
 
 }
 
