@@ -62,10 +62,10 @@ void listar_descuentos(Descuentos**);
 //postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
 void listar_descuentos_propios(Descuentos_clientes**,char Id_clientes[]);
 
-//cabecera: void listar_descuentos_cliente(char id_cliente[7],Descuentos_clientes v[])
-//precondición: Recibe el id de un cliente así como al dirección de memoria de la estructura de los descuentos 
-//postcondición: imprime(y lista) los descuentos que tiene vigente el cliente 
-
+//cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
+//precondición: **dc inicializado e Id_cod un código de descuento válido
+//postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
+int comprobar_descuento(Descuentos_clientes**,char *);
 
  //cabecera:
  //precondición:

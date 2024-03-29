@@ -428,13 +428,26 @@ if((f= fopen("descuentos.txt","r"))==NULL){
  return (n_lin+1);
 }
 
+//cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
+//precondición: **dc inicializado e Id_cod un código de descuento válido
+//postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
+int comprobar_descuento(Descuentos_clientes**dc,char *Id_cod){
+    int i=0,c_salida=0,ret;
+    
+    while (c_salida==0)
+    {
+        if((*dc)[i].Id_cod==Id_cod) c_salida++ ;
+        else
+        {
+            i++;
+        }
+    }
 
-/*POR HACER 
-    Función que inicialice cada uno de los tipos(2) 
-    Función que convierta de cadena de 11 carácteres al tipo fecha para poder compararlo con la actual y a la inversa
-    Función que compruebe si el descuento está vigente
-    --más funciones en adelante--
-*/
+    if((*dc)[i].Estado== si || comparar_fechas(de_string_a_fecha((*dc)[i].f_caducidad),fecha_actual())>0) ret=1;
+
+
+    return ret;
+}
 
    /*FUNCIONES DE FECHAS*/
 
@@ -492,7 +505,7 @@ int comparar_fechas(fecha fecha1, fecha fecha2)
 // postcondición: convierte cadena en una fecha y lo devuelve
 fecha de_string_a_fecha(char* cadena)
 { // FUNCIONA
-    char s_dia[3], s_mes[3], s_agno[5];
+    char s_dia[3], s_mes[3], s_anno[5];
     fecha ej_fecha;
 
     // Almacenamos el dia en una cadena
@@ -506,16 +519,16 @@ fecha de_string_a_fecha(char* cadena)
     s_mes[2] = '\0';
 
     // Almacenamos el año en una cadena
-    s_agno[0] = cadena[6];
-    s_agno[1] = cadena[7];
-    s_agno[2] = cadena[8];
-    s_agno[3] = cadena[9];
-    s_agno[4] = '\0';
+    s_anno[0] = cadena[6];
+    s_anno[1] = cadena[7];
+    s_anno[2] = cadena[8];
+    s_anno[3] = cadena[9];
+    s_anno[4] = '\0';
 
     // Convertimos el dia, mes y año en enteros
     ej_fecha.dia = (int)strtol(s_dia, NULL, 10);
     ej_fecha.mes = (int)strtol(s_mes, NULL, 10);
-    ej_fecha.anno = (int)strtol(s_agno, NULL, 10);
+    ej_fecha.anno = (int)strtol(s_anno, NULL, 10);
 
     return ej_fecha;
 }
