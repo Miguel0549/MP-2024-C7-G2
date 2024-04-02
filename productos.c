@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 //TODO: implementacion de categoria. Temporalmente tendran todas 1 hasta desarrollo de categoria.
-void alta_producto(char *id_user,producto *v)//Por probar
+void alta_producto(categoria *c,producto *v)//Por probar
 {
     int tamanio=TAMANIO_PROD(*v),error;
     char salida='n',carga='n',aux[8];
@@ -14,6 +14,9 @@ void alta_producto(char *id_user,producto *v)//Por probar
         fgets(p.nombre,16,stdin);
         printf("\nEscribe una descripcion del producto (no puede contener -,maximo 50 caracteres)\nDescripcion: ");
         fgets(p.descrip,51,stdin);
+        lista_cat(c);
+        printf("Escribe el identificador de la categoria que quieras asociar al producto.\nCategoria: ");
+        fgets(p.id_categ,5,stdin);
         printf("\nEscribe el stock inicial del producto.\nStock: ");
         scanf("%d",&p.stock);
         printf("\nEscribe la cantidad de dias de compromiso de entrega.\nEntrega: ");
@@ -38,9 +41,9 @@ void alta_producto(char *id_user,producto *v)//Por probar
             if (carga=='s')
             {
                 //REMOVER DESPUES
-                strcpy(p.id_prod,"0001\0");
+                strcpy(p.id_gestor,"0001\0");
                 //REMOVER DESPUES
-                strcpy(p.id_gestor,id_user);
+                //p.id_gestor=usuario_actual().id;
                 //Obtencion de la proxima id disponible
                 strcpy(aux,v[tamanio-1].id_prod);
                 suma1(aux,7);//Suma a la cadena 1

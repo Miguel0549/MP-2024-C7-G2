@@ -35,11 +35,10 @@ void guardar_categoria(categoria *v);
 //Poscondicion: Vuelca toda la informacion de las categorias en el fichero "Categorias.txt", devolviendolo en un array
 categoria * volcar_categoria();
 //Cabecera: void alta_producto(char *id,producto *v)
-//Precondicion: id tiene que ser el identificador del usuario que crea el producto,
-//debe existir y ser un administrador/proveedor
+//Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
-void alta_producto(char *id,producto *v);
+void alta_producto(categoria *c,producto *v);
 //Cabecera: void baja producto(producto *v)
 //Precondicion: v debe apuntar al producto a borrar
 //Poscondicion: Borra la informacion de un producto
