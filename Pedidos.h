@@ -38,6 +38,8 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped);
 void volcado_pedidos ( Pedido *p, int *n_ped );
 void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped );
 
+void eliminar_pedido ( Pedido *ped, int indice_ped, int *n_ped );
+void crear_pedido ( Pedido **ped, int *n_ped );
 
 void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int *n_prod_ped, usu tipo_usu );
 
