@@ -186,20 +186,6 @@ void volcado_pedidos ( Pedido *p, int *n_ped ){
     char line[LINEA]="\0";
     FILE *f;
 
-    for ( i=0 ; i<*n_ped ; i++ ){
-
-        printf("----------------------------");
-        printf("\n%s\n",p[i].id_pedido);
-        printf("%s\n",p[i].fecha_ped);
-        printf("%s\n",p[i].id_cliente);
-        printf("%s\n",p[i].lugar_entrega);
-        printf("%s\n",p[i].id_locker);
-        printf("%s\n",p[i].id_cod_prom);
-        printf("-------------------------------");
-
-    }
-
-
     if ((f = fopen("Files\\Pedidos.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
@@ -370,10 +356,10 @@ void eliminar_pedido ( Pedido *ped, int indice_ped, int *n_ped ){
 }
 
 
-void crear_pedido ( Pedido **ped, int *n_ped ){
+void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8]){
 
     int i=0,j,n;
-    char borrado[8]="#######",prueba_id_ped[8],prueba_fecha[11],prueba_id_cliente[8],prueba_lugar[10],prueba_id_lock[11],prueba_id_cod_prom[11];
+    char borrado[8]="#######",prueba_id_ped[8]="\0",prueba_fecha[11]="\0",prueba_id_cliente[8]="\0",prueba_lugar[10]="\0",prueba_id_lock[11]="\0",prueba_id_cod_prom[11]="\0";
     char *aux,*nulo;
     int id_pedido,cifras=0;
 
@@ -416,25 +402,25 @@ void crear_pedido ( Pedido **ped, int *n_ped ){
 
         system("cls");
 
-        printf("Fecha_pedido: ");
-        scanf("%s",(*ped)[*n_ped].fecha_ped);
         fflush(stdin);
-        printf("Id_cliente: ");
-        scanf("%s",(*ped)[*n_ped].id_cliente);
+        printf("Fecha_pedido: ");
+        gets((*ped)[*n_ped].fecha_ped);
+
+        strcpy( (*ped)[*n_ped].id_cliente , usu_act);
         fflush(stdin);
         printf("Lugar_entrega: ");
-        scanf("%s",(*ped)[*n_ped].lugar_entrega);
+        gets((*ped)[*n_ped].lugar_entrega);
         fflush(stdin);
 
         if (strcmp((*ped)[*n_ped].lugar_entrega,"domicilio") == 0){
 
             printf("Id_cod_prom: ");
-            scanf("%s",(*ped)[*n_ped].id_cod_prom);
+            gets((*ped)[*n_ped].id_cod_prom);
 
         }else if ( strcmp((*ped)[*n_ped].lugar_entrega,"locker") == 0 ){
 
             printf("Id_locker: ");
-            scanf("%s",(*ped)[*n_ped].id_locker);
+            gets((*ped)[*n_ped].id_locker);
 
         }else{
 
@@ -443,14 +429,16 @@ void crear_pedido ( Pedido **ped, int *n_ped ){
 
         }
 
+        strcpy(prueba_id_ped,(*ped)[*n_ped].id_pedido);
+        strcpy(prueba_fecha,(*ped)[*n_ped].fecha_ped);
+        strcpy(prueba_id_cliente,(*ped)[*n_ped].id_cliente);
+        strcpy(prueba_lugar,(*ped)[*n_ped].lugar_entrega);
+        strcpy(prueba_id_lock,(*ped)[*n_ped].id_locker);
+        strcpy(prueba_id_cod_prom,(*ped)[*n_ped].id_cod_prom);
+
         (*n_ped)++;
 
-        //strcpy(prueba_id_ped,(*ped)[5].id_pedido);
-        //strcpy(prueba_fecha,(*ped)[5].fecha_ped);
-       // strcpy(prueba_id_cliente,(*ped)[5].id_cliente);
-       // strcpy(prueba_lugar,(*ped)[5].lugar_entrega);
-       // strcpy(prueba_id_lock,(*ped)[5].id_locker);
-       // strcpy(prueba_id_cod_prom,(*ped)[5].id_cod_prom);
+
 
 
 
@@ -472,21 +460,21 @@ void crear_pedido ( Pedido **ped, int *n_ped ){
             system("cls");
 
             printf("Fecha_pedido: ");
-            scanf("%s",(*ped)[i].fecha_ped);
+            gets((*ped)[i].fecha_ped);
             printf("Id_cliente: ");
-            scanf("%s",(*ped)[i].id_cliente);
+            gets((*ped)[i].id_cliente);
             printf("Lugar_entrega: ");
-            scanf("%s",(*ped)[i].lugar_entrega);
+            gets((*ped)[i].lugar_entrega);
 
             if (strcmp((*ped)[i].lugar_entrega,"domicilio") == 0){
 
                 printf("Id_cod_prom: ");
-                scanf("%s",(*ped)[i].id_cod_prom);
+                gets((*ped)[i].id_cod_prom);
 
             }else if ( strcmp((*ped)[i].lugar_entrega,"locker") == 0 ){
 
                 printf("Id_locker: ");
-                scanf("%s",(*ped)[i].id_locker);
+                gets((*ped)[i].id_locker);
 
             }else{
 
@@ -531,6 +519,129 @@ void modificar_pedido ( Pedido *ped , int *n_ped , int indice ){
         exit(1);
 
     }
+
+
+
+}
+
+
+void menu_prod_ped ( ProductoPedido *pr_p , int *n_pr_ped , char id_ped[8] , usu est){
+
+    int i,cont=1,ind_prod_ped;
+    char c;
+
+    system("cls");
+
+    printf("---------------- Productos asociados al pedido ----------------\n\n");
+
+    for ( i=0 ; i< *n_pr_ped ; i++ ){
+
+        if (strcmp( pr_p[i].id_pedido,id_ped)==0){
+
+            printf("[%i].%s-%i\n",cont,pr_p[i].id_prod,pr_p[i].unidades);
+            cont++;
+
+        }
+
+    }
+
+    printf("Escriba el id del producto que desee ver: ");
+    scanf("%i",&ind_prod_ped);
+
+    ind_prod_ped--;
+
+    system("cls");
+
+    printf("------------------------- Producto %i --------------------------\n\n",ind_prod_ped);
+
+    printf("Id_Ped: %s\nId_Prod: %s\nUnidades: %i\nFecha_prevista_entrega: %s\nImporte: %i\n",pr_p[ind_prod_ped].id_pedido,
+                                                          pr_p[ind_prod_ped].id_prod,
+                                                          pr_p[ind_prod_ped].unidades,
+                                                          pr_p[ind_prod_ped].fecha_entrega,
+                                                          pr_p[ind_prod_ped].importe);
+
+    printf("Estado: ");
+    switch (pr_p[ind_prod_ped].est_pedido) {
+
+        case enPreparacion:
+
+            printf("en Preparacion\n");
+
+            break;
+        case enviado:
+
+            printf("enviado\n");
+
+            break;
+        case enReparto:
+
+            printf("enReparto\n");
+            printf("Id_transportista: %s\n",pr_p[i].id_transp);
+
+            break;
+        case enLocker:
+
+            printf("enLocker\n");
+            printf("Id_transportista: %s\n",pr_p[i].id_transp);
+            printf("Id_locker: %s",pr_p[i].id_locker);
+            printf("Cod_locker: %s",pr_p[i].cod_locker);
+            printf("Fecha de entrega: %s\n",pr_p[i].fecha_entr_dev);
+
+            break;
+        case entregado:
+
+            printf("entregado\n");
+            printf("Id_transportista: %s\n",pr_p[i].id_transp);
+            printf("Fecha de entrega: %s\n",pr_p[i].fecha_entr_dev);
+
+            break;
+        case devuelto:
+
+            printf("devuelto\n");
+            printf("Id_transportista: %s\n",pr_p[i].id_transp);
+            printf("Fecha de entrega: %s\n",pr_p[i].fecha_entr_dev);
+
+            break;
+        case trasnportista:
+
+            printf("transportista\n");
+            printf("Id_transportista: %s\n",pr_p[i].id_transp);
+
+            break;
+        default:
+            printf("Error con el estado del prod_ped ( menu prod ped )");
+            exit(1);
+
+    }
+
+
+    if ( est == admin ){
+
+        do{
+
+            printf("\n Quiere modificar este producto? (s/n): ");
+            scanf("%c",&c);
+
+            system("cls");
+
+            if ( c == 's' || c == 'S'){
+
+                printf("Unidades: ");
+
+
+            }else if ( c == 'n' || c == 'N'){
+
+
+
+            }else printf("Escribe s o n");
+
+
+        } while ( c != 's' && c != 'S' && c != 'n' && c != 'N');
+
+
+
+    }
+
 
 
 
@@ -694,6 +805,8 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
         fflush(stdin);
         scanf("%c", &resp);
 
+        system("cls");
+
         if (resp == 's' || resp == 'S') {
 
             printf("1.domicilio\n2.locker\n");
@@ -831,7 +944,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
                 case 1:
 
-                    crear_pedido(&ped,n_pedidos);
+                    crear_pedido(&ped,n_pedidos,"0000004");
 
                     break;
                 case 2:
@@ -863,7 +976,10 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
                     break;
                 case 4:
 
+                    printf("Escribe el id del pedido que quiera ver: ");
+                    scanf("%i",&op_accion_pedido);
 
+                    menu_prod_ped(  prod_ped, n_pr_ped ,ped[op_accion_pedido-1].id_pedido , admin);
 
                     break;
                 default:
