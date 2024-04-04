@@ -3,19 +3,19 @@
 
 typedef enum {
 
-    ocupado,         // 0
-    vacio,           // 1
-    enPreparacion,   // 2
-    enviado,         // 3
-    enReparto,       // 4
-    enLocker,        // 5
-    entregado,       // 6
-    devuelto,        // 7
-    trasnportista,   // 8
-    pediente,        // 9
-    aceptado,        // 10
-    denegado,        // 11
-    recibido,        // 12
+    enPreparacion,   // 0
+    enviado,         // 1
+    enReparto,       // 2
+    enLocker,        // 3
+    entregado,       // 4
+    devuelto,        // 5
+    trasnportista,   // 6
+    pediente,        // 7
+    aceptado,        // 8
+    denegado,        // 9
+    recibido,        // 10
+    ocupado,         // 11
+    vacio,           // 12
 
 }estado;
 
