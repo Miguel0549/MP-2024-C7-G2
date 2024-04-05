@@ -1,7 +1,9 @@
 /*##### MODULO SESIONES #####*/
 
 #include<stdio.h>
-#include<sesiones.h>
+#include <string.h>
+#include <stdlib.h>
+#include "sesiones.h"
 #define LINE 100 
 
 //char* usuario_actual(char*);
@@ -13,8 +15,10 @@ int num_cliente();
 
 int main(){ // main para pruebas
 
+    Cliente *c;
 
-
+    carga_cliente(&c);
+    volcado_cliente(&c);
     return 0;
 }
 
@@ -35,15 +39,12 @@ void crear_fichero_clientes()
 void carga_cliente(Cliente **c){
     int i,n_clien;
     char line[LINE]="\0";
-    char estado[10]="\0";
     FILE *f;
     n_clien=num_cliente();
 
-    if((f=fopen("clientes.txt","r"))==NULL){
+    if((f=fopen("clientes.txt","r"))==NULL)
         printf("Error al abrir el archivo\n");
-    }else{
     
-        }
         *c = (Cliente *)calloc(n_clien, sizeof(Cliente));
         if(*c==NULL){
             printf("Error al reservar memoria para los Descuentos\n");
@@ -62,22 +63,21 @@ void carga_cliente(Cliente **c){
                 strcpy((*c)[i].Contrasenna, strtok(NULL, "-\n"));
                 strcpy((*c)[i].Cartera, strtok(NULL, "-\n"));
             
-             }   
+            }   
         }
         rewind(f);
         fclose(f);
-
 }
 
 //cabecera:void volcado_descuentos(Clientes **c)
 //precondición:**c incializado y descuentos.txt creado
 //postcondición:descuentos.txt contiene la información que contenía el vector de estructuras
-void volcado_descuentos(Cliente **c){
+void volcado_cliente(Cliente **c){
 
     int i,n_clien;
     char line[LINE]="\0";
     FILE *f;
-    n_clien=num_desc();
+    n_clien=num_cliente();
 
     if ((f = fopen("clientes.txt", "w+")) == NULL) {
 

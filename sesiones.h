@@ -5,7 +5,7 @@ typedef enum{
 
 typedef struct 
 {
-    char Id_cliente[7], Nombr_cliente[20], Dir_cliente[50],Localidad[20], Provincia[20], email[30] ,Contrasenna[15],Cartera[6];    
+    char Id_cliente[7], Nombr_cliente[21], Dir_cliente[51],Localidad[21], Provincia[21], email[31] ,Contrasenna[16],Cartera[6];    
 }Cliente;
 
 typedef struct
@@ -17,3 +17,6 @@ typedef struct
 typedef struct {
     char Id_transp[4],Nombre[20],email[30],Contrasenna[15],Nom_empre[20],Ciudad[20];
 }Transportista;
+
+void carga_cliente(Cliente**);
+void volcado_cliente(Cliente **);
