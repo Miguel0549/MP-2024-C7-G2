@@ -13,35 +13,40 @@ static void lista_prod(producto *lista,categoria *c,int tamanio_c,int tamanio_p)
 static int cadena_valida(char *v);
 static void quitaenter(char *);
 
-void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c)//Por probar
+void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c)
 {
-    int error;
-    char salida='n',carga='n',aux[8];
+    int error,a;
+    char salida='n',carga='n',aux[51],aux2[51];
     producto p;//Auxiliar para guardar temporalmente el producto nuevo
     printf("Comienzo de registro de un producto.\n");
     do{
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el buffer de entrada
         printf("Escribe el nombre del producto (no puede contener -,maximo 15 caracteres)\nNombre: ");
-        getchar();
         fgets(p.nombre,16,stdin);
         quitaenter(p.nombre);
         printf("\nEscribe una descripcion del producto (no puede contener -,maximo 50 caracteres)\nDescripcion: ");
         fgets(p.descrip,51,stdin);
         quitaenter(p.descrip);
-        fflush(stdin);
-        lista_cat(c,*tamanio_c);
-        printf("Escribe el identificador de la categoria que quieras asociar al producto.\nCategoria: ");
-        fgets(p.id_categ,5,stdin);
-        fflush(stdin);
+        
+        lista_cat(*c,*tamanio_c);
+        printf("Escribe la categoria que quieras asociar al producto.\nCategoria: ");
+        fgets(aux2,51,stdin);
+        quitaenter(aux2);
+        cataid(p.id_categ,*c,aux2,*tamanio_c);
+        
         printf("\nEscribe el stock inicial del producto.\nStock: ");
-        scanf("%d",&p.stock);
-        fflush(stdin);
+        fgets(aux,51,stdin);
+        p.stock=atoi(aux);
+        
         printf("\nEscribe la cantidad de dias de compromiso de entrega.\nEntrega: ");
-        scanf("%d",&p.entrega);
-        fflush(stdin);
+        fgets(aux,51,stdin);
+        p.entrega=atoi(aux);
+        
         printf("\nEscribe el importe en euros de cada producto.\nImporte: ");
-        scanf("%d",&p.importe);
-        fflush(stdin);
-        if((cadena_valida(p.nombre)!=0)&&(cadena_valida(p.descrip)!=0)&&(p.stock!=EOF)&&(p.entrega!=EOF)&&(p.importe!=EOF))//Comprobacion de los datos
+        fgets(aux,51,stdin);
+        p.importe=atoi(aux);
+        
+        if((cadena_valida(p.nombre)!=0)&&(cadena_valida(p.descrip)!=0)&&(cadena_valida(p.id_categ)!=0)&&(p.stock!=EOF)&&(p.entrega!=EOF)&&(p.importe!=EOF))//Comprobacion de los datos
         {
             printf("\nDatos introducidos no validos.\n");
             error=1;
@@ -51,13 +56,13 @@ void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c)//Por 
             printf("\nRecopilacion de los datos.\n");
             printf("Nombre: %s\n",p.nombre);
             printf("Descripcion: %s\n",p.descrip);
+            printf("Categoria %s\n",aux2);
             printf("Stock inicial: %d unidades\n",p.stock);
             printf("Compromiso de entrega: %d dias\n",p.entrega);
             printf("Importe: %d euros\n",p.importe);
             printf("¿Es la informacion correcta? Escriba s para confirmar.\n");
-            fgetc(stdin);
             carga=fgetc(stdin);
-            fflush(stdin);
+            
             if (carga=='s')
             {
                 //REMOVER DESPUES
@@ -71,15 +76,15 @@ void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c)//Por 
                 }
                 else
                 {
-                    strcpy(aux,v[*tamanio_p-1].id_prod);
+                    strcpy(aux,(*v+(*tamanio_p-1))->id_prod);
                     suma1(aux,7);//Suma a la cadena 1
                     strcpy(p.id_prod,aux);
                 }
                 //Subida del producto al vector
                 *tamanio_p=*tamanio_p+1;
-                if(realloc(v,(*tamanio_p)*(sizeof(producto)))!=NULL)//agrega espacio al vector para poner el nuevo producto
+                if((*v=(producto *)realloc(*v,(*tamanio_p)*(sizeof(producto))))!=NULL)//agrega espacio al vector para poner el nuevo producto
                 {
-                    v[*tamanio_p-1]=p;
+                    (*v)[(*tamanio_p)-1]=p;
                     error=0;
                     salida='s';
                 }
@@ -99,9 +104,9 @@ void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c)//Por 
         if(error!=0)
         {
             printf("¿Desea cancelar el alta? Escriba s para salir.\n");
-            fflush(stdin);
-            salida=getchar();
-            fflush(stdin);
+            
+            salida=fgetc(stdin);
+            
         }
     }while(salida!='s');
     if(error!=0)
@@ -110,16 +115,17 @@ void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c)//Por 
     }
     else
     {
-        printf("Alta de producto con exito.\n");
+        printf("Alta de producto con exito. Id: %s\n",p.id_prod);
     }
 }
-void alta_categoria(categoria *v,int *tamanio)//Por probar
+void alta_categoria(categoria **v,int *tamanio)
 {
-    int error;
+    int error,a;
     categoria c;
     char salida,carga,aux[5];
     printf("Comienzo de alta de una categoria.\n");
     do{
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
         printf("Escribe la descripcion de la categoria.\nEsta no puede contener guiones o ser mayor de 51 caracteres.\n");
         fgets(c.descrip,51,stdin);
         quitaenter(c.descrip);
@@ -143,20 +149,20 @@ void alta_categoria(categoria *v,int *tamanio)//Por probar
                 }
                 else
                 {
-                    strcpy(aux,v[*tamanio-1].id_cat);
+                    strcpy(aux,(*v+(*tamanio-1))->id_cat);
                     suma1(aux,4);
                     strcpy(c.id_cat,aux);
                     *tamanio=*tamanio+1;
                 }
-                if (realloc(v,(*tamanio)*sizeof(categoria))==NULL)
+                if ((*v=(categoria *)realloc(*v,(*tamanio)*sizeof(categoria)))==NULL)
                 {
                     printf("Error de memoria.\n");
-                    tamanio--;
+                    *tamanio--;
                     error=2;
                 }
                 else
                 {
-                    v[*tamanio-1]=c;
+                    (*v)[*tamanio-1]=c;
                     error=0;
                     salida='s';
                 }
@@ -182,13 +188,45 @@ void alta_categoria(categoria *v,int *tamanio)//Por probar
         printf("Alta de categoria fallida. Error: %d",error);
     }
 }
+/*void baja_producto(producto **v,int *tamanio_p,categoria **c, int tamanio_c)//TODO: Implementar la comprobacion de proveedor, POR TERMINAR
+{
+    int i,j,a;
+    int *asoc;//Vector auxiliar de entero cuyos elementos representan los indices de los productos asociados al proveedor en el vector o [-1] si el ususario es administrador
+    char salida='n';
+    char id[5]="0001\0";//REEMPLAZAR id POR usuario.Id_empresa una vez se haya desarrollado el modulo de sesiones
+    printf("Comienzo de borrado de un producto.\n");
+    if(usuario_actual().Perfil_usuario==administrador)
+    {
+        if(asoc=(int *)malloc(sizeof(int)))
+        {
+            asoc[0]=-1;
+        }
+    }
+    else
+    {
+            //Almacenaje de los productos que tengan la misma id que el proveedor
+            j=0;
+            if (asoc=(int *)malloc(*tamanio_p*sizeof(int)))
+            {
+                for (i=0;i<tamanio_p;i++)
+                {
+                    if ((strcmp(id,(*v)[i].id_gestor))==0)
+                    {
+                        asoc[j]=i;
+                        j++;
+                        lista_prod((*v)[i],*c,1,tamanio_c);
+                    }
+                }
+            }
+    }
+}*/
 void guardar_producto(producto *v,int n_elem)
 {
     FILE *f;
     int i;
     if ((f=fopen(F_PRODUCTO,"w"))==NULL)
     {
-        printf("Error de apertura de fichero.");
+        printf("Error de apertura de fichero., no se han guardado los datos");
     }
     else
     {
@@ -214,7 +252,7 @@ void guardar_producto(producto *v,int n_elem)
         }
     }
     fclose(f);
-    //free(v);  
+    free(v);  
 }
 void guardar_categoria(categoria *v,int n_elem)
 {
@@ -235,13 +273,13 @@ void guardar_categoria(categoria *v,int n_elem)
         }
     }
     fclose(f);
-    //free(v);
+    free(v);
 }
-producto * volcar_producto(int *tamanio)//No Probada todavia
+producto * volcar_producto(int *tamanio)
 {
     FILE *f;
     char aux[51];//Cadena auxiliar para rellenar los datos, 51 es el valor de la cadena más larga
-    producto *v;
+    static producto *v;
     char j;
     int i;
     if ((v=(producto *)malloc(sizeof(producto)))==NULL)
@@ -328,14 +366,27 @@ void idacat(char *descrip,categoria *c,char *id,int tamanio)
     int encontrado=1;
     for (int i=0;(i<tamanio)||(encontrado);i++)
     {
-        if (strcmp(c[i].id_cat,id))
+        if (strcmp(c[i].id_cat,id)==0)
         {
             strcpy(descrip,c[i].descrip);
             encontrado=0;
         }
     }
 }
-
+void cataid(char *id,categoria *c,char *descrip,int tamanio)
+{
+    id[0]='-';
+    id[1]='\0';
+    int encontrado=1;
+    for (int i=0;(i<tamanio)||(encontrado);i++)
+    {
+        if (strcmp(c[i].descrip,descrip)==0)
+        {
+            strcpy(id,c[i].id_cat);
+            encontrado=0;
+        }
+    }
+}
 //FUNCIONES PRIVADAS
 
 //Cabecera: static void obtener_dato_f(FILE **f,char *n)

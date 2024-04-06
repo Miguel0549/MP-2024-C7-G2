@@ -36,11 +36,11 @@ categoria * volcar_categoria(int *tamanio);
 //Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
-void alta_producto(categoria *c,producto *v,int *tamanio_p,int *tamanio_c);
+void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c);
 //Cabecera: void baja producto(producto *v)
 //Precondicion: v debe apuntar al producto a borrar
-//Poscondicion: Borra la informacion de un producto
-void baja_producto(producto *v);
+//Poscondicion: Borra la informacion de un producto y corrije el vector de acuerdo al borrado
+void baja_producto(producto **v);
 //Cabecera: void mod_prod(producto)
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod
@@ -62,10 +62,14 @@ producto cargar_prod(char *id);
 //Precondicion: v es un vector definido de forma dinamica que contiene todas las categorias registradas
 //Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
 //y cuya id es la proxima disponible
-void alta_categoria(categoria *v,int *tamanio); 
+void alta_categoria(categoria **v,int *tamanio); 
 //Cabecera: void idacat(char *descrip,categoria *c,char *id)
 //Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
 //Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
 //Si no se encuentra, se devuelve en descrip "-\0";
 void idacat(char *descrip,categoria *c,char *id,int tamanio);
+//Cabecera: cataid(char *id,categoria *c,char *descrip,int tamanio)
+//Precondicion: descrip debe estar definido y tener 51 elementos, el final de la cadena debe terminar en '\0'
+//Poscondicion: Devuelve en id la c.id_cat de la categoria cuyo c.descrip coincida con descrip.
+void cataid(char *id,categoria *c,char *descrip,int tamanio);
 #endif
