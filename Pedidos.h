@@ -38,20 +38,22 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped);
 void volcado_pedidos ( Pedido *p, int *n_ped );
 void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped );
 
-void eliminar_pedido ( Pedido *ped, int indice_ped, int *n_ped );
+void eliminar_pedido ( Pedido *ped, int indice_ped);
 void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8] );
 void modificar_pedido ( Pedido *ped , ProductoPedido *pr_ped, int *n_ped ,int *n_pr_ped, int indice ,usu tipo_usu, char usu_act[8] );
+
+void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] );
 
 void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos] , char vect_id[num_digitos]);
 
 void menu_pedidos ( Pedido *ped , ProductoPedido *prod_ped ,int *n_pedidos ,int *n_prod_ped, usu tipo_usu );
 
-void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, char id_cliente[7] , usu tipo_usu );
+void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, char id_cliente[8] , usu tipo_usu );
 void menu_pedidos_admin(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_pr_ped , usu tipo_usu);
 void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu);
 void menu_pedidos_transp(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu);
 
-void menu_prod_ped( ProductoPedido *pr_p, int *n_pr_ped , char id_ped[8] ,usu est);
+void menu_prod_ped( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu);
 
 
 
