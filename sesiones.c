@@ -18,9 +18,14 @@ int num_transp();
 int main(){ // main para pruebas
 
     Cliente *c;
-
-    carga_cliente(&c);
-    volcado_cliente(&c);
+    Adminprov *a;
+    Transportista *t;
+   // carga_cliente(&c);
+   // volcado_cliente(&c);
+  // carga_adminprov(&a);
+  // volcado_adminprov(&a);
+    carga_transp(&t);
+    volcado_transp(&t);
     return 0;
 }
 
@@ -41,28 +46,29 @@ void carga_cliente(Cliente **c){
     FILE *f;
     n_clien=num_cliente();
 
-    if((f=fopen("clientes.txt","r"))==NULL)
+    if((f=fopen("clientes.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
-    
-        *c = (Cliente *)calloc(n_clien, sizeof(Cliente));
-        if(*c==NULL){
-            printf("Error al reservar memoria para los Descuentos\n");
-            exit(1);
-        }else{
-            rewind(f);
-            for(i=0;i<n_clien;i++){
+        }
+        else{
+            *c = (Cliente *)calloc(n_clien, sizeof(Cliente));
+            if(*c==NULL){
+                printf("Error al reservar memoria para los Descuentos\n");
+                exit(1);
+            }else{
+                rewind(f);
+                for(i=0;i<n_clien;i++){
 
-                fgets(line,LINE,f);
-                strcpy((*c)[i].Id_cliente, strtok(line,"-"));
-                strcpy((*c)[i].Nombr_cliente, strtok(NULL, "-\n"));  //cargamos los datos tipo char
-                strcpy((*c)[i].Dir_cliente, strtok(NULL, "-\n"));
-                strcpy((*c)[i].Localidad, strtok(NULL, "-\n"));
-                strcpy((*c)[i].Provincia, strtok(NULL, "-\n"));
-                strcpy((*c)[i].email, strtok(NULL, "-\n"));
-                strcpy((*c)[i].Contrasenna, strtok(NULL, "-\n"));
-                strcpy((*c)[i].Cartera, strtok(NULL, "-\n"));
-            
-            }   
+                    fgets(line,LINE,f);
+                    strcpy((*c)[i].Id_cliente, strtok(line,"-"));
+                    strcpy((*c)[i].Nombr_cliente, strtok(NULL, "-\n"));  //cargamos los datos tipo char
+                    strcpy((*c)[i].Dir_cliente, strtok(NULL, "-\n"));
+                    strcpy((*c)[i].Localidad, strtok(NULL, "-\n"));
+                    strcpy((*c)[i].Provincia, strtok(NULL, "-\n"));
+                    strcpy((*c)[i].email, strtok(NULL, "-\n"));
+                    strcpy((*c)[i].Contrasenna, strtok(NULL, "-\n"));
+                    strcpy((*c)[i].Cartera, strtok(NULL, "-\n"));
+                 }   
+            }
         }
         rewind(f);
         fclose(f);
@@ -208,9 +214,9 @@ void carga_adminprov(Adminprov **a){
     FILE *f;
     n_admin=num_adminprov();
 
-    if((f=fopen("adminprov.txt","r"))==NULL)
+    if((f=fopen("adminprov.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
-    
+        }
         *a = (Adminprov *)calloc(n_admin, sizeof(Adminprov));
         if(*a==NULL){
             printf("Error al reservar memoria para los Descuentos\n");
@@ -265,6 +271,14 @@ void volcado_adminprov(Adminprov **a){
             strcat(line, "-");
             strcat(line, (*a)[i].Contrasenna);
             strcat(line, "-");
+
+             if((*a)[i].Perfil_usuario==proveedor){
+                strcat(line,"proveedor");
+            }else if((*a)[i].Perfil_usuario==administrador){
+                strcat(line,"administrador");
+            }else{
+                puts("Error en el volcado de TIPO prov/admin");
+            }
             
            if(i < n_admin - 1) strcat(line, "\n");
             fprintf(f, "%s", line);
@@ -327,9 +341,12 @@ void volcado_transp(Transportista **t){
             strcat(line, "-");
             strcat(line, (*t)[i].email);
             strcat(line, "-");
+            strcat(line, (*t)[i].Nom_empre);
+            strcat(line, "-");
             strcat(line, (*t)[i].Contrasenna);
             strcat(line, "-");
-            
+            strcat(line, (*t)[i].Ciudad);
+
            if(i < n_trans - 1) strcat(line, "\n");
             fprintf(f, "%s", line);
         }

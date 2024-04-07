@@ -10,12 +10,12 @@ typedef struct
 
 typedef struct
 {
-    char Id_empresa[4],Nombre[20], email[30],Contrasenna[15];
+    char Id_empresa[5],Nombre[21], email[31],Contrasenna[16];
     tipo_per Perfil_usuario;
 }Adminprov;
 
 typedef struct {
-    char Id_transp[4],Nombre[20],email[30],Contrasenna[15],Nom_empre[20],Ciudad[20];
+    char Id_transp[5],Nombre[21],email[31],Contrasenna[16],Nom_empre[21],Ciudad[21];
 }Transportista;
 
 
