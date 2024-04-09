@@ -15,23 +15,28 @@ void leer_string(char*,int);
 
 int main(){ // main para pruebas
   //  int *n_clien,clientes;
-    int *n_adminprov,adminprov;
+   // int *n_adminprov,adminprov;
+    int *n_transport,transport;
     //Cliente *c;
-    Adminprov *a;
-    //clientes=2;
-    //n_clien=&clientes;
+    //Adminprov *a;
+    Transportista *t;
+    /*clientes=2;
+    n_clien=&clientes;
     adminprov=1;
     n_adminprov=&adminprov;
-    /*
+    
     carga_cliente(&c,n_clien);
     nuevo_cliente(&c,n_clien);
     volcado_cliente(&c,n_clien);
-    */
+    
     carga_adminprov(&a,n_adminprov);
     nuevo_adminprov(&a,n_adminprov);
-    volcado_adminprov(&a,n_adminprov);
-   /* carga_transp(&t);
-    volcado_transp(&t);*/
+    volcado_adminprov(&a,n_adminprov);*/
+    transport=1;
+    n_transport=&transport;
+    carga_transp(&t,n_transport);
+    nuevo_transportista(&t,n_transport);
+    volcado_transp(&t,n_transport);
     return 0;
 }
 
@@ -58,7 +63,7 @@ void carga_cliente(Cliente **c,int *n_clien){
         else{
             *c = (Cliente *)calloc(*n_clien, sizeof(Cliente));
             if(*c==NULL){
-                printf("Error al reservar memoria para los Descuentos\n");
+                printf("Error al reservar memoria para los clientes\n");
                 exit(1);
             }else{
                 rewind(f);
@@ -169,7 +174,7 @@ void carga_adminprov(Adminprov **a,int *n_admin){
         }
         *a = (Adminprov *)calloc(*n_admin, sizeof(Adminprov));
         if(*a==NULL){
-            printf("Error al reservar memoria para los Descuentos\n");
+            printf("Error al reservar memoria para los admin/proveedores\n");
             exit(1);
         }else{
             rewind(f);
@@ -282,7 +287,7 @@ void carga_transp(Transportista**t,int *n_trans){
     }
         *t = (Transportista *)calloc(*n_trans, sizeof(Transportista));
         if(*t==NULL){
-            printf("Error al reservar memoria para los Descuentos\n");
+            printf("Error al reservar memoria para los transportistas\n");
             exit(1);
         }else{
             rewind(f);
@@ -335,6 +340,39 @@ void volcado_transp(Transportista **t,int *n_trans){
     fclose(f);
 
 }
+
+
+void nuevo_transportista(Transportista **t,int *n_transport){
+    char Id[5];
+    (*n_transport)++;
+    if((*t = (Transportista*)realloc(*t, *n_transport * sizeof(Transportista)))==NULL)
+    {
+        printf("Error al reservar memoria para los transportistas\n");
+        exit(1); 
+    }else{
+    de_int_a_id_empresa(*n_transport,Id);
+    printf("\n Su Id de transportista es: ");
+    puts(Id); 
+    strcpy((*t)[*n_transport-1].Id_transp,Id);
+
+    printf("\nIntrozuca su nombre y apellidos(20 caracteres):\n");     
+    leer_string((*t)[*n_transport-1].Nombre,21);
+   
+    printf("\nIntroduzca su correco electrónico de empresa(31 caracteres):\n");
+    leer_string((*t)[*n_transport-1].email,31);
+
+     printf("\nIntroduzca el nombre de su empresa(21 caracteres):\n");
+    leer_string((*t)[*n_transport-1].Nom_empre,21);
+
+    printf("\nCree e introduzca una contraseña(hasta 15 dígitos):\n");
+    leer_string((*t)[*n_transport-1].Contrasenna,16);
+    
+    printf("\nCree e introduzca su ciudad(hasta 15 dígitos):\n");
+    leer_string((*t)[*n_transport-1].Ciudad,16);
+
+    }
+}
+
 
 
 // cabecera: void leer_string(char * cadena, int elem)
