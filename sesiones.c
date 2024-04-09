@@ -10,23 +10,27 @@
 //FUCION QUE DEVUELVA EL TIPO DE ENUM
 
 void  de_int_a_id_cliente(int,char*);
-void nuevo_cliente(Cliente **,int *);
+void de_int_a_id_empresa(int,char*);
 void leer_string(char*,int);
 
 int main(){ // main para pruebas
-    int *n_clien,clientes;
-    Cliente *c;
-    clientes=2;
-    n_clien=&clientes;
-   /*Adminprov *a;
-    Transportista *t;*/
+  //  int *n_clien,clientes;
+    int *n_adminprov,adminprov;
+    //Cliente *c;
+    Adminprov *a;
+    //clientes=2;
+    //n_clien=&clientes;
+    adminprov=1;
+    n_adminprov=&adminprov;
+    /*
     carga_cliente(&c,n_clien);
     nuevo_cliente(&c,n_clien);
     volcado_cliente(&c,n_clien);
-
-   /* carga_adminprov(&a);
-    volcado_adminprov(&a);
-    carga_transp(&t);
+    */
+    carga_adminprov(&a,n_adminprov);
+    nuevo_adminprov(&a,n_adminprov);
+    volcado_adminprov(&a,n_adminprov);
+   /* carga_transp(&t);
     volcado_transp(&t);*/
     return 0;
 }
@@ -117,6 +121,42 @@ void volcado_cliente(Cliente **c,int *n_clien){
 
 }
 
+void nuevo_cliente(Cliente **c,int *n_cliente){
+    char Id[7];
+    (*n_cliente)++;
+    if((*c = (Cliente *)realloc(*c, *n_cliente * sizeof(Cliente)))==NULL)
+    {
+        printf("Error al reservar memoria para los Clientes\n");
+        exit(1); 
+    }else{
+    de_int_a_id_cliente(*n_cliente,Id);
+    printf("\n Su Id de cliente es: ");
+    puts(Id); 
+    strcpy((*c)[*n_cliente-1].Id_cliente,Id);
+
+    printf("\nIntrozuca su nombre y apellidos(20 caracteres):\n");     
+    leer_string((*c)[*n_cliente-1].Nombr_cliente,21);             
+    
+    printf("\nIntroduzca su dirección(50 caracteres):\n");
+    leer_string((*c)[*n_cliente-1].Dir_cliente,51);                            
+
+    printf("\nIntroduzca su localidad(20 caracteres):\n");
+    leer_string((*c)[*n_cliente-1].Localidad,21);              
+    
+    printf("\nIntroduzca su Provincia(20 caracteres):\n");
+    leer_string((*c)[*n_cliente-1].Provincia,21);
+
+    printf("\nIntroduzca su correco electrónico(31 caracteres):\n");
+    leer_string((*c)[*n_cliente-1].email,31);
+
+    printf("\nCree e introduzca una contraseña(hasta 15 dígitos):\n");
+    leer_string((*c)[*n_cliente-1].Contrasenna,16);
+
+    strcpy((*c)[*n_cliente-1].Cartera,"000000");
+    }
+}
+
+
 void carga_adminprov(Adminprov **a,int *n_admin){
     int i;
     char line[LINE]="\0";
@@ -199,6 +239,39 @@ void volcado_adminprov(Adminprov **a,int*n_admin){
 
 }
 
+
+void nuevo_adminprov(Adminprov **a,int *n_adminprov){
+    char Id[7],nomb[21];
+    (*n_adminprov)++;
+    if((*a = (Adminprov *)realloc(*a, *n_adminprov * sizeof(Adminprov)))==NULL)
+    {
+        printf("Error al reservar memoria para los Clientes\n");
+        exit(1); 
+    }else{
+    de_int_a_id_empresa(*n_adminprov,Id);
+    printf("\n Su Id de administrador/proveedor es: ");
+    puts(Id); 
+    strcpy((*a)[*n_adminprov-1].Id_empresa,Id);
+
+    printf("\nIntrozuca el nombre de su empresa(20 caracteres):\n");     
+    leer_string(nomb,21); 
+    puts(nomb);
+    strcpy((*a)[*n_adminprov-1].Nombre,nomb);
+    if(strcmp(nomb,"ESIZON\0")==0){
+        (*a)[*n_adminprov-1].Perfil_usuario=administrador;
+    }else{
+        (*a)[*n_adminprov-1].Perfil_usuario=proveedor;
+    }           
+
+    printf("\nIntroduzca su correco electrónico de empresa(31 caracteres):\n");
+    leer_string((*a)[*n_adminprov-1].email,31);
+
+    printf("\nCree e introduzca una contraseña(hasta 15 dígitos):\n");
+    leer_string((*a)[*n_adminprov-1].Contrasenna,16);
+    }
+}
+
+
 void carga_transp(Transportista**t,int *n_trans){
     int i;
     char line[LINE]="\0";
@@ -264,46 +337,6 @@ void volcado_transp(Transportista **t,int *n_trans){
 }
 
 
-
-//cabecera: void nuevo_cliente(Cliente **c)
-//precondición: **c un vector de estructura cliente inicializado
-//postcondición: crea y añade a la estructura un nuevo cliente
-void nuevo_cliente(Cliente **c,int *n_cliente){
-    char Id[7];
-    (*n_cliente)++;
-    if((*c = (Cliente *)realloc(*c, *n_cliente * sizeof(Cliente)))==NULL)
-    {
-        printf("Error al reservar memoria para los Clientes\n");
-        exit(1); 
-    }else{
-    de_int_a_id_cliente(*n_cliente,Id);
-    printf("\n Su Id de cliente es: ");
-    puts(Id); 
-    strcpy((*c)[*n_cliente-1].Id_cliente,Id);
-
-    printf("\nIntrozuca su nombre y apellidos(20 caracteres):\n");     
-    leer_string((*c)[*n_cliente-1].Nombr_cliente,21);             
-    
-    printf("\nIntroduzca su dirección(50 caracteres):\n");
-    leer_string((*c)[*n_cliente-1].Dir_cliente,51);                            
-
-    printf("\nIntroduzca su localidad(20 caracteres):\n");
-    leer_string((*c)[*n_cliente-1].Localidad,21);              
-    
-    printf("\nIntroduzca su Provincia(20 caracteres):\n");
-    leer_string((*c)[*n_cliente-1].Provincia,21);
-
-    printf("\nIntroduzca su correco electrónico(31 caracteres):\n");
-    leer_string((*c)[*n_cliente-1].email,31);
-
-    printf("\nCree e introduzca una contraseña(hasta 15 dígitos):\n");
-    leer_string((*c)[*n_cliente-1].Contrasenna,16);
-
-    strcpy((*c)[*n_cliente-1].Cartera,"000000");
-    }
-}
-
-
 // cabecera: void leer_string(char * cadena, int elem)
 // precondicion: ninguna
 // postcondicion: lee en cadena la cadena introducida por el usuario
@@ -341,6 +374,25 @@ void de_int_a_id_cliente(int i_id, char* s_id)
     itoa(i_id, cadena, 10);
 
     for (i = 6 - strlen(cadena); i < 6; i++) {
+        s_id[i] = cadena[j];
+        j++;
+    }
+}
+
+
+// cabecera: void de_int_a_id_empresa(int i_id, char * s_id)
+// precondicion: i_id es un numero de 4 digitos como máximo
+// postcondicion: convierte el entero i_id en un string s_id
+void de_int_a_id_empresa(int i_id, char* s_id)
+{ 
+    char cadena[5];
+    int i, j = 0;
+
+    strcpy(s_id, "0000");
+
+    itoa(i_id, cadena, 10);
+
+    for (i = 4 - strlen(cadena); i < 4; i++) {
         s_id[i] = cadena[j];
         j++;
     }
