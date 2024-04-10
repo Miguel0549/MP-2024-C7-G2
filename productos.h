@@ -26,10 +26,10 @@ typedef struct {
 //Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
 //Poscondicion: Muestra en pantalla el menu de productos para el cliente
 void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c);
-//Cabecera: void menu_adminprov_prod (producto **p,categproa **c,int *tamanio_p,int *tamanio_c,sesion ses)
+//Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
 //Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
 //Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
-void menu_adminprov_prod (producto **p,categoria **c,int *tamanio_p,int *tamanio_c,sesion ses);
+void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c,sesion ses);
 //Cabecera: producto * volcar_producto()
 //Precondicion: 
 //poscondicion: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
@@ -50,7 +50,7 @@ categoria * volcar_categoria(int *tamanio);
 //Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
-void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c);
+void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char *id);
 //Cabecera: void baja_producto(producto **v,int *tamanio_p,categoria **c,int *tamanio_c);
 //Precondicion: v debe apuntar al producto a borrar y el usuario actual debe ser administrador o proveedor
 //Poscondicion: Borra la informacion de un producto y corrije el vector de acuerdo al borrado

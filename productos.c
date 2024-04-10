@@ -21,7 +21,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
     int *asoc,i,j=0,a;
     char nombre[51],idcat[8];
     system("cls");
-    printf("¿Que desea realizar?\n1)Consulta por categoria\n2)Consulta por nombre\n3)Salir\n");
+    printf("Que desea realizar?\n1)Consulta por categoria\n2)Consulta por nombre\n3)Salir\n");
     seleccion=getchar();
     switch (seleccion)
     {
@@ -30,7 +30,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
             system("cls");
             lista_cat(c,tamanio_c);
             printf("Escriba el nombre de la categoria a buscar\n");
-            getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             fgets(nombre,51,stdin);
             quitaenter(nombre);
             cataid(idcat,c,nombre,tamanio_c);
@@ -69,16 +69,16 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
         menu_cliente_prod(p,c,tamanio_p,tamanio_c);
         break;
         case('2'):
-        do{
+        
             system("cls");
             printf("Escriba el nombre del producto a buscar\n");
-            getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             fgets(nombre,51,stdin);
             quitaenter(nombre);
                 asoc=(int *)malloc(tamanio_p*sizeof(int));
                 for (i=0;i<tamanio_p;i++)//Obtencion de asoc
                 {
-                    if (strstr(p[i].id_categ,nombre)!=NULL)
+                    if (strstr(p[i].nombre,nombre)!=NULL)
                     {
                         asoc[j]=i;
                         j++;
@@ -98,14 +98,65 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 printf("Pulse enter para salir.\n");
                 system("PAUSE");
                 salida='s';
-        }while(salida='s');
+        
         menu_cliente_prod(p,c,tamanio_p,tamanio_c);
         break;
-
+        case ('3'):
+        break;
+        default:
+        menu_cliente_prod(p,c,tamanio_p,tamanio_c);
 
     }
 }
-void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c)
+void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c,sesion ses)
+{
+    int i,tamanio_asoc,*asoc;
+    char seleccion;
+    asoc=(int *)malloc(*tamanio_p*sizeof(int));
+    system("cls");
+    printf("Sus productos.\n");
+    for (i=0;i<*tamanio_p;i++)
+    {
+        if (strcmp(p[i]->id_gestor,ses.id)==0)
+        {
+            asoc[tamanio_asoc]=i;
+            tamanio_asoc++;
+        }
+    }
+    asoc=(int *)realloc(asoc,tamanio_asoc*sizeof(int));
+    lista_prod_asoc(*p,asoc,c,tamanio_c,tamanio_asoc);
+    printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir");
+    seleccion=getchar();
+    system("cls");
+    switch(seleccion)
+    {
+        case('1'):
+        alta_producto(c,p,tamanio_p,tamanio_c,ses.id);
+        free(asoc);
+        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        break;
+        case('2'):
+        free(asoc);
+        menu_cliente_prod(*p,c,*tamanio_p,tamanio_c);
+        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        break;
+        case('3'):
+        baja_producto(p,tamanio_p,c,tamanio_c,asoc);
+        free(asoc);
+        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        break;
+        case('4'):
+        free(asoc);
+        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        break;
+        case('5'):
+        break;
+        default:
+        free(asoc);
+        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+    }
+}
+void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char *id)
 {
     int error,a;
     char salida='n',carga='n',aux[51],aux2[51];
@@ -120,11 +171,11 @@ void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c)
         fgets(p.descrip,51,stdin);
         quitaenter(p.descrip);
         
-        lista_cat(*c,*tamanio_c);
+        lista_cat(c,*tamanio_c);
         printf("Escribe la categoria que quieras asociar al producto.\nCategoria: ");
         fgets(aux2,51,stdin);
         quitaenter(aux2);
-        cataid(p.id_categ,*c,aux2,*tamanio_c);
+        cataid(p.id_categ,c,aux2,*tamanio_c);
         
         printf("\nEscribe el stock inicial del producto.\nStock: ");
         fgets(aux,51,stdin);
@@ -157,10 +208,7 @@ void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c)
             
             if (carga=='s')
             {
-                //REMOVER DESPUES
-                strcpy(p.id_gestor,"0001\0");
-                //REMOVER DESPUES
-                //p.id_gestor=usuario_actual().id;
+                strcpy(p.id_gestor,id);
                 //Obtencion de la proxima id disponible
                 if (*tamanio_p==0)
                 {
@@ -204,10 +252,12 @@ void alta_producto(categoria **c,producto **v,int *tamanio_p,int *tamanio_c)
     if(error!=0)
     {
         printf("Alta de producto fallida. Error: %d.\n",error);
+        system("pause");
     }
     else
     {
         printf("Alta de producto con exito. Id: %s\n",p.id_prod);
+        system("pause");
     }
 }
 void alta_categoria(categoria **v,int *tamanio)
@@ -653,7 +703,7 @@ static void lista_prod(producto *lista,categoria *c,int tamanio_p,int tamanio_c)
         printf("Nombre: %s\n",lista[i].nombre);
         printf("Descripcion: %s\n",lista[i].descrip);
         printf("Categoria: %s\n",descrip_cat);
-        printf("Precio: %d€\n",lista[i].importe);
+        printf("Precio: %d euros\n",lista[i].importe);
         printf("Stock: %d unidades\n",lista[i].stock);
         printf("Entrega en %d dias\n",lista[i].entrega);
         printf("Identificador: %s\n",lista[i].id_prod);
