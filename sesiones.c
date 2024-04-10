@@ -12,31 +12,32 @@
 void  de_int_a_id_cliente(int,char*);
 void de_int_a_id_empresa(int,char*);
 void leer_string(char*,int);
-
+void borrar_cliente_con_id(Cliente**,char*,int*);
+int indice_con_id_cliente(Cliente**,char*,int);
 int main(){ // main para pruebas
-  //  int *n_clien,clientes;
+    int *n_clien,clientes;
    // int *n_adminprov,adminprov;
-    int *n_transport,transport;
-    //Cliente *c;
+   // int *n_transport,transport;
+    Cliente *c;
     //Adminprov *a;
-    Transportista *t;
-    /*clientes=2;
+    //Transportista *t;
+    clientes=3;
     n_clien=&clientes;
-    adminprov=1;
-    n_adminprov=&adminprov;
+    //adminprov=1;
+    //n_adminprov=&adminprov;
     
     carga_cliente(&c,n_clien);
-    nuevo_cliente(&c,n_clien);
+    borrar_cliente_con_id(&c,"000002",n_clien);
     volcado_cliente(&c,n_clien);
-    
+    /*
     carga_adminprov(&a,n_adminprov);
     nuevo_adminprov(&a,n_adminprov);
     volcado_adminprov(&a,n_adminprov);*/
-    transport=1;
-    n_transport=&transport;
-    carga_transp(&t,n_transport);
-    nuevo_transportista(&t,n_transport);
-    volcado_transp(&t,n_transport);
+   // transport=1;
+    //n_transport=&transport;
+   // carga_transp(&t,n_transport);
+    //nuevo_transportista(&t,n_transport);
+    //volcado_transp(&t,n_transport);
     return 0;
 }
 
@@ -311,7 +312,7 @@ void volcado_transp(Transportista **t,int *n_trans){
     int i;
     char line[LINE]="\0";
     FILE *f;
-    if ((f = fopen("transportistas.txt", "w+")) == NULL) {
+    if ((f = fopen("transportistas.txt", "w")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -433,5 +434,26 @@ void de_int_a_id_empresa(int i_id, char* s_id)
     for (i = 4 - strlen(cadena); i < 4; i++) {
         s_id[i] = cadena[j];
         j++;
+    }
+}
+
+int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int n_clientes){
+    int i=0,devolver;
+    do{
+        if(strcmp(id_cliente,(*vector_cliente)[i].Id_cliente)==0){
+        devolver=i;
+    }
+        i++;
+    }while(i<=n_clientes);
+    return devolver;
+}
+
+void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes){
+    int i;
+    if(*n_clientes==1){
+        free(vector_cliente);
+    }else{
+    for(i=indice_con_id_cliente(*vector_cliente,Id_cliente,*n_clientes)+1;i<*n_clientes;i++)
+        vector_cliente[i-1]=vector_cliente[i];
     }
 }
