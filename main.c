@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include "Devoluciones.h"
 
 
 int main(){
@@ -32,9 +33,8 @@ int main(){
     carga_devoluciones(&dev,n_dev);
 
 
-     menu_pedidos(ped,p_ped,n_ped,n_prod_ped,transportista);
+     menu_devoluciones(ped,p_ped,dev,n_dev,n_ped,n_prod_ped,admin);
 
-     volcado_devoluciones(dev,n_dev);
      volcado_lockers(l,n_lock);
      volcado_comp_lockers(c_l,n_c_lock);
 

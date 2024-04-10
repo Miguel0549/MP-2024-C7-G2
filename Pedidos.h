@@ -31,6 +31,7 @@ typedef struct {
 
 }ProductoPedido;
 
+void fecha_actual( char fecha_act[11]);
 
 void carga_pedidos( Pedido **ped ,int *n_ped);
 void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped);

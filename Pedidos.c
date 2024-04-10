@@ -1844,7 +1844,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
                     break;
             }
 
-        }while ( op_ped != 1 && op_ped != 2 && op_ped != 3 && op_ped != 4 && op_ped != 5);
+        }while ( op_ped != 1 && op_ped != 2 && op_ped != 3 && op_ped != 4 && op_ped != 5 && op_ped != 6 && op_ped != 7);
 
 
 
@@ -1970,16 +1970,11 @@ void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos 
     }while ( op != 1 && op != 2);
 
 
-
-
-
-
 }
 
 
     void menu_pedidos(Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, usu tipo_usu) {
 
-        int i;
         char id_cliente[8]="0000004";
 
         switch (tipo_usu) {
