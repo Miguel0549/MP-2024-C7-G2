@@ -23,7 +23,7 @@ int num_desc_desde_fich();
     /*MAIN PROVISIONAL*/
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
-int desc=1,*n_desc;
+int desc=0,*n_desc;
 Descuentos_clientes *dc;
 //char cad[]="0020312";
 n_desc=&desc;
@@ -72,7 +72,6 @@ void crear_fichero_descuentos_clientes()
 //postcondición: crea y añade a la estructura un nuevo descuento
 void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
     int sel,i=0;
-    char placeholder[11];
     (*n_desc)++;
     if((*d = (Descuentos *)realloc(*d, *n_desc * sizeof(Descuentos)))==NULL){
         printf("Error al reservar memoria para los Descuentos\n");
@@ -85,10 +84,11 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
     (*dc)[*n_desc-1].Estado=no;
     //(*dc)[*n_desc-1].Id_cliente=cliente_actual();
     strcpy((*dc)[*n_desc-1].Id_cliente,"0020312"); //PROVISIONAL
+    strcpy((*dc)[*n_desc-1].f_asignacion,"10/04/2024");
     printf("\nIntrozuca la Id del descuento:\n");     
     leer_string((*d)[*n_desc-1].Id_cod,11);           //Introducimos la Id del código
     
-    strcpy((*dc)[*n_desc-1].Id_cliente,(*d)[*n_desc-1].Id_cod);
+    strcpy((*dc)[*n_desc-1].Id_cod,(*d)[*n_desc-1].Id_cod);
 
     printf("\nIntroduzca una breve descripción del descuento:\n");
     leer_string((*d)[*n_desc-1].Descrip,51);                            //Introducimos la cadena
@@ -97,11 +97,8 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
     leer_string((*d)[*n_desc-1].Importe,4);               //Introducimos el importe del descuento
 
     printf("\n Introduzca la fecha de caducidad del descuento formato:(dd/mm/aaaa)\n");
-    leer_string(placeholder,11);
-/*
-    printf("\n Introduzca la fecha de caducidad del descuento formato:(dd/mm/aaaa)\n");
-    leer_string(placeholder,11);*/
-    strcpy((*dc)[*n_desc-1].f_caducidad,placeholder);
+
+    strcpy((*dc)[*n_desc-1].f_caducidad,"12/03/2030");
 
     do{
         printf("\nElija un tipo de descuento:\n 1.Codpro\n 2.Cheqreg\n");
@@ -556,7 +553,7 @@ void leer_string(char*cadena, int elem)
     int i;
 
     fflush(stdin);
-    fgets(cadena, elem , stdin);
+    fgets(cadena,elem,stdin);
     fflush(stdin);
     //puts(cadena);
     for (i = 0; cadena[i] != '\n' && i < elem + 1; i++)
