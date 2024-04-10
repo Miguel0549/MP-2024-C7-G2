@@ -96,9 +96,9 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
     printf("\nIntroduce el importe del descuento:\n");
     leer_string((*d)[*n_desc-1].Importe,4);               //Introducimos el importe del descuento
 
+    while ((i=getchar()) != '\n' && i != EOF){} //limpiamos el buffer
     printf("\n Introduzca la fecha de caducidad del descuento formato:(dd/mm/aaaa)\n");
-
-    strcpy((*dc)[*n_desc-1].f_caducidad,"12/03/2030");
+    leer_string((*dc)[*n_desc-1].f_caducidad,11);
 
     do{
         printf("\nElija un tipo de descuento:\n 1.Codpro\n 2.Cheqreg\n");
@@ -551,7 +551,7 @@ fecha de_string_a_fecha(char* cadena)
 void leer_string(char*cadena, int elem)
 {
     int i;
-
+   
     fflush(stdin);
     fgets(cadena,elem,stdin);
     fflush(stdin);
