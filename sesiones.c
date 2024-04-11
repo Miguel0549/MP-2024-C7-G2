@@ -437,23 +437,27 @@ void de_int_a_id_empresa(int i_id, char* s_id)
     }
 }
 
-int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int n_clientes){
+int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int num_clien){
     int i=0,devolver;
     do{
         if(strcmp(id_cliente,(*vector_cliente)[i].Id_cliente)==0){
         devolver=i;
     }
         i++;
-    }while(i<=n_clientes);
+    }while(i<=num_clien);
     return devolver;
 }
 
 void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes){
-    int i;
+    int i,aux;
+    aux=*n_clientes;
+
     if(*n_clientes==1){
         free(vector_cliente);
+        *n_clientes=0;
     }else{
-    for(i=indice_con_id_cliente(*vector_cliente,Id_cliente,*n_clientes)+1;i<*n_clientes;i++)
-        vector_cliente[i-1]=vector_cliente[i];
+    for(i=indice_con_id_cliente(vector_cliente,Id_cliente,aux)+1;i<aux;i++)
+        (*vector_cliente)[i-1]=(*vector_cliente)[i];
     }
+    (*n_clientes)=aux-1;
 }
