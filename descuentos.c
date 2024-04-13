@@ -605,3 +605,4 @@ int indice_con_id_descuento(Descuentos**vector_descuentos,char *id_descuento,int
 }
 
 
+//Hacer borrado descuentos, modificaciones del los mismos, que si es codpro ser asocie a todos los clientes actuales 
