@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "sesiones.h"
-#define LINE 100 
+#define LINE 150
 
 //char* usuario_actual(char*);
 //FUCION QUE DEVUELVA EL TIPO DE ENUM
@@ -14,30 +14,37 @@ void de_int_a_id_empresa(int,char*);
 void leer_string(char*,int);
 void borrar_cliente_con_id(Cliente**,char*,int*);
 int indice_con_id_cliente(Cliente**,char*,int);
+void borrar_adminprov_con_id(Adminprov**,char*,int*);
+int indice_con_id_cliente(Cliente**,char*,int);
+void borrar_transp_con_id(Transportista**,char*,int*);
+int indice_con_id_transp(Transportista**,char*,int);
+void siguiente_id(char*,int);
+
 int main(){ // main para pruebas
-    int *n_clien,clientes;
-   // int *n_adminprov,adminprov;
-   // int *n_transport,transport;
-    Cliente *c;
+    //int *n_clien,clientes;
+    //int *n_adminprov,adminprov;
+    int *n_transport,transport;
+    //Cliente *c;
     //Adminprov *a;
-    //Transportista *t;
-    clientes=3;
-    n_clien=&clientes;
-    //adminprov=1;
+    Transportista *t;
+    //clientes=num_cliente_fich();
+    //n_clien=&clientes;
+    //adminprov=num_admin_fich();
     //n_adminprov=&adminprov;
+    transport=num_transp_fich();
+    n_transport=&transport;
+
+
+
+   // carga_cliente(&c,n_clien);
+    //volcado_cliente(&c,n_clien);
     
-    carga_cliente(&c,n_clien);
-    borrar_cliente_con_id(&c,"000002",n_clien);
-    volcado_cliente(&c,n_clien);
-    /*
-    carga_adminprov(&a,n_adminprov);
-    nuevo_adminprov(&a,n_adminprov);
-    volcado_adminprov(&a,n_adminprov);*/
-   // transport=1;
-    //n_transport=&transport;
-   // carga_transp(&t,n_transport);
-    //nuevo_transportista(&t,n_transport);
-    //volcado_transp(&t,n_transport);
+    //carga_adminprov(&a,n_adminprov);
+    //volcado_adminprov(&a,n_adminprov);
+
+    carga_transp(&t,n_transport);
+    nuevo_transportista(&t,n_transport);
+    volcado_transp(&t,n_transport);
     return 0;
 }
 
@@ -135,10 +142,17 @@ void nuevo_cliente(Cliente **c,int *n_cliente){
         printf("Error al reservar memoria para los Clientes\n");
         exit(1); 
     }else{
-    de_int_a_id_cliente(*n_cliente,Id);
+
+        if(*n_cliente==1){
+            de_int_a_id_cliente(*n_cliente,Id);
+        }else{
+            strcpy(Id,(*c+(*n_cliente-2))->Id_cliente);
+            siguiente_id(Id,6);
+        }
     printf("\n Su Id de cliente es: ");
     puts(Id); 
     strcpy((*c)[*n_cliente-1].Id_cliente,Id);
+   
 
     printf("\nIntrozuca su nombre y apellidos(20 caracteres):\n");     
     leer_string((*c)[*n_cliente-1].Nombr_cliente,21);             
@@ -254,14 +268,20 @@ void nuevo_adminprov(Adminprov **a,int *n_adminprov){
         printf("Error al reservar memoria para los Clientes\n");
         exit(1); 
     }else{
-    de_int_a_id_empresa(*n_adminprov,Id);
+        
+        if(*n_adminprov==1){
+            de_int_a_id_empresa(*n_adminprov,Id);
+        }else{
+            strcpy(Id,(*a+(*n_adminprov-2))->Id_empresa);
+            siguiente_id(Id,4);
+        }
     printf("\n Su Id de administrador/proveedor es: ");
     puts(Id); 
     strcpy((*a)[*n_adminprov-1].Id_empresa,Id);
 
     printf("\nIntrozuca el nombre de su empresa(20 caracteres):\n");     
     leer_string(nomb,21); 
-    puts(nomb);
+    //puts(nomb);
     strcpy((*a)[*n_adminprov-1].Nombre,nomb);
     if(strcmp(nomb,"ESIZON\0")==0){
         (*a)[*n_adminprov-1].Perfil_usuario=administrador;
@@ -309,8 +329,9 @@ void carga_transp(Transportista**t,int *n_trans){
 }
 
 void volcado_transp(Transportista **t,int *n_trans){
-    int i;
+    int i,lim;
     char line[LINE]="\0";
+    lim=*n_trans;
     FILE *f;
     if ((f = fopen("transportistas.txt", "w")) == NULL) {
 
@@ -318,7 +339,7 @@ void volcado_transp(Transportista **t,int *n_trans){
 
     } else {
 
-        for ( i=0 ; i<*n_trans ; i++ ){
+        for ( i=0 ; i<lim ; i++ ){
            // strcpy(line,"\n");
             strcpy(line, (*t)[i].Id_transp);
             strcat(line, "-");
@@ -351,7 +372,13 @@ void nuevo_transportista(Transportista **t,int *n_transport){
         printf("Error al reservar memoria para los transportistas\n");
         exit(1); 
     }else{
-    de_int_a_id_empresa(*n_transport,Id);
+        
+        if(*n_transport==1){
+            de_int_a_id_empresa(*n_transport,Id);
+        }else{
+            strcpy(Id,(*t+(*n_transport-2))->Id_transp);
+            siguiente_id(Id,4);
+        }
     printf("\n Su Id de transportista es: ");
     puts(Id); 
     strcpy((*t)[*n_transport-1].Id_transp,Id);
@@ -437,6 +464,9 @@ void de_int_a_id_empresa(int i_id, char* s_id)
     }
 }
 
+//cabecera:int indice_con_id_cliente(Cliente **vector_cliente,cha*id_cliente,int)
+//precondición: vector cliente un vector de estructura cliente, id cliente una cadena y num_clien el número de clientes registrados del vector
+//postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
 int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int num_clien){
     int i=0,devolver;
     do{
@@ -448,6 +478,7 @@ int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int num_clien
     return devolver;
 }
 
+//
 void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes){
     int i,aux;
     aux=*n_clientes;
@@ -460,4 +491,153 @@ void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clie
         (*vector_cliente)[i-1]=(*vector_cliente)[i];
     }
     (*n_clientes)=aux-1;
+}
+
+
+//cabecera:int indice_con_id_cliente(Adminprov **vector_admin,cha*id_admin,int)
+//precondición: vector cliente un vector de estructura adminprov, id admin una cadena y num_admin el número de admin/prov registrados del vector
+//postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+int indice_con_id_adminprov(Adminprov**vector_admin,char *id_admin,int num_admin){
+    int i=0,devolver;
+    do{
+        if(strcmp(id_admin,(*vector_admin)[i].Id_empresa)==0){
+        devolver=i;
+    }
+        i++;
+    }while(i<=num_admin);
+    return devolver;
+}
+
+
+
+void borrar_adminprov_con_id(Adminprov**vector_admin,char *Id_admin, int *n_admin){
+    int i,aux;
+    aux=*n_admin;
+
+    if(*n_admin==1){
+        free(vector_admin);
+        *n_admin=0;
+    }else{
+    for(i=indice_con_id_adminprov(vector_admin,Id_admin,aux)+1;i<aux;i++)
+        (*vector_admin)[i-1]=(*vector_admin)[i];
+    }
+    (*n_admin)=aux-1;
+}
+
+
+
+int indice_con_id_transp(Transportista**vector_transp,char *id_transp,int num_transp){
+    int i=0,devolver;
+    do{
+        if(strcmp(id_transp,(*vector_transp)[i].Id_transp)==0){
+        devolver=i;
+    }
+        i++;
+    }while(i<=num_transp);
+    return devolver;
+}
+
+void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_transp){
+    int i,aux;
+    aux=*n_transp;
+
+    if(aux==1){
+        free(vector_transp);
+        *n_transp=0;
+    }else{
+    for(i=indice_con_id_transp(vector_transp,Id_trans,aux)+1;i<aux;i++)
+        (*vector_transp)[i-1]=(*vector_transp)[i];
+    }
+    (*n_transp)=aux-1;
+}
+
+
+
+void siguiente_id(char*cad,int i){
+    for(int j=0;(i>=0)&&(j==0);i--)
+        if(cad[i-1]=='9'){
+            cad[i-1]='0';
+        }else{
+            cad[i-1]++;
+            j=1;
+        }
+}   
+
+
+
+int num_cliente_fich(){
+    char c;
+    int n_lin,i;
+    n_lin=0;
+    i=0;
+
+    FILE *f;
+    if((f=fopen("clientes.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+        while(i==0){
+            
+            c=fgetc(f);
+            if(c=='\n')
+                n_lin++;
+            if(c==EOF)//si el caracter es end of file, cambiamos la variable de salida del bucle
+                i++;
+        
+
+        }
+
+    }
+    return (n_lin+1);
+}
+
+int num_admin_fich(){
+    char c;
+    int n_lin,i;
+    n_lin=0;
+    i=0;
+
+    FILE *f;
+    if((f=fopen("adminprov.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+        while(i==0){
+            
+            c=fgetc(f);
+            if(c=='\n')
+                n_lin++;
+            
+            if(c==EOF) //si el caracter es end of file, cambiamos la variable de salida del bucle
+                i++;
+            
+
+        }
+
+    }
+    return (n_lin+1);
+}
+
+int num_transp_fich(){
+    char c;
+    int n_lin,i;
+    n_lin=0;
+    i=0;
+
+    FILE *f;
+    if((f=fopen("transportistas.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+        while(i==0){
+            
+            c=fgetc(f);
+            if(c=='\n')
+                n_lin++;
+            
+            if(c==EOF) //si el caracter es end of file, cambiamos la variable de salida del bucle
+                i++;
+            
+
+        }
+
+    }
+    return (n_lin+1);
 }

@@ -65,3 +65,18 @@ void volcado_transp(Transportista**,int*);
 //precondición: **t doble puntero a estructura inicializado y *n_transportista puntero que apunta al numero actual de transportistas
 //postcondición: amplia el vector de estructuras e inicializa desde entrada de teclado un nuevo transportista
 void nuevo_transportista(Transportista **,int *);
+
+//cabecera:int num_cliente_fich()
+//precondición: que exista el .txt correspondiente
+//postcondición: devuelve el número de líneas que tiene el fichero
+int num_cliente_fich();
+
+//cabecera:int num_admin_fich()
+//precondición: que exista el .txt correspondiente
+//postcondición: devuelve el número de líneas que tiene el fichero
+int num_admin_fich();
+
+//cabecera:int num_transp_fich()
+//precondición: que exista el .txt correspondiente
+//postcondición: devuelve el número de líneas que tiene el fichero
+int num_transp_fich();
