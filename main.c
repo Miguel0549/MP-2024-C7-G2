@@ -7,7 +7,7 @@ void menu_principal_usuario(char Id[7]);
 void menu_principal_transportista(char transp[4]);
 int main(){
     printf("texto de prueba\n");
-    menu_principal_usuario
+    menu_principal_usuario();
 
     return 0;
 }
