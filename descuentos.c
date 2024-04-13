@@ -19,19 +19,22 @@ void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 void leer_string(char*,int);
 int num_desc_desde_fich();
+int indice_con_id_descuento(Descuentos**,char*,int);
 
     /*MAIN PROVISIONAL*/
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
-int desc=0,*n_desc;
+int desc,*n_desc;
 Descuentos_clientes *dc;
 //char cad[]="0020312";
+desc=num_desc_desde_fich();
 n_desc=&desc;
 //crear_fichero_descuentos();
 //printf("\n%i\n",num_desc());
 carga_descuentos(&d,n_desc);
 carga_descuentos_clientes(&dc,n_desc);
-nuevo_descuento(&d,&dc,n_desc);
+listar_descuentos_propios(&d,&dc,"0020312",n_desc);
+//nuevo_descuento(&d,&dc,n_desc);
 volcado_descuentos(&d,n_desc);
 volcado_descuentos_clientes(&dc,n_desc);
 
@@ -385,21 +388,29 @@ void listar_descuentos(Descuentos**d,int*n_desc){
         i++;
     } while (i<=*n_desc-1);
     
-
 }
 
 //cabecera:void listar_descuentos_propios(char*Id_cliente)
 //precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
 //postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
-void listar_descuentos_propios(Descuentos_clientes **dc,char *Id_cliente,int*n_desc){
-    int i=0,cont=1;
+void listar_descuentos_propios(Descuentos **d, Descuentos_clientes **dc,char *Id_cliente,int*n_desc){
+    int i=0,cont=1,j;
     //Id_a_user(*Id_cliente);
     printf("Descuentos de %s:\n",Id_cliente);
     do
     {
         if(strcmp((*dc)[i].Id_cliente,Id_cliente)==0){
+            j=indice_con_id_descuento(d,(*dc)[i].Id_cod,*n_desc);
              printf(" %i.",cont);
              puts((*dc)[i].Id_cod);
+             printf("Cantidad:");
+             puts((*d)[j].Importe);
+             printf("Fecha de expedición:");
+             puts((*dc)[i].f_asignacion);
+             printf("Fecha de caducidad:");
+             puts((*dc)[i].f_caducidad);
+             if((*d)[j].Estado==activo){printf("Descuento activo\n\n");}
+             else{ printf("Descuento inactivo\n\n");}
              cont++;
         }
        
@@ -567,3 +578,30 @@ void leer_string(char*cadena, int elem)
         i++;
     }
 }
+
+
+void siguiente_id(char*cad,int i){
+    for(int j=0;(i>=0)&&(j==0);i--)
+        if(cad[i-1]=='9'){
+            cad[i-1]='0';
+        }else{
+            cad[i-1]++;
+            j=1;
+        }
+}   
+
+//cabecera:int indice_con_id_descuentos(Cliente **vector_descuentos,cha*id_desc,int num_desc)
+//precondición: vector cliente un vector de estructura descuentos, id_desc una cadena y num_desc el número de descuentpos registrados del vector
+//postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+int indice_con_id_descuento(Descuentos**vector_descuentos,char *id_descuento,int num_desc){
+    int i=0,devolver;
+    do{
+        if(strcmp(id_descuento,(*vector_descuentos)[i].Id_cod)==0){
+        devolver=i;
+    }
+        i++;
+    }while(i<=num_desc);
+    return devolver;
+}
+
+

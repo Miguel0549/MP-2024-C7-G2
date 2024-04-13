@@ -59,7 +59,7 @@ void listar_descuentos(Descuentos**,int*);
 //cabecera:void listar_descuentos_propios(char*Id_cliente)
 //precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
 //postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
-void listar_descuentos_propios(Descuentos_clientes**,char *,int*);
+void listar_descuentos_propios(Descuentos**,Descuentos_clientes**,char *,int*);
 
 //cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
 //precondición: **dc inicializado e Id_cod un código de descuento válido
@@ -71,3 +71,5 @@ int comprobar_descuento(Descuentos_clientes**,char *);
  //postcondición:
 
 void nuevo_descuento(Descuentos**,Descuentos_clientes**,int*);
+
+
