@@ -79,14 +79,18 @@ void alta_categoria(categoria **v,int *tamanio);
 //Cabecera: void baja_categoria(categoria **c,int *tamanio_c);
 //Precondicion: El usuario actual debe ser administrador
 //Poscondcion: Borra la categoria que especifique el usuario y ajusta el vector de acuerdo a ello
-void baja_categoria(categoria **c,int *tamanio,producto *p);
+void baja_categoria();
 //Cabecera: void idacat(char *descrip,categoria *c,char *id)
 //Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
 //Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
 //Si no se encuentra, se devuelve en descrip "-\0";
-void idacat(char *descrip,categoria *c,char *id,int tamanio);
+int idacat(char *descrip,categoria *c,char *id,int tamanio);
 //Cabecera: cataid(char *id,categoria *c,char *descrip,int tamanio)
 //Precondicion: descrip debe estar definido y tener 51 elementos, el final de la cadena debe terminar en '\0'
 //Poscondicion: Devuelve en id la c.id_cat de la categoria cuyo c.descrip coincida con descrip.
 void cataid(char *id,categoria *c,char *descrip,int tamanio);
+//Cabecera: menu_admin_cat();
+//Precondicion: El usuario actual debe ser un administrador
+//Poscondicion: Muestra por pantalla un menu el cual el usuario puede dar de alta, modificar o borrar cualquier categoria
+void menu_admin_cat();
 #endif

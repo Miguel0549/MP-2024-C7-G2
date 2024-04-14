@@ -18,6 +18,7 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
 static void borrar_producto(producto **p,int *tamanio_prod,int indice);
 static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
 static void menu_modificar_producto (int indice);
+static void listado_cat();
 
 //Declaracion de variables publicas
 producto *array_prod;
@@ -163,6 +164,36 @@ void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c
         default:
         free(asoc);
         menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+    }
+}
+void menu_admin_cat()
+{
+    char seleccion;
+    int a;
+    system("cls");
+    printf("Estas son las categorias disponibles\n");
+    listado_cat();
+    printf("Que desea hacer?\n1)Alta de categoria\n2)Modificar categoria\n3)Baja de categoria\n4)Salir\n");
+    seleccion=getchar();
+    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+    switch (seleccion)
+    {
+        case '1'://Alta
+        alta_categoria(&array_cat,&tamanio_c);
+        menu_admin_cat();
+        break;
+        case '2'://Modificar
+        //modificar_categoria();POR HACER
+        menu_admin_cat();
+        break;
+        case '3'://Baja
+        baja_categoria();
+        menu_admin_cat();
+        break;
+        case '4'://Salida del programa
+        break;
+        default://Si se introduce un caracter no valido
+        menu_admin_cat();
     }
 }
 void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *id)
@@ -428,10 +459,91 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     }
 }
-void baja_categoria(categoria **c,int *tamanio_c,producto *p)//Por terminar
+void baja_categoria()//Por terminar
 {
+    int a,*asoc,tamanio_asoc=0,i,indice;
+    char salida='n',id_cat[5],descrip[51],confirmar;
+    system("cls");
     printf("Comienzo de borrado de una categoria.\n");
-    lista_cat(*c,*tamanio_c);
+    lista_cat(array_cat,tamanio_c);
+    asoc=(int *)malloc(tamanio_p*sizeof(producto));//asoc es un vector que va a contener todas los indices de los productos que coincidan con la categoria a borrar
+    do{
+        pritnf("Escribe el identificador de la id a borrar.\n");
+        fgets(id_cat,5,stdin);
+        indice=idacat(descrip,array_cat,id_cat,tamanio_c);
+        if(descrip[0]=='-')//'-' significa que no se ha encontrado la id
+        {
+            printf("No se ha encontrado la categoria\nDesea cancelar la baja? Escriba 's' para salir");
+            salida=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+        }
+        else
+        {
+            printf("Va a borrar la categoria %s.\nEscriba 's' para confirmar\n",descrip);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+            {
+                for (i=0;i<tamanio_p;i++)
+                {
+                    if(strcmp(id_cat,array_prod[i].id_categ))
+                    {
+                        asoc[tamanio_asoc]=i;
+                        tamanio_asoc++;
+                    }
+                }
+                asoc=(int *)realloc(asoc,tamanio_asoc*sizeof(int));
+                if (tamanio_asoc!=0)
+                {
+                    listado_prod_asoc(array_prod,asoc,array_cat,tamanio_c,tamanio_asoc);
+                    printf("Los siguientes productos estan asociados a la categoria a borrar.\nBorrar esta categoria tambien borrara esos productos.\nSi no quiere borrarlos, cancele y asocie dichos productos a otra categoria.\nDesea continuar? Escriba 's' para continuar.\n");
+                    confirmar='n';
+                    confirmar=getchar();
+                    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                    if (confirmar=='s')
+                    {
+                        for (i=0;i<tamanio_asoc;i++)//Borrado de los productos asociados a la categoria
+                        {
+                            borrar_producto(&array_prod,&tamanio_p,asoc[i]);
+                        }
+                        for (i=indice;i<tamanio_c-1;i++)//Borrado de la categoria
+                        {
+                            array_cat[i]=array_cat[i+1];
+                        }
+                        tamanio_c--;
+                        array_cat=(categoria *)realloc(array_cat,tamanio_c*sizeof(categoria));
+                        printf("Borrado de categoria con exito\n");
+                    }
+                    else
+                    {
+                        printf("Baja de categoria abortada.\nDesea salir? Escriba 's' para salir\n");
+                        salida=getchar();
+                        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                    }
+                }
+                else
+                {
+                    for (i=indice;i<tamanio_c-1;i++)//Borrado de la categoria
+                        {
+                            array_cat[i]=array_cat[i+1];
+                        }
+                        tamanio_c--;
+                        array_cat=(categoria *)realloc(array_cat,tamanio_c*sizeof(categoria));
+                        printf("Borrado de categoria con exito\n");
+                }
+            }
+            else
+            {
+                {
+                    printf("Baja de categoria abortada.\nDesea salir? Escriba 's' para salir\n");
+                    salida=getchar();
+                    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                }
+                
+            }
+        }
+    }while(salida=='s');
+    free(asoc);
 }
 void guardar_producto(producto *v,int n_elem)
 {
@@ -572,19 +684,21 @@ categoria * volcar_categoria(int *tamanio)//No Probada todavia
     }
     return v;
 }
-void idacat(char *descrip,categoria *c,char *id,int tamanio)
+int idacat(char *descrip,categoria *c,char *id,int tamanio)
 {
     descrip[0]='-';
     descrip[1]='\0';
-    int encontrado=1;
-    for (int i=0;(i<tamanio)||(encontrado);i++)
+    int encontrado=1,indice=0;
+    for (int i=0;(i<tamanio)&&(encontrado);i++)
     {
         if (strcmp(c[i].id_cat,id)==0)
         {
             strcpy(descrip,c[i].descrip);
             encontrado=0;
+            indice=i;
         }
     }
+    return indice;
 }
 void cataid(char *id,categoria *c,char *descrip,int tamanio)
 {
@@ -991,6 +1105,18 @@ static void menu_modificar_producto (int indice)
         menu_modificar_producto(indice);
     }
 }
+//Cabecera: static void listado_cat()
+//Precondicion: array_categoria debe estar definido y tamanio_cat debe ser menor o igual al numero de elementos
+//Poscondicion: Muestra por pantalla todas las categorias de forma mas compacta
+static void listado_cat()
+{
+    printf("Identificador|Descripcion\n");
+    for (int i=0;i<tamanio_c;i++)
+    {
+        printf("%s|%s\n",array_cat[i].id_cat,array_cat[i].descrip);
+    }
+}
 //POR HACER: REMPLAZAR TODAS LAS DECLARACIONES DE LOS VECTORES DE PRODUCTO Y CATEGORIA COMO SUS TAMAÑOS POR SUS VARIABLES PUBLICAS
-//POR HACER: MENU DE CATEGORIA Y PODER MODIFICAR Y BORRAR CATEGORIAS
+//POR HACER: PODER MODIFICAR CATEGORIAS
 //POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y DEBUGARLO
+//POR HACER: MEJORAR LAS LIMPIEZAS DEL BUFFER DE ENTRADA
