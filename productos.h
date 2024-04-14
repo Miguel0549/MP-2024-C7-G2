@@ -22,6 +22,9 @@ typedef struct {
     char id_cat[5];
     char descrip[51];
 }categoria;
+extern producto *array_prod;//Vector de productos el cual se inicializa con volcar_producto y se libera con guardar_producto.
+extern categoria *array_cat;//Vector de categorias el cual se inicializa con volcar_categoria y se libera con guardar_categoria.
+extern int tamanio_p,tamanio_c;//Enteros utilizados para almacenar el tamaño del producto y categoria
 //Cabecera: void menu_cliente_prod (producto **p,categoria **c,int *tamanio_p, int *tamanio_c);
 //Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
 //Poscondicion: Muestra en pantalla el menu de productos para el cliente
@@ -50,11 +53,7 @@ categoria * volcar_categoria(int *tamanio);
 //Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
-void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char *id);
-//Cabecera: void baja_producto(producto **v,int *tamanio_p,categoria **c,int *tamanio_c);
-//Precondicion: v debe apuntar al producto a borrar y el usuario actual debe ser administrador o proveedor
-//Poscondicion: Borra la informacion de un producto y corrije el vector de acuerdo al borrado
-void baja_producto(producto **v,int *tamanio_p,categoria *c,int tamanio_c,int *asoc);
+void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *id);
 //Cabecera: void mod_prod(producto)
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod

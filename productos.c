@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
-//TODO: implementacion de usuario. Temporalmente tendran todas 1 hasta desarrollo de categoria.
 
 //PROTOTIPO DE FUNCIONES PRIVADAS
 static void obtener_dato_f(FILE **f,char *n);
@@ -14,11 +12,22 @@ static void lista_prod(producto *lista,categoria *c,int tamanio_c,int tamanio_p)
 static int cadena_valida(char *v);
 static void quitaenter(char *);
 static void lista_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc);
+static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p);
+static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_p);
+static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_c,int *asoc,sesion ses,int tamanio_asoc);
+static void borrar_producto(producto **p,int *tamanio_prod,int indice);
+static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
+static void menu_modificar_producto (int indice);
+
+//Declaracion de variables publicas
+producto *array_prod;
+categoria *array_cat;
+int tamanio_p,tamanio_c;
 
 void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
 {
     char seleccion,salida;
-    int *asoc,i,j=0,a;
+    int *asoc,i,j=0,a;//asoc es un vector de enteros cuyos elementos son las indices de los productos a buscar
     char nombre[51],idcat[8];
     system("cls");
     printf("Que desea realizar?\n1)Consulta por categoria\n2)Consulta por nombre\n3)Salir\n");
@@ -110,22 +119,22 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
 }
 void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c,sesion ses)
 {
-    int i,tamanio_asoc,*asoc;
+    int i,tamanio_asoc=0,*asoc,a;
     char seleccion;
     asoc=(int *)malloc(*tamanio_p*sizeof(int));
     system("cls");
     printf("Sus productos.\n");
     for (i=0;i<*tamanio_p;i++)
     {
-        if (strcmp(p[i]->id_gestor,ses.id)==0)
+        if (strcmp((*p)[i].id_gestor,ses.id)==0)
         {
             asoc[tamanio_asoc]=i;
             tamanio_asoc++;
         }
     }
     asoc=(int *)realloc(asoc,tamanio_asoc*sizeof(int));
-    lista_prod_asoc(*p,asoc,c,tamanio_c,tamanio_asoc);
-    printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir");
+    listado_prod_asoc(*p,asoc,c,tamanio_c,tamanio_asoc);
+    printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir\n");
     seleccion=getchar();
     system("cls");
     switch(seleccion)
@@ -141,7 +150,7 @@ void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c
         menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
         break;
         case('3'):
-        baja_producto(p,tamanio_p,c,tamanio_c,asoc);
+        baja_producto(p,tamanio_p,c,tamanio_c,asoc,ses,tamanio_asoc);
         free(asoc);
         menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
         break;
@@ -156,7 +165,7 @@ void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c
         menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
     }
 }
-void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char *id)
+void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *id)
 {
     int error,a;
     char salida='n',carga='n',aux[51],aux2[51];
@@ -171,11 +180,11 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char 
         fgets(p.descrip,51,stdin);
         quitaenter(p.descrip);
         
-        lista_cat(c,*tamanio_c);
+        lista_cat(c,tamanio_c);
         printf("Escribe la categoria que quieras asociar al producto.\nCategoria: ");
         fgets(aux2,51,stdin);
         quitaenter(aux2);
-        cataid(p.id_categ,c,aux2,*tamanio_c);
+        cataid(p.id_categ,c,aux2,tamanio_c);
         
         printf("\nEscribe el stock inicial del producto.\nStock: ");
         fgets(aux,51,stdin);
@@ -196,6 +205,7 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int *tamanio_c,char 
         }
         else
         {
+            system("cls");
             printf("\nRecopilacion de los datos.\n");
             printf("Nombre: %s\n",p.nombre);
             printf("Descripcion: %s\n",p.descrip);
@@ -330,106 +340,94 @@ void alta_categoria(categoria **v,int *tamanio)
         printf("Alta de categoria fallida. Error: %d",error);
     }
 }
-/*void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_c,int *asoc)//TODO: Implementar la comprobacion de proveedor, POR PROBAR
+static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_c,int *asoc,sesion ses,int tamanio_asoc)//TODO: Implementar la comprobacion de proveedor, POR PROBAR
 {
-    int i,j,a,tamanio_aux,encontrado=0;
-    int *asoc;//Vector auxiliar de entero cuyos elementos representan los indices de los productos asociados al proveedor en el vector o [-1] si el ususario es administrador
-    char salida='n';
-    char id_usuario[5]="0001\0";//REEMPLAZAR id POR usuario.Id_empresa una vez se haya desarrollado el modulo de sesiones
+    int i,indice,a,encontrado=0;
+    char salida='s';
     char id_prod[8];
     char confirmar='n';
-    printf("Comienzo de borrado de un producto.\n");
-    //Alocacion de memoria dinamica
-    /*if(Perfil_usuario==administrador)
+    system("cls");
+    if(ses.perfil_usuario==administrador)
     {
-        if((asoc=(int *)malloc(sizeof(int)))!=NULL)
-        {
-            asoc[0]=-1;
-            lista_prod(*v,c,tamanio_p,tamanio_c);
-        }
+        printf("Como administrador, puede eliminar cualquier producto del sistema.\n");
+        listado_prod(*v,c,tamanio_c,*tamanio_p);
+        do{
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            printf("Escribe el identificador del producto a eliminar.\nId: ");
+
+            fgets(id_prod,8,stdin);
+            for (i=0;i<*tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
+            {
+                if(strcmp((*v)[i].id_prod,id_prod)==0)
+                {
+                    encontrado=1;
+                    indice=i;
+                }
+            }
+            if (encontrado==1)
+            {
+                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",v[indice]->nombre);
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                confirmar=getchar();
+                if(confirmar=='s')
+                {
+                    salida='n';
+                    borrar_producto(v,tamanio_p,indice);
+                    printf("Baja de producto con exito");
+                }
+                else
+                {
+                    printf("Eliminacion de producto abortada.\n");
+                }
+            }
+
+        }while(salida=='s');
     }
     else
     {
-            //Almacenaje de los productos que tengan la misma id que el proveedor
-            j=0;
-            if ((asoc=(int *)malloc(*tamanio_p*sizeof(int)))!=NULL)
-            {
-                for (i=0;i<tamanio_p;i++)
-                {
-                    if ((strcmp(id_usuario,(*v)[i].id_gestor))==0)
-                    {
-                        asoc[j]=i;
-                        j++;
-                        lista_prod(v[i],c,1,tamanio_c);
-                    }
-                }
-                tamanio_aux=j;
-                asoc=(int *)realloc(asoc,tamanio_aux*sizeof(int));
-            }
-    }
-    //Seleccion del producto a remover
-    if(asoc!=NULL)
-    {
-        printf("Se muestran todos los productos que tiene permiso.\n");
+        printf("Como proveedor, solo puede borrar productos asociados a su nombre.\n");
+        listado_prod_asoc(*v,asoc,c,tamanio_c,tamanio_asoc);
         do{
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
             fgets(id_prod,8,stdin);
-            //Validez de la id introducida, cuyo indice saldra como i-1
-            if(asoc[0]==-1)//Si es administrador
+            for (i=0;i<tamanio_asoc&&encontrado;i++)//Encuentra el indice del producto a borrar
             {
-                for (i=0;i<tamanio_p||encontrado;i++)
+                if(strcmp((*v)[asoc[i]].id_prod,id_prod)==0)
                 {
-                    if(strcmp(id_prod,(*v)[i].id_prod)==0)
-                    {
-                        encontrado=1;
-                    }
+                    encontrado=1;
+                    indice=asoc[i];
                 }
             }
-            else//Si es proveedor
+            if (encontrado==1)
             {
-                for (i=0;i<tamanio_aux||encontrado;i++)
+                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",v[indice]->nombre);
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                confirmar=getchar();
+                if(confirmar=='s')
                 {
-                    if(strcmp(id_prod,(*v)[asoc[i]].id_prod)==0)
-                    {
-                        encontrado=1;
-                    }
-                }
-            }
-            if(encontrado)//Confirmacion de eliminacion
-            {
-                lista_prod(v[i-1],c,*tamanio_p,tamanio_c);
-                printf("Este es el producto que se va a eliminar, ¿desea eliminarlo? Escriba 's' para confirmar.\n");
-                for (confirmar=0;confirmar=getchar() == 's' || confirmar =='n';) {}
-                if(confirmar=='s')//Comienzo de eliminacion de un producto mediante la sustitucion de este por el siguiente (Recuerda i-1 es el indice del producto a eliminar)
-                {
-                    for (j=i;j<tamanio_p;j++)
-                    {
-                        v[j-1]=v[j];
-
-                    }
-                    *tamanio_p--;
-                    *v=(producto *)realloc(*v,*tamanio_p*sizeof(producto));
                     salida='s';
+                    borrar_producto(v,tamanio_p,indice);
+                    printf("Baja de producto con exito");
                 }
-            }
-            else
-            {
-                printf("No se ha encontrado la id, ¿desea abortar? s/n.\n");
-                for (salida=0;salida=getchar() == 's' || salida=='n';) {}
+                else
+                {
+                    printf("Eliminacion de producto abortada.\n");
+                }
             }
         }while(salida=='s');
-    }
-    //Salida de la funcion
+    } 
     if(confirmar=='s')
     {
         printf("Borrado del producto con exito.\n");
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     }
     else
     {
         printf("No se ha podido borrar el producto.\n");
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     }
-}*/
+}
 void baja_categoria(categoria **c,int *tamanio_c,producto *p)//Por terminar
 {
     printf("Comienzo de borrado de una categoria.\n");
@@ -753,3 +751,246 @@ static void quitaenter(char *c)
             c[strlen(c)-1]='\0';
         }
 }
+//Cabecera: static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p)
+//Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
+//Poscondicion: Muestra por pantalla una lista de los productos de forma mas compacta
+static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p)
+{
+    int i;
+    char aux[51];
+    printf("Identificador-Nombre-Descripcion-Categoria-Precio-Stock-Entrega-Gestor.\n");
+    for (i=0;i<tamanio_p;i++)
+    {
+        idacat(aux,c,p[i].id_categ,tamanio_c);
+        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",p[i].id_prod,p[i].nombre,p[i].descrip,aux,p[i].importe,p[i].stock,p[i].entrega,"Por implementar");
+    }
+}
+//Cabecera: static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_p)
+//Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
+//Poscondicion: Muestra por pantalla una lista de los productos de forma mas compacta a traves de un vector que asocia las posiciones de los productos
+static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc)
+{
+    int i;
+    char aux[51];
+    printf("Identificador-Nombre-Descripcion-Categoria-Precio-Stock-Entrega-Gestor.\n");
+    for (i=0;i<tamanio_asoc;i++)
+    {
+        idacat(aux,c,p[i].id_categ,tamanio_c);
+        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",p[asoc[i]].id_prod,p[asoc[i]].nombre,p[asoc[i]].descrip,aux,p[asoc[i]].importe,p[asoc[i]].stock,p[asoc[i]].entrega,"Por implementar");
+    }
+}
+//Cabecera: static void borrar_producto(producto **p,int *tamanio_prod,int indice)
+//Precondicion: *tamanio_prod debe ser el numero de indices de *p, indice<*tamanio_prod
+//Poscondicion: borra el elemento indice del vector p y reduce el tamaño del vector en uno
+static void borrar_producto(producto **p,int *tamanio_prod,int indice)
+{
+    for (int i=indice;i<(*tamanio_prod)-1;i++)//Borra el producto mediante la sustitucion de este por el siguiente
+    {
+        (*p)[i]=(*p)[i+1];
+    }
+    *tamanio_prod=(*tamanio_prod)-1;
+    *p=(producto *)realloc(*p,*tamanio_prod*sizeof(producto));
+}
+//Cabecera: static void modificar_producto(sesion ses);
+//Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente
+//Poscondicion: Muestra por pantalla un menu por el que el usuario puede modificar cualquier caracteristica de los productos que tenga permiso modificar.
+static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
+{
+    int encontrado=0,indice,a,i;
+    char *id_prod,salida='n';
+    if(ses.perfil_usuario==administrador)
+    {
+        
+        printf("Como administrador, puede modificar cualquier producto del sistema.\n");
+        listado_prod(array_prod,array_cat,tamanio_c,tamanio_p);
+        do{
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            printf("Escribe el identificador del producto a eliminar.\nId: ");
+
+            fgets(id_prod,8,stdin);
+            for (i=0;i<tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
+            {
+                if(strcmp(array_prod[i].id_prod,id_prod)==0)
+                {
+                    encontrado=1;
+                    indice=i;
+                }
+            }
+            if(encontrado==1)
+            {
+                menu_modificar_producto(i);
+            }
+            else
+            {
+                printf("No se ha encontrado la id introducida. Desea salir? Escriba s para salir");
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                salida=getchar();
+            }
+        }while(salida=='s');
+    }
+    else
+    {
+        printf("Como proveedor, solo puede modificar los productos asociados a su nombre.\n");
+        listado_prod_asoc(array_prod,asoc,array_cat,tamanio_c,tamanio_asoc);
+        do{
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            printf("Escribe el identificador del producto a modificar.\nId: ");
+            fgets(id_prod,8,stdin);
+            for (i=0;i<tamanio_asoc&&encontrado;i++)//Encuentra el indice del producto a borrar
+            {
+                if(strcmp(array_prod[asoc[i]].id_prod,id_prod)==0)
+                {
+                    encontrado=1;
+                    indice=asoc[i];
+                }
+            }
+            if(encontrado==1)
+            {
+                menu_modificar_producto(i);
+            }
+            else
+            {
+                printf("No se ha encontrado la id introducida. Desea salir? Escriba s para salir");
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                salida=getchar();
+            }
+        }while(salida=='s');
+    }
+}
+//Cabecera: static void menu_modificar_producto (int indice)
+//Precondicion: indice menor que tamanio_p
+//Poscondicion: Muestra por pantalla un menu recursivo en el que el usuario puede modificar el producto de elemento indice en el vector array_prod
+static void menu_modificar_producto (int indice)
+{
+    int asoc[1]={indice},a,aux_int;
+    char seleccion,aux[51],confirmar,id[8],descrip[51];
+
+    system ("cls");
+    lista_prod_asoc(array_prod,asoc,array_cat,tamanio_c,1);
+    printf("Que desea modificar?\n1)Nombre\n2)Descripcion\n3)Compromiso de entrega\n4)Importe\n5)Stock\n6)Categoria\n7)Atras");
+    seleccion=getchar();
+    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+    switch (seleccion)//Captacion del dato
+    {
+        case'1'://Nombre
+        printf("Escribe el nuevo nombre. (Maximo 15 caracteres, no puede contener '-')\n");
+        fgets(aux,51,stdin);
+        quitaenter(aux);
+        if (cadena_valida(aux))
+        {
+            printf("Error: El valor introducido no es valido\n");
+            system("pause");
+        }
+        else
+        {
+            printf("Va a remplazar el siguiente valor\n Nombre: %s  <- %s \n Escriba 's' para confirmar",array_prod[indice].nombre,aux);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+                strcpy(array_prod[indice].nombre,aux); 
+        }
+        menu_modificar_producto(indice);
+        break;
+        case '2'://Descripcion
+        printf("Escribe la nueva descripcion. (Maximo 50 caracterres, no puede contener '-')\n");
+        fgets(aux,51,stdin);
+        quitaenter(aux);
+        if (cadena_valida(aux))
+        {
+            printf("Error: El valor introducido no es valido\n");
+            system("pause");
+        }
+        else
+        {
+            printf("Va a remplazar el siguiente valor\n Descripcion: %s <- %s \n Escriba 's' para confirmar",array_prod[indice].importe,aux);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+                strcpy(array_prod[indice].importe,aux);
+        }
+        menu_modificar_producto(indice);
+        break;
+        case '3'://Compromiso de entrega
+        printf("Escribe el nuevo compromiso de entrega en dias.\n");
+        fgets(aux,51,stdin);
+        a=atoi(aux);
+        if (a==0)
+        {
+            printf("Error: El valor introducido no es valido\n");
+            system("pause");
+        }
+        else
+        {
+            printf("Va a remplazar el siguiente valor\n Entrega: %i dias <- %i dias\n Escriba 's' para confirmar",array_prod[indice].importe,aux_int);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+                array_prod[indice].importe=aux_int;
+        }
+        menu_modificar_producto(indice);
+        break;
+        case '4'://Importe
+        printf("Escribe el nuevo importe en euros\n");
+        fgets(aux,51,stdin);
+        aux_int=atoi(aux);
+        if (aux_int==0)
+        {
+            printf("Error: El valor introducido no es valido\n");
+            system("pause");
+        }
+        else
+        {
+            printf("Va a remplazar el siguiente valor\n Importe: %i euros <- %i euros\n Escriba 's' para confirmar",array_prod[indice].importe,aux_int);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+                array_prod[indice].importe=aux_int;
+        }
+        menu_modificar_producto(indice);
+        break;
+        case '5'://Stock
+        printf("Escribe el nuevo stock\n");
+        fgets(aux,51,stdin);
+        aux_int=atoi(aux);
+        if (aux_int==0)
+        {
+            printf("Error: El valor introducido no es valido\n");
+            system("pause");
+        }
+        else
+        {
+            printf("Va a remplazar el siguiente valor\n Stock: %i unidades <- %i unidades\n Escriba 's' para confirmar",array_prod[indice].stock,aux_int);
+            confirmar=getchar();
+            if (confirmar=='s')
+                array_prod[indice].stock=aux_int;
+        }
+        menu_modificar_producto(indice);
+        break;
+        case '6'://Categoria
+        lista_cat(array_cat,tamanio_c);
+        printf("Escribe el nombre de la categoria a asignar\n");
+        fgets(aux,51,stdin);
+        cataid(aux,array_cat,id,tamanio_c);
+        if (id[0]=='-')
+        {
+            printf("Error, el nombre introducido no coincide con ninguna categoria\n");
+            system("pause");
+        }
+        else
+        {
+            idacat(descrip,array_cat,array_prod[indice].id_categ,tamanio_c);
+            printf("Va a remplazar el siguiente valor\n Categoria: %s <- %s \n Escriba 's' para confirmar",descrip,aux);
+            confirmar=getchar();
+            if (confirmar=='s')
+                strcpy(array_prod[indice].id_categ,aux_int);
+        }
+        menu_modificar_producto(indice);
+        case '7'://Salida
+        break;
+        default://Default, si no se introduce un valor valido
+        menu_modificar_producto(indice);
+    }
+}
+//POR HACER: REMPLAZAR TODAS LAS DECLARACIONES DE LOS VECTORES DE PRODUCTO Y CATEGORIA COMO SUS TAMAÑOS POR SUS VARIABLES PUBLICAS
+//POR HACER: MENU DE CATEGORIA Y PODER MODIFICAR Y BORRAR CATEGORIAS
+//POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y DEBUGARLO
