@@ -80,3 +80,10 @@ int num_admin_fich();
 //precondición: que exista el .txt correspondiente
 //postcondición: devuelve el número de líneas que tiene el fichero
 int num_transp_fich();
+
+
+//cabecera:void pasar_ids_desde_fich(char*cadena,int*num_linea);
+//precondición: sea cadena* un puntero a char de 11 caracteres inicializado a 0, *num_linea un puntero a entero que contiene el número de la linea que se va a usar
+// IMPORTANTE: Antes de usar la función, hacer un volcado a fichero para asegurarse que están todos los clientes
+//postcondición: ninguna, ya que modifica la cadena introducida, poniendo la id del cliente de la línea seleccionada
+void pasar_ids_desde_fich(char*,int*);

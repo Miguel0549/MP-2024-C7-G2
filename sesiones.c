@@ -21,20 +21,21 @@ int indice_con_id_transp(Transportista**,char*,int);
 void siguiente_id(char*,int);
 
 int main(){ // main para pruebas
-    //int *n_clien,clientes;
+    int *n_clien,clientes;
+    char cad[11]="0";
     //int *n_adminprov,adminprov;
-    int *n_transport,transport;
+    //int *n_transport,transport;
     //Cliente *c;
     //Adminprov *a;
-    Transportista *t;
-    //clientes=num_cliente_fich();
-    //n_clien=&clientes;
+   // Transportista *t;
+    clientes=num_cliente_fich();
+    n_clien=&clientes;
     //adminprov=num_admin_fich();
     //n_adminprov=&adminprov;
-    transport=num_transp_fich();
-    n_transport=&transport;
-
-
+  //  transport=num_transp_fich();
+    //n_transport=&transport;
+    pasar_ids_desde_fich(cad,n_clien);
+    puts(cad);
 
    // carga_cliente(&c,n_clien);
     //volcado_cliente(&c,n_clien);
@@ -42,9 +43,9 @@ int main(){ // main para pruebas
     //carga_adminprov(&a,n_adminprov);
     //volcado_adminprov(&a,n_adminprov);
 
-    carga_transp(&t,n_transport);
-    nuevo_transportista(&t,n_transport);
-    volcado_transp(&t,n_transport);
+    //carga_transp(&t,n_transport);
+    //nuevo_transportista(&t,n_transport);
+    //volcado_transp(&t,n_transport);
     return 0;
 }
 
@@ -640,4 +641,30 @@ int num_transp_fich(){
 
     }
     return (n_lin+1);
+}
+
+
+void pasar_ids_desde_fich(char cadena[],int*num_linea){
+ char c;
+    int n_lin,i,num;
+    n_lin=*num_linea;
+    i=0;
+    num=1;
+
+    FILE *f;
+    if((f=fopen("clientes.txt","r"))==NULL){
+        printf("Error al abrir el archivo\n");
+    }else{
+         while(num<n_lin){
+            c=fgetc(f);
+            if(c=='\n')
+                num++;
+        }
+        
+        while(i<6){
+            c=fgetc(f);
+            cadena[i]=c;
+            i++;
+        }
+    }
 }
