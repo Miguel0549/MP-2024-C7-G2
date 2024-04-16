@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include <time.h>
 #include "descuentos.h"
+#include "sesiones.h"
 #define LINE 100
 
 //Tipos 
@@ -22,6 +23,7 @@ int num_desc_desde_fich();
 int indice_con_id_descuento(Descuentos**,char*,int);
 
     /*MAIN PROVISIONAL*/
+    
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
 int desc,*n_desc;
@@ -44,7 +46,6 @@ volcado_descuentos_clientes(&dc,n_desc);
 //printf("Id: %s\n",d[0].Id_cod);
 return 0;
 }
-
 //Cuerpos de función
 
   /*FUNCIONES CON FICHEROS*/
