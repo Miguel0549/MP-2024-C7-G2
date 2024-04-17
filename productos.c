@@ -19,6 +19,7 @@ static void borrar_producto(producto **p,int *tamanio_prod,int indice);
 static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
 static void menu_modificar_producto (int indice);
 static void listado_cat();
+static void modificar_categoria();
 
 //Declaracion de variables publicas
 producto *array_prod;
@@ -183,7 +184,7 @@ void menu_admin_cat()
         menu_admin_cat();
         break;
         case '2'://Modificar
-        //modificar_categoria();POR HACER
+        modificar_categoria();
         menu_admin_cat();
         break;
         case '3'://Baja
@@ -308,7 +309,6 @@ void alta_categoria(categoria **v,int *tamanio)
     char salida,carga,aux[5];
     printf("Comienzo de alta de una categoria.\n");
     do{
-        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
         printf("Escribe la descripcion de la categoria.\nEsta no puede contener guiones o ser mayor de 51 caracteres.\n");
         fgets(c.descrip,51,stdin);
         quitaenter(c.descrip);
@@ -322,7 +322,8 @@ void alta_categoria(categoria **v,int *tamanio)
             printf("\nConfirmacion de los datos.\n");
             printf("Decripcion: %s\n",c.descrip);
             printf("¿Desea confirmar la categoria? s/n.\n");
-            for (carga=0;carga=getchar() == 's' || carga=='n';) {}
+            carga=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             if (carga=='s')
             {
                 //Obtencion de la proxima id
@@ -359,7 +360,8 @@ void alta_categoria(categoria **v,int *tamanio)
         if (error!=0)
         {
             printf("¿Desea cancelar el alta? s/n.\n");
-            for (salida=0;salida=getchar() == 's' || salida=='n';) {}
+            salida=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
         }
     }while(salida!='s');
     if (error==0)
@@ -459,17 +461,18 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     }
 }
-void baja_categoria()//Por terminar
+void baja_categoria()
 {
     int a,*asoc,tamanio_asoc=0,i,indice;
     char salida='n',id_cat[5],descrip[51],confirmar;
-    system("cls");
+    //system("cls");
     printf("Comienzo de borrado de una categoria.\n");
     lista_cat(array_cat,tamanio_c);
     asoc=(int *)malloc(tamanio_p*sizeof(producto));//asoc es un vector que va a contener todas los indices de los productos que coincidan con la categoria a borrar
     do{
-        pritnf("Escribe el identificador de la id a borrar.\n");
+        printf("Escribe el identificador de la id a borrar.\n");
         fgets(id_cat,5,stdin);
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
         indice=idacat(descrip,array_cat,id_cat,tamanio_c);
         if(descrip[0]=='-')//'-' significa que no se ha encontrado la id
         {
@@ -486,7 +489,7 @@ void baja_categoria()//Por terminar
             {
                 for (i=0;i<tamanio_p;i++)
                 {
-                    if(strcmp(id_cat,array_prod[i].id_categ))
+                    if(strcmp(id_cat,array_prod[i].id_categ)==0)
                     {
                         asoc[tamanio_asoc]=i;
                         tamanio_asoc++;
@@ -798,7 +801,7 @@ static int cadena_valida(char *v)
     }
     if (v[i-1]=='\n')
     {
-        v[i-1]=='\0';
+        error=2;
     }
     return error;
 }
@@ -1016,11 +1019,11 @@ static void menu_modificar_producto (int indice)
         }
         else
         {
-            printf("Va a remplazar el siguiente valor\n Descripcion: %s <- %s \n Escriba 's' para confirmar",array_prod[indice].importe,aux);
+            printf("Va a remplazar el siguiente valor\n Descripcion: %s <- %s \n Escriba 's' para confirmar",array_prod[indice].descrip,aux);
             confirmar=getchar();
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             if (confirmar=='s')
-                strcpy(array_prod[indice].importe,aux);
+                strcpy(array_prod[indice].descrip,aux);
         }
         menu_modificar_producto(indice);
         break;
@@ -1035,11 +1038,11 @@ static void menu_modificar_producto (int indice)
         }
         else
         {
-            printf("Va a remplazar el siguiente valor\n Entrega: %i dias <- %i dias\n Escriba 's' para confirmar",array_prod[indice].importe,aux_int);
+            printf("Va a remplazar el siguiente valor\n Entrega: %i dias <- %i dias\n Escriba 's' para confirmar",array_prod[indice].entrega,aux_int);
             confirmar=getchar();
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             if (confirmar=='s')
-                array_prod[indice].importe=aux_int;
+                array_prod[indice].entrega=aux_int;
         }
         menu_modificar_producto(indice);
         break;
@@ -1096,7 +1099,7 @@ static void menu_modificar_producto (int indice)
             printf("Va a remplazar el siguiente valor\n Categoria: %s <- %s \n Escriba 's' para confirmar",descrip,aux);
             confirmar=getchar();
             if (confirmar=='s')
-                strcpy(array_prod[indice].id_categ,aux_int);
+                strcpy(array_prod[indice].id_categ,aux);
         }
         menu_modificar_producto(indice);
         case '7'://Salida
@@ -1116,7 +1119,60 @@ static void listado_cat()
         printf("%s|%s\n",array_cat[i].id_cat,array_cat[i].descrip);
     }
 }
+//Cabecera: static void modificar_categoria();
+//Precondicion: El usuario debe ser administrador
+//Poscondicion: Muestra por pantalla un menu interactivo en el que el usuario puede cambiar el nombre de cualquier categoria
+static void modificar_categoria()
+{
+    int indice,a;//Indice es el indice de la categoria a cambiar dentro del vector
+    char id[5],descrip[51],salida,confirmar;//id y desc son auxiliares que almacenan la id a cambiar y la nueva descripcion
+    system("cls");
+    printf("Categorias disponibles.\n");
+    listado_cat();
+    printf("Escriba el identificador de la categoria a la que quiera cambiar el nombre.\n");
+    fgets(id,5,stdin);
+    indice=idacat(descrip,array_cat,id,tamanio_c);
+    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+    if (descrip[0]=='-')
+    {
+        printf("Error: No se ha encontrado la categoria.\nDesea salir? Escriba 's' para salir");
+        salida=getchar();
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+        if (salida!='s')
+        {
+            modificar_categoria();
+        }
+    }
+    else
+    {
+        printf("Categoria a modificar: %s\nEscriba el nuevo nombre de la categoria\n",descrip);
+        fgets(descrip,51,stdin);
+        quitaenter(descrip);
+        if(cadena_valida(descrip)==0)
+        {
+            printf("Va a modificar el siguiente valor.\nDescripcion %s <- %s\nQuiere continuar? Escriba 's' para confirmar.n",array_cat[indice].descrip,descrip);
+            confirmar=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (confirmar=='s')
+            {
+                strcpy(array_cat[indice].descrip,descrip);
+                printf("Modificacion de categoria con exito\n");
+                system("pause");
+            }
+        else
+        {
+            printf("Descripcion no valida.\nDesea salir? Escriba 's' para salir");
+            salida=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            if (salida!='s')
+            {
+                modificar_categoria();
+            }
+        }
+            
+        }
+    }
+}
 //POR HACER: REMPLAZAR TODAS LAS DECLARACIONES DE LOS VECTORES DE PRODUCTO Y CATEGORIA COMO SUS TAMAÑOS POR SUS VARIABLES PUBLICAS
-//POR HACER: PODER MODIFICAR CATEGORIAS
-//POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y DEBUGARLO
+//POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y MENU DE CATEGORIA Y DEBUGARLO
 //POR HACER: MEJORAR LAS LIMPIEZAS DEL BUFFER DE ENTRADA
