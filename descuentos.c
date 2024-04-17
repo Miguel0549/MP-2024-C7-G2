@@ -20,6 +20,7 @@ void crear_fichero_descuentos();
 void crear_fichero_descuentos_clientes();
 void leer_string(char*,int);
 int num_desc_desde_fich();
+int num_desc_clien_desde_fich();
 int indice_con_id_descuento(Descuentos**,char*,int);
 
     /*MAIN PROVISIONAL*/
@@ -27,18 +28,20 @@ int indice_con_id_descuento(Descuentos**,char*,int);
 int main(){   //main para pruebas, quitar a la hora de unir los módulos
 Descuentos *d;
 int desc,*n_desc;
+int desc_clien,*n_desc_clien;
 Descuentos_clientes *dc;
 //char cad[]="0020312";
 desc=num_desc_desde_fich();
 n_desc=&desc;
-//crear_fichero_descuentos();
-//printf("\n%i\n",num_desc());
+
+desc_clien=num_desc_clien_desde_fich();
+n_desc_clien=&desc_clien;
+
 carga_descuentos(&d,n_desc);
-carga_descuentos_clientes(&dc,n_desc);
-listar_descuentos_propios(&d,&dc,"0020312",n_desc);
-//nuevo_descuento(&d,&dc,n_desc);
+carga_descuentos_clientes(&dc,n_desc_clien);
+nuevo_descuento(&d,&dc,n_desc,n_desc_clien);
 volcado_descuentos(&d,n_desc);
-volcado_descuentos_clientes(&dc,n_desc);
+volcado_descuentos_clientes(&dc,n_desc_clien);
 
 //carga_descuentos(&d);
 //listar_descuentos(&d);
@@ -74,63 +77,55 @@ void crear_fichero_descuentos_clientes()
 //cabecera: void nuevo_descuento(Descuentos **d)   MODIFICAR PARA CREAR EN descuentos_clinetes.txt su descuento asociado
 //precondición: *n_desc puntero que apunta al número total de descuentos actual
 //postcondición: crea y añade a la estructura un nuevo descuento
-void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
-    int sel,i=0;
+void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc,int*n_desc_clien){
+
+    int *n_lin,lin,indice,k,indice_d,num,buffer,sel,i=0;
+    char id_cliente[7]="\0";
+    //char fecha[11]="\0";
+    lin=0;
+    num=num_cliente_fich();
+    n_lin=&lin;
+    indice=(*n_desc_clien);
+    indice_d=(*n_desc);
+    (*n_desc_clien)++;
     (*n_desc)++;
     if((*d = (Descuentos *)realloc(*d, *n_desc * sizeof(Descuentos)))==NULL){
         printf("Error al reservar memoria para los Descuentos\n");
         exit(1); 
     }
-    if((*dc =(Descuentos_clientes*)realloc(*dc, *n_desc * sizeof(Descuentos_clientes)))==NULL){
+    if((*dc =(Descuentos_clientes*)realloc(*dc, *n_desc_clien * sizeof(Descuentos_clientes)))==NULL){
         printf("Error al reservar memoria para los Descuentos_clientes\n");
         exit(1); 
     }
-    (*dc)[*n_desc-1].Estado=no;
-    //(*dc)[*n_desc-1].Id_cliente=cliente_actual();
-    strcpy((*dc)[*n_desc-1].Id_cliente,"0020312"); //PROVISIONAL
-    strcpy((*dc)[*n_desc-1].f_asignacion,"10/04/2024");
+    (*dc)[indice].Estado=no;
+    //(*dc)[indice_d].Id_cliente=cliente_actual();
+    strcpy((*dc)[indice].f_asignacion,"10/04/2024");
     printf("\nIntrozuca la Id del descuento:\n");     
-    leer_string((*d)[*n_desc-1].Id_cod,11);           //Introducimos la Id del código
-    
-    strcpy((*dc)[*n_desc-1].Id_cod,(*d)[*n_desc-1].Id_cod);
-
+    leer_string((*d)[indice_d].Id_cod,11);           //Introducimos la Id del código
+    puts((*d)[indice_d].Id_cod);
+    strcpy((*dc)[indice].Id_cod,(*d)[indice_d].Id_cod);
+    puts((*dc)[indice].Id_cod);
     printf("\nIntroduzca una breve descripción del descuento:\n");
-    leer_string((*d)[*n_desc-1].Descrip,51);                            //Introducimos la cadena
+    leer_string((*d)[indice_d].Descrip,51);                            //Introducimos la cadena
 
     printf("\nIntroduce el importe del descuento:\n");
-    leer_string((*d)[*n_desc-1].Importe,4);               //Introducimos el importe del descuento
+    leer_string((*d)[indice_d].Importe,4);               //Introducimos el importe del descuento
 
     while ((i=getchar()) != '\n' && i != EOF){} //limpiamos el buffer
-    printf("\n Introduzca la fecha de caducidad del descuento formato:(dd/mm/aaaa)\n");
-    leer_string((*dc)[*n_desc-1].f_caducidad,11);
+    printf("\nIntroduzca la fecha de caducidad del descuento formato:(dd/mm/aaaa)\n");
+    leer_string((*dc)[indice].f_caducidad,11);
 
-    do{
-        printf("\nElija un tipo de descuento:\n 1.Codpro\n 2.Cheqreg\n");
-        scanf("%i",&sel);
-        if (sel==1)
-        {
-            (*d)[*n_desc-1].Tipo=codpro;
-            i++;
-        }else if (sel==2)
-        {
-            (*d)[*n_desc-1].Tipo=cheqreg;
-            i++;
-        }else
-        {
-            printf("\nIntroduzca una opción válida\n");
-        }
-    }while(i==0);
     i=0;
     do{
         printf("\nElija el Estado del Descuento:\n 1.Activo\n 2.Inactivo\n");
         scanf("%i",&sel);
         if (sel==1)
         {
-            (*d)[*n_desc-1].Estado=activo;
+            (*d)[indice_d].Estado=activo;
             i++;
         }else if (sel==2)
         {
-            (*d)[*n_desc-1].Estado=inactivo;
+            (*d)[indice_d].Estado=inactivo;
             i++;
         }else
         {
@@ -143,19 +138,69 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
         scanf("%i",&sel);
         if (sel==1)
         {
-            (*d)[*n_desc-1].Aplicabilidad=todos;
+            (*d)[indice_d].Aplicabilidad=todos;
             i++;
         }else if (sel==2)
         {
-            (*d)[*n_desc-1].Aplicabilidad=esizon;
+            (*d)[indice_d].Aplicabilidad=esizon;
             i++;
         }else
         {
             printf("\nIntroduzca una opción válida\n");
         }
     }while(i==0);
+    i=0;
+    do{
+        printf("\nElija un tipo de descuento:\n 1.Codpro\n 2.Cheqreg\n");
+        scanf("%i",&sel);
+        if (sel==1)
+        {   
+            (*d)[indice_d].Tipo=codpro;
+            i++;
+           // (*n_desc_clien)=(*n_desc_clien)+num; //sumamos al nuemro actual de desc_clientes el numero de clientes
+            //if((*dc = (Descuentos_clientes *)realloc(*d, *n_desc_clien * sizeof(Descuentos_clientes)))==NULL){
+            //    printf("Error al reservar memoria para los Descuentos\n");
+           //     exit(1); 
+            //} 
+            pasar_ids_desde_fich(id_cliente,n_lin);
+            strcpy((*dc)[indice].Id_cliente,id_cliente);
+            if(num>1){
+                k=0;
+                while (k<num-1)
+                {
+                (*n_desc_clien)++;
+                if((*dc = (Descuentos_clientes *)realloc(*dc, *n_desc_clien * sizeof(Descuentos_clientes)))==NULL){
+                
+                     printf("Error al reservar memoria para los Descuentos\n");
+                    exit(1); 
+
+                }
+                (*n_lin)++;
+                k++;
+                pasar_ids_desde_fich(id_cliente,n_lin);
+                strcpy((*dc)[indice+k].Id_cliente,id_cliente);
+                puts(id_cliente);
+                strcpy((*dc)[indice+k].Id_cod,(*dc)[indice].Id_cod);
+                strcpy((*dc)[indice+k].f_caducidad,(*dc)[indice].f_caducidad);
+                strcpy((*dc)[indice+k].f_asignacion,(*dc)[indice].f_asignacion);
+                (*dc)[indice+k].Estado=(*dc)[indice].Estado;
+                }
+            }
+        }else if (sel==2)
+        {
+            (*d)[indice_d].Tipo=cheqreg;
+            i++;
+            printf("Introduzca la id del Cliente al que quiere asignar el cheque regalo:\n");
+            while ((buffer=getchar()) != '\n' && buffer != EOF){}
+            leer_string(id_cliente,7);
+            strcpy((*dc)[indice].Id_cliente,id_cliente);
+        }else
+        {
+            printf("\nIntroduzca una opción válida\n");
+        }
+    }while(i==0);
    
-   // (*dc)[*n_desc-1].f_asignacion==de_decha_a_string(fecha_actual());
+   // (*dc)[indice_d].f_asignacion==de_decha_a_string(fecha_actual());
 
 }
 
@@ -163,11 +208,12 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc){
 //precondición: sea **d un doble puntero a una estructura descuentos 
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
 void carga_descuentos(Descuentos **d,int *n_desc){
-    int i;
+    int i,j;
+    char c;
     char line[LINE]="\0";
     char estado[10]="\0";
     FILE *f;
-
+    j=0;
     if((f=fopen("descuentos.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
     }else{
@@ -178,7 +224,11 @@ void carga_descuentos(Descuentos **d,int *n_desc){
             exit(1);
         }else{
             rewind(f);
-            for(i=0;i<*n_desc;i++){
+            c=fgetc(f);
+            if(*n_desc==1 && c==EOF )
+                j++;
+            rewind(f);
+            for(i=j;i<*n_desc;i++){                    
 
                 fgets(line,LINE,f);
                 strcpy((*d)[i].Id_cod, strtok(line,"-"));
@@ -229,11 +279,12 @@ void carga_descuentos(Descuentos **d,int *n_desc){
 //precondición: sea **d un doble puntero a una estructura descuentos_clientes 
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
 void carga_descuentos_clientes(Descuentos_clientes **dc,int *n_desc_c){
-    int i;
+    int i,j;
     char line[LINE]="\0";
     char estado[10]="\0";
+    char c;
     FILE *f;
-
+    j=0;
     if((f=fopen("descuentos_clientes.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
     }else{
@@ -244,7 +295,11 @@ void carga_descuentos_clientes(Descuentos_clientes **dc,int *n_desc_c){
             exit(1);
         }else{
             rewind(f);
-            for(i=0;i<*n_desc_c;i++){
+            c=fgetc(f);
+             if(*n_desc_c==1 && c==EOF)
+                j++;
+            rewind(f);
+            for(i=j;i<*n_desc_c;i++){
 
                 fgets(line,LINE,f);
                 strcpy((*dc)[i].Id_cliente, strtok(line,"-"));
@@ -273,11 +328,12 @@ void carga_descuentos_clientes(Descuentos_clientes **dc,int *n_desc_c){
 
 //cabecera:void volcado_descuentos(Descuentos **d)
 //precondición:**d incializado y descuentos.txt creado
-//postcondición:descuentos.txt contiene la información que contenía el vector de estructuras
+//postcondición:descuentos.txt contiene la información que contenílolololola el vector de estructuras
 void volcado_descuentos(Descuentos **d,int*n_desc){
-
+    int aux;
     char line[LINE]="\0";
     FILE *f;
+    aux=*n_desc;
 
     if ((f = fopen("Descuentos.txt", "w+")) == NULL) {
 
@@ -285,7 +341,7 @@ void volcado_descuentos(Descuentos **d,int*n_desc){
 
     } else {
 
-        for ( int i=0 ; i<*n_desc ; i++ ){
+        for ( int i=0 ; i<aux ; i++ ){
            // strcpy(line,"\n");
             strcpy(line, (*d)[i].Id_cod);
             
@@ -434,20 +490,60 @@ FILE *f;
 if((f= fopen("descuentos.txt","r"))==NULL){
        printf("Error al abrir el archivo\n");
     }else{
-        while(i==0){
+        c=getc(f);
+        if(c==EOF){
+            n_lin=-1;
+        }else{
+            while(i==0){
 
-            c = fgetc(f);
+                 c = fgetc(f);
 
-            if(c == '\n'){
-                n_lin++;
+                if(c == '\n'){
+                    n_lin++;
             }
-            if(c == EOF){  //Si el caracter es end of file imprimimos el contador y salimos del while
+            if(c == EOF) //Si el caracter es end of file imprimimos el contador y salimos del while
                // printf("%i",n_lin);  //El número de lineas
                 i++;
-            }
+            }  
         }
     }
  return (n_lin+1);
+}
+
+
+//cabecera:int num_desc()
+//precondición: archivo .txt inicializado
+//postcondición:devuelve el número de líneas que tiene el fichero
+int num_desc_clien_desde_fich(){
+char c; 
+int n_lin,i;
+n_lin=0;
+i=0;
+
+FILE *f;
+if((f= fopen("descuentos_clientes.txt","r"))==NULL){
+       printf("Error al abrir el archivo\n");
+    }else{
+         c=getc(f);
+        if(c==EOF){
+            n_lin=-1;
+        }else{
+            while(i==0){
+
+                c = fgetc(f);
+
+                if(c == '\n')
+                n_lin++;
+            
+                if(c == EOF)  //Si el caracter es end of file imprimimos el contador y salimos del while
+               // printf("%i",n_lin);  //El número de lineas
+                i++;
+            
+            }
+        }
+  
+    }
+  return (n_lin+1);
 }
 
 //cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
@@ -607,3 +703,7 @@ int indice_con_id_descuento(Descuentos**vector_descuentos,char *id_descuento,int
 
 
 //Hacer borrado descuentos, modificaciones del los mismos, que si es codpro ser asocie a todos los clientes actuales 
+
+
+
+

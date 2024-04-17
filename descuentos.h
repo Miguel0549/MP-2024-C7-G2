@@ -70,6 +70,6 @@ int comprobar_descuento(Descuentos_clientes**,char *);
  //precondición:
  //postcondición:
 
-void nuevo_descuento(Descuentos**,Descuentos_clientes**,int*);
+void nuevo_descuento(Descuentos**,Descuentos_clientes**,int*,int*);
 
 
