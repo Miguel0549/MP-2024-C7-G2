@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include <time.h>
 #include "descuentos.h"
-#include "sesiones.h"
+//#include "sesiones.h"
 #define LINE 100
 
 //Tipos 
@@ -13,15 +13,18 @@ typedef struct fecha{
 }fecha;
 
 /*CABECERAS*/
-fecha fecha_actual();
-fecha de_string_a_fecha(char*);
-int comparar_fechas(fecha,fecha);
-void crear_fichero_descuentos();
-void crear_fichero_descuentos_clientes();
-void leer_string(char*,int);
-int num_desc_desde_fich();
-int num_desc_clien_desde_fich();
-int indice_con_id_descuento(Descuentos**,char*,int);
+    void fecha_actual();
+    fecha de_string_a_fecha(char*);
+    int comparar_fechas(fecha,fecha);
+    void crear_fichero_descuentos();
+    void crear_fichero_descuentos_clientes();
+    void leer_string(char*,int);
+    int num_desc_desde_fich();
+    int num_desc_clien_desde_fich();
+    int indice_con_id_descuento(Descuentos**,char*,int);
+    int indice_con_id_descuento_cl(Descuentos_clientes**,char*,int);
+    void borrar_descuento_con_id(Descuentos**,Descuentos_clientes**,char*,int *,int*);
+
 
     /*MAIN PROVISIONAL*/
     
@@ -39,7 +42,10 @@ n_desc_clien=&desc_clien;
 
 carga_descuentos(&d,n_desc);
 carga_descuentos_clientes(&dc,n_desc_clien);
-nuevo_descuento(&d,&dc,n_desc,n_desc_clien);
+//nuevo_descuento(&d,&dc,n_desc,n_desc_clien);
+listar_descuentos(&d,n_desc);
+borrar_descuento_con_id(&d,&dc,"black006",n_desc,n_desc_clien);
+listar_descuentos(&d,n_desc);
 volcado_descuentos(&d,n_desc);
 volcado_descuentos_clientes(&dc,n_desc_clien);
 
@@ -77,6 +83,7 @@ void crear_fichero_descuentos_clientes()
 //cabecera: void nuevo_descuento(Descuentos **d)   MODIFICAR PARA CREAR EN descuentos_clinetes.txt su descuento asociado
 //precondición: *n_desc puntero que apunta al número total de descuentos actual
 //postcondición: crea y añade a la estructura un nuevo descuento
+/*
 void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc,int*n_desc_clien){
 
     int *n_lin,lin,indice,k,indice_d,num,buffer,sel,i=0;
@@ -98,8 +105,8 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc,int*n_d
         exit(1); 
     }
     (*dc)[indice].Estado=no;
-    //(*dc)[indice_d].Id_cliente=cliente_actual();
-    strcpy((*dc)[indice].f_asignacion,"10/04/2024");
+    fecha_actual((*dc)[indice_d].f_asignacion);
+    //strcpy((*dc)[indice].f_asignacion,"10/04/2024");
     printf("\nIntrozuca la Id del descuento:\n");     
     leer_string((*d)[indice_d].Id_cod,11);           //Introducimos la Id del código
     puts((*d)[indice_d].Id_cod);
@@ -202,7 +209,7 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc,int*n_d
    
    // (*dc)[indice_d].f_asignacion==de_decha_a_string(fecha_actual());
 
-}
+}*/
 
 //cabecera: void carga_descuentos(Descuentos **d)
 //precondición: sea **d un doble puntero a una estructura descuentos 
@@ -551,7 +558,8 @@ if((f= fopen("descuentos_clientes.txt","r"))==NULL){
 //postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
 int comprobar_descuento(Descuentos_clientes**dc,char *Id_cod){
     int i=0,c_salida=0,ret;
-    
+    char fecha[11]="\0";
+    fecha_actual(fecha);
     while (c_salida==0)
     {
         if((*dc)[i].Id_cod==Id_cod) c_salida++ ;
@@ -561,7 +569,7 @@ int comprobar_descuento(Descuentos_clientes**dc,char *Id_cod){
         }
     }
 
-    if((*dc)[i].Estado== si || comparar_fechas(de_string_a_fecha((*dc)[i].f_caducidad),fecha_actual())>0) ret=1;
+    if((*dc)[i].Estado== si || comparar_fechas(de_string_a_fecha((*dc)[i].f_caducidad),de_string_a_fecha(fecha))>0) ret=1;
 
 
     return ret;
@@ -572,18 +580,53 @@ int comprobar_descuento(Descuentos_clientes**dc,char *Id_cod){
 // cabecera: fecha fecha_actual()
 // precondición: ninguna
 // postcondición: devuelve una estructura fecha con la fecha actual
-fecha fecha_actual()
-{ // FUNCIONA
+void fecha_actual( char fecha_act[11]){
+
     fecha fecha_actual;
     time_t t = time(NULL);
     struct tm tiempo_actual = *localtime(&t);
+    char dd[4]="\0",mm[4]="\0",aa[5]="\0";
+    char fecha[11]="\0";
 
     // Pasamos los datos desde la estructura tm a fecha
     fecha_actual.dia = tiempo_actual.tm_mday;
     fecha_actual.mes = tiempo_actual.tm_mon + 1;
     fecha_actual.anno = tiempo_actual.tm_year + 1900;
 
-    return fecha_actual;
+    sprintf(dd,"%i",fecha_actual.dia);
+    sprintf(mm,"%i",fecha_actual.mes);
+    sprintf(aa,"%i",fecha_actual.anno);
+
+
+    if ( fecha_actual.dia < 10 ){
+
+        strcpy(fecha,"0");
+        strcat(fecha,dd);
+        strcat(fecha,"/");
+
+    }else{
+
+        strcpy(fecha,dd);
+        strcat(fecha,"/");
+
+    }
+
+    if ( fecha_actual.mes < 10 ){
+
+        strcat(fecha,"0");
+        strcat(fecha,mm);
+        strcat(fecha,"/");
+
+    }else{
+
+        strcat(fecha,mm);
+        strcat(fecha,"/");
+
+    }
+
+    strcat(fecha,aa);
+    strcpy(fecha_act,fecha);
+
 }
 
 
@@ -691,7 +734,7 @@ void siguiente_id(char*cad,int i){
 //precondición: vector cliente un vector de estructura descuentos, id_desc una cadena y num_desc el número de descuentpos registrados del vector
 //postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
 int indice_con_id_descuento(Descuentos**vector_descuentos,char *id_descuento,int num_desc){
-    int i=0,devolver;
+    int i=NULL,devolver;
     do{
         if(strcmp(id_descuento,(*vector_descuentos)[i].Id_cod)==0){
         devolver=i;
@@ -701,8 +744,47 @@ int indice_con_id_descuento(Descuentos**vector_descuentos,char *id_descuento,int
     return devolver;
 }
 
+int indice_con_id_descuento_cl(Descuentos_clientes**vector_descuentos_cl,char *id_descuento,int num_desc_cl){
+    int i=0,devolver;
+    do{
+        if(strcmp(id_descuento,(*vector_descuentos_cl)[i].Id_cod)==0){
+        devolver=i;
+    }
+        i++;
+    }while(i<=num_desc_cl);
+    if(strcmp(id_descuento,(*vector_descuentos_cl)[i].Id_cod)!=0)
+        devolver=-1;
+    return devolver;
+}
 
-//Hacer borrado descuentos, modificaciones del los mismos, que si es codpro ser asocie a todos los clientes actuales 
+//Hacer borrado descuentos, modificaciones del los mismos, 
+
+//
+void borrar_descuento_con_id(Descuentos**vector_descuento,Descuentos_clientes**dc,char *Id_descuento, int *n_descuento,int*n_descuento_cl){
+    int i,aux,aux2;
+    aux=*n_descuento;
+    aux2=*n_descuento_cl;
+
+    if(aux==1){
+        free(vector_descuento);
+        *n_descuento=0;
+        free(dc);
+        *n_descuento_cl=0;
+        aux++;
+    }else{
+        i=indice_con_id_descuento(vector_descuento,Id_descuento,aux)+1;
+        if(i==-1){
+            printf("la id no existe\n");
+
+        }else{
+    for(i;i<aux;i++)
+        (*vector_descuento)[i-1]=(*vector_descuento)[i];
+    for(i=indice_con_id_descuento_cl(dc,Id_descuento,aux2)+1;i<aux;i++)
+        (*dc)[i-1]=(*dc)[i];
+        }
+    }
+    (*n_descuento)=aux-1;
+}
 
 
 
