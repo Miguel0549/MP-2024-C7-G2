@@ -40,6 +40,31 @@ author:
 
 ---
 
+<div id='usuario' />
+
+# Documentación de usuario
+
+Una vez ejecutado el programa, le pregutará con qué tipo de usuario desea acceder a la plataforma, siendo estos: Cliente, Administrador/Proveedor, Transportista;
+una vez seleccionado esto, podrá crear un usuario del tipo seleccionado o iniciar sesión en uno ya existente. Una vez iniciado sesión y en función del tipo de usuario escojido, podrá navegar por los distintos menús.
+
+MENÚ DE Cliente
+
+Se le darán 6 opciones:
+
+-   Perfil: Se le mostrará por pantalla sus credenciales y podrá modificarla si lo desea, incluido modificar su cartera
+
+-   Productos: Esta opción permite al cliente realizar consultas de productos tanto por categoría como por nombre
+
+-   Descuentos: Mediante esta opción el cliente podrá consultar todos los códigos promocionales y cheques regalo que tiene asignados
+
+-   Pedidos: Mediante esta opción se le permite al cliente realizar pedidos controlando los códigos promocionales, así como comsultar el estado de cada uno de los productos de sus pedidos, por último, con el código de locker correspondiente podrá recoger sus productos del mismo.
+
+-   Devoluciones: Con esta opción el cliente puede llevar a cabo devoluciones de productos así como realizar un seguimiento de las mismas
+
+-   Salir del sistema: Con está opción vuelve al menú de acceso
+
+
+
 
 
 
