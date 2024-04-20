@@ -72,4 +72,4 @@ int comprobar_descuento(Descuentos_clientes**,char *);
 
 void nuevo_descuento(Descuentos**,Descuentos_clientes**,int*,int*);
 
-
+void modificar_descuento(Descuentos**,Descuentos_clientes**,int*,int*);
