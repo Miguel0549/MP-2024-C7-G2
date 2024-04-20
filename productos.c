@@ -7,26 +7,26 @@
 static void obtener_dato_f(FILE **f,char *n);
 static int buscar_id_f(FILE **f,char *n);
 static void suma1(char *s,int i);
-static void lista_cat(categoria *lista,int tamanio);
-static void lista_prod(producto *lista,categoria *c,int tamanio_c,int tamanio_p);
+static void lista_cat();
+static void lista_prod();
 static int cadena_valida(char *v);
 static void quitaenter(char *);
-static void lista_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc);
-static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p);
-static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_p);
-static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_c,int *asoc,sesion ses,int tamanio_asoc);
-static void borrar_producto(producto **p,int *tamanio_prod,int indice);
+static void lista_prod_asoc(int *asoc,int tamanio_asoc);
+static void listado_prod();
+static void listado_prod_asoc(int *asoc,int tamanio_asoc);
+static void baja_producto(int *asoc,sesion ses,int tamanio_asoc);
+static void borrar_producto(int indice);
 static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
 static void menu_modificar_producto (int indice);
 static void listado_cat();
 static void modificar_categoria();
 
-//Declaracion de variables publicas
-producto *array_prod;
-categoria *array_cat;
-int tamanio_p,tamanio_c;
+//Declaracion de variables privadas
+static producto *array_prod;
+static categoria *array_cat;
+static int tamanio_p,tamanio_c;
 
-void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
+void menu_cliente_prod ()
 {
     char seleccion,salida;
     int *asoc,i,j=0,a;//asoc es un vector de enteros cuyos elementos son las indices de los productos a buscar
@@ -39,12 +39,12 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
         case('1'): 
         do{
             system("cls");
-            lista_cat(c,tamanio_c);
+            lista_cat();
             printf("Escriba el nombre de la categoria a buscar\n");
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             fgets(nombre,51,stdin);
             quitaenter(nombre);
-            cataid(idcat,c,nombre,tamanio_c);
+            cataid(idcat,nombre);
             if (idcat[0]=='-')
             {
                 printf("Error, categoria no encontrada, ¿desea salir? s/n\n");
@@ -55,7 +55,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 asoc=(int *)malloc(tamanio_p*sizeof(int));
                 for (i=0;i<tamanio_p;i++)//Obtencion de asoc
                 {
-                    if (strcmp(p[i].id_categ,idcat)==0)
+                    if (strcmp(array_prod[i].id_categ,idcat)==0)
                     {
                         asoc[j]=i;
                         j++;
@@ -68,7 +68,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 else
                 {
                     asoc=(int *)realloc(asoc,j*sizeof(int));
-                    lista_prod_asoc(p,asoc,c,tamanio_c,j);
+                    lista_prod_asoc(asoc,j);
                     
                 }
                 free(asoc);
@@ -77,7 +77,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 salida='s';
             }
         }while(salida!='s');
-        menu_cliente_prod(p,c,tamanio_p,tamanio_c);
+        menu_cliente_prod();
         break;
         case('2'):
         
@@ -89,7 +89,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 asoc=(int *)malloc(tamanio_p*sizeof(int));
                 for (i=0;i<tamanio_p;i++)//Obtencion de asoc
                 {
-                    if (strstr(p[i].nombre,nombre)!=NULL)
+                    if (strstr(array_prod[i].nombre,nombre)!=NULL)
                     {
                         asoc[j]=i;
                         j++;
@@ -102,7 +102,7 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 else
                 {
                     asoc=(int *)realloc(asoc,j*sizeof(int));
-                    lista_prod_asoc(p,asoc,c,tamanio_c,j);
+                    lista_prod_asoc(asoc,j);
                     
                 }
                 free(asoc);
@@ -110,61 +110,61 @@ void menu_cliente_prod (producto *p,categoria *c,int tamanio_p,int tamanio_c)
                 system("PAUSE");
                 salida='s';
         
-        menu_cliente_prod(p,c,tamanio_p,tamanio_c);
+        menu_cliente_prod();
         break;
         case ('3'):
         break;
         default:
-        menu_cliente_prod(p,c,tamanio_p,tamanio_c);
+        menu_cliente_prod();
 
     }
 }
-void menu_adminprov_prod (producto **p,categoria *c,int *tamanio_p,int tamanio_c,sesion ses)
+void menu_adminprov_prod (sesion ses)
 {
     int i,tamanio_asoc=0,*asoc,a;
     char seleccion;
-    asoc=(int *)malloc(*tamanio_p*sizeof(int));
+    asoc=(int *)malloc(tamanio_p*sizeof(int));
     system("cls");
     printf("Sus productos.\n");
-    for (i=0;i<*tamanio_p;i++)
+    for (i=0;i<tamanio_p;i++)
     {
-        if (strcmp((*p)[i].id_gestor,ses.id)==0)
+        if (strcmp(array_prod[i].id_gestor,ses.id)==0)
         {
             asoc[tamanio_asoc]=i;
             tamanio_asoc++;
         }
     }
     asoc=(int *)realloc(asoc,tamanio_asoc*sizeof(int));
-    listado_prod_asoc(*p,asoc,c,tamanio_c,tamanio_asoc);
+    listado_prod_asoc(asoc,tamanio_asoc);
     printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir\n");
     seleccion=getchar();
     system("cls");
     switch(seleccion)
     {
         case('1'):
-        alta_producto(c,p,tamanio_p,tamanio_c,ses.id);
+        alta_producto(ses.id);
         free(asoc);
-        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        menu_adminprov_prod(ses);
         break;
         case('2'):
         free(asoc);
-        menu_cliente_prod(*p,c,*tamanio_p,tamanio_c);
-        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        menu_cliente_prod();
+        menu_adminprov_prod(ses);
         break;
         case('3'):
-        baja_producto(p,tamanio_p,c,tamanio_c,asoc,ses,tamanio_asoc);
+        baja_producto(asoc,ses,tamanio_asoc);
         free(asoc);
-        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        menu_adminprov_prod(ses);
         break;
         case('4'):
         free(asoc);
-        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        menu_adminprov_prod(ses);
         break;
         case('5'):
         break;
         default:
         free(asoc);
-        menu_adminprov_prod(p,c,tamanio_p,tamanio_c,ses);
+        menu_adminprov_prod(ses);
     }
 }
 void menu_admin_cat()
@@ -197,7 +197,7 @@ void menu_admin_cat()
         menu_admin_cat();
     }
 }
-void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *id)
+void alta_producto(char *id)
 {
     int error,a;
     char salida='n',carga='n',aux[51],aux2[51];
@@ -212,11 +212,11 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *
         fgets(p.descrip,51,stdin);
         quitaenter(p.descrip);
         
-        lista_cat(c,tamanio_c);
+        lista_cat();
         printf("Escribe la categoria que quieras asociar al producto.\nCategoria: ");
         fgets(aux2,51,stdin);
         quitaenter(aux2);
-        cataid(p.id_categ,c,aux2,tamanio_c);
+        cataid(p.id_categ,aux2);
         
         printf("\nEscribe el stock inicial del producto.\nStock: ");
         fgets(aux,51,stdin);
@@ -246,34 +246,35 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *
             printf("Compromiso de entrega: %d dias\n",p.entrega);
             printf("Importe: %d euros\n",p.importe);
             printf("¿Es la informacion correcta? Escriba s para confirmar.\n");
-            for (carga=0;carga=getchar() == 's' || carga=='n';) {}
+            carga=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el buffer de entrada
             
             if (carga=='s')
             {
                 strcpy(p.id_gestor,id);
                 //Obtencion de la proxima id disponible
-                if (*tamanio_p==0)
+                if (tamanio_p==0)
                 {
                     strcpy(p.id_prod,"0000001\0");
                 }
                 else
                 {
-                    strcpy(aux,(*v+(*tamanio_p-1))->id_prod);
+                    strcpy(aux,array_prod[tamanio_p-1].id_prod);
                     suma1(aux,7);//Suma a la cadena 1
                     strcpy(p.id_prod,aux);
                 }
                 //Subida del producto al vector
-                *tamanio_p=*tamanio_p+1;
-                if((*v=(producto *)realloc(*v,(*tamanio_p)*(sizeof(producto))))!=NULL)//agrega espacio al vector para poner el nuevo producto
+                tamanio_p=tamanio_p+1;
+                if((array_prod=(producto *)realloc(array_prod,(tamanio_p)*(sizeof(producto))))!=NULL)//agrega espacio al vector para poner el nuevo producto
                 {
-                    (*v)[(*tamanio_p)-1]=p;
+                    array_prod[(tamanio_p)-1]=p;
                     error=0;
                     salida='s';
                 }
                 else
                 {
                     printf("Se ha producido un error en la carga del producto.\n");
-                    *tamanio_p=*tamanio_p-1;
+                    tamanio_p=tamanio_p-1;
                     error=2;
                 }
             }
@@ -287,7 +288,8 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *
         {
             printf("¿Desea cancelar el alta? s/n.\n");
             
-            for (salida=0;salida=getchar() == 's' || salida=='n';) {}
+            salida=getchar();
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el buffer de entrada
             
         }
     }while(salida!='s');
@@ -302,7 +304,7 @@ void alta_producto(categoria *c,producto **v,int *tamanio_p,int tamanio_c,char *
         system("pause");
     }
 }
-void alta_categoria(categoria **v,int *tamanio)
+void alta_categoria()
 {
     int error,a;
     categoria c;
@@ -327,26 +329,26 @@ void alta_categoria(categoria **v,int *tamanio)
             if (carga=='s')
             {
                 //Obtencion de la proxima id
-                if (*tamanio==0)
+                if (tamanio_c==0)
                 {
                     strcpy(c.id_cat,"0001\0");
                 }
                 else
                 {
-                    strcpy(aux,(*v+(*tamanio-1))->id_cat);
+                    strcpy(aux,array_cat[tamanio_c-1].id_cat);
                     suma1(aux,4);
                     strcpy(c.id_cat,aux);
-                    *tamanio=*tamanio+1;
+                    tamanio_c++;
                 }
-                if ((*v=(categoria *)realloc(*v,(*tamanio)*sizeof(categoria)))==NULL)
+                if ((array_cat=(categoria *)realloc(array_cat,(tamanio_c)*sizeof(categoria)))==NULL)
                 {
                     printf("Error de memoria.\n");
-                    *tamanio--;
+                    tamanio_c--;
                     error=2;
                 }
                 else
                 {
-                    (*v)[*tamanio-1]=c;
+                    array_cat[tamanio_c-1]=c;
                     error=0;
                     salida='s';
                 }
@@ -373,7 +375,7 @@ void alta_categoria(categoria **v,int *tamanio)
         printf("Alta de categoria fallida. Error: %d",error);
     }
 }
-static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_c,int *asoc,sesion ses,int tamanio_asoc)//TODO: Implementar la comprobacion de proveedor, POR PROBAR
+static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
 {
     int i,indice,a,encontrado=0;
     char salida='s';
@@ -383,15 +385,15 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
     if(ses.perfil_usuario==administrador)
     {
         printf("Como administrador, puede eliminar cualquier producto del sistema.\n");
-        listado_prod(*v,c,tamanio_c,*tamanio_p);
+        listado_prod();
         do{
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
 
             fgets(id_prod,8,stdin);
-            for (i=0;i<*tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
+            for (i=0;i<tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
             {
-                if(strcmp((*v)[i].id_prod,id_prod)==0)
+                if(strcmp(array_prod[i].id_prod,id_prod)==0)
                 {
                     encontrado=1;
                     indice=i;
@@ -399,13 +401,13 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
             }
             if (encontrado==1)
             {
-                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",v[indice]->nombre);
+                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",array_prod[indice].nombre);
                 while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 confirmar=getchar();
                 if(confirmar=='s')
                 {
                     salida='n';
-                    borrar_producto(v,tamanio_p,indice);
+                    borrar_producto(indice);
                     printf("Baja de producto con exito");
                 }
                 else
@@ -419,14 +421,14 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
     else
     {
         printf("Como proveedor, solo puede borrar productos asociados a su nombre.\n");
-        listado_prod_asoc(*v,asoc,c,tamanio_c,tamanio_asoc);
+        listado_prod_asoc(asoc,tamanio_asoc);
         do{
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
             fgets(id_prod,8,stdin);
             for (i=0;i<tamanio_asoc&&encontrado;i++)//Encuentra el indice del producto a borrar
             {
-                if(strcmp((*v)[asoc[i]].id_prod,id_prod)==0)
+                if(strcmp(array_prod[asoc[i]].id_prod,id_prod)==0)
                 {
                     encontrado=1;
                     indice=asoc[i];
@@ -434,13 +436,13 @@ static void baja_producto(producto **v,int *tamanio_p,categoria *c, int tamanio_
             }
             if (encontrado==1)
             {
-                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",v[indice]->nombre);
+                printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",array_prod[indice].nombre);
                 while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 confirmar=getchar();
                 if(confirmar=='s')
                 {
                     salida='s';
-                    borrar_producto(v,tamanio_p,indice);
+                    borrar_producto(indice);
                     printf("Baja de producto con exito");
                 }
                 else
@@ -473,7 +475,7 @@ void baja_categoria()
         printf("Escribe el identificador de la id a borrar.\n");
         fgets(id_cat,5,stdin);
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
-        indice=idacat(descrip,array_cat,id_cat,tamanio_c);
+        indice=idacat(descrip,id_cat);
         if(descrip[0]=='-')//'-' significa que no se ha encontrado la id
         {
             printf("No se ha encontrado la categoria\nDesea cancelar la baja? Escriba 's' para salir");
@@ -498,7 +500,7 @@ void baja_categoria()
                 asoc=(int *)realloc(asoc,tamanio_asoc*sizeof(int));
                 if (tamanio_asoc!=0)
                 {
-                    listado_prod_asoc(array_prod,asoc,array_cat,tamanio_c,tamanio_asoc);
+                    listado_prod_asoc(asoc,tamanio_asoc);
                     printf("Los siguientes productos estan asociados a la categoria a borrar.\nBorrar esta categoria tambien borrara esos productos.\nSi no quiere borrarlos, cancele y asocie dichos productos a otra categoria.\nDesea continuar? Escriba 's' para continuar.\n");
                     confirmar='n';
                     confirmar=getchar();
@@ -507,7 +509,7 @@ void baja_categoria()
                     {
                         for (i=0;i<tamanio_asoc;i++)//Borrado de los productos asociados a la categoria
                         {
-                            borrar_producto(&array_prod,&tamanio_p,asoc[i]);
+                            borrar_producto(asoc[i]);
                         }
                         for (i=indice;i<tamanio_c-1;i++)//Borrado de la categoria
                         {
@@ -548,7 +550,7 @@ void baja_categoria()
     }while(salida=='s');
     free(asoc);
 }
-void guardar_producto(producto *v,int n_elem)
+void guardar_producto ()
 {
     FILE *f;
     int i;
@@ -559,30 +561,30 @@ void guardar_producto(producto *v,int n_elem)
     else
     {
         rewind(f);
-        for (i=0;i<n_elem;i++)//Volcado de un elemento
+        for (i=0;i<tamanio_p;i++)//Volcado de un elemento
         {
-            fputs(v[i].id_prod,f);
+            fputs(array_prod[i].id_prod,f);
             fputc('-',f);
-            fputs(v[i].nombre,f);
+            fputs(array_prod[i].nombre,f);
             fputc('-',f);
-            fputs(v[i].descrip,f);
+            fputs(array_prod[i].descrip,f);
             fputc('-',f);
-            fputs(v[i].id_categ,f);
+            fputs(array_prod[i].id_categ,f);
             fputc('-',f);
-            fputs(v[i].id_gestor,f);
+            fputs(array_prod[i].id_gestor,f);
             fputc('-',f);
-            fprintf(f,"%d",v[i].stock);
+            fprintf(f,"%d",array_prod[i].stock);
             fputc('-',f);
-            fprintf(f,"%d",v[i].entrega);
+            fprintf(f,"%d",array_prod[i].entrega);
             fputc('-',f);
-            fprintf(f,"%d",v[i].importe);
+            fprintf(f,"%d",array_prod[i].importe);
             fputc('\n',f);
         }
     }
     fclose(f);
-    free(v);  
+    free(array_prod);  
 }
-void guardar_categoria(categoria *v,int n_elem)
+void guardar_categoria()
 {
     FILE *f;
     int i;
@@ -592,25 +594,24 @@ void guardar_categoria(categoria *v,int n_elem)
     }
     else
     {
-        for (i=0;i<n_elem;i++)//Volcado de un elemento
+        for (i=0;i<tamanio_c;i++)//Volcado de un elemento
         {
-            fputs(v[i].id_cat,f);
+            fputs(array_cat[i].id_cat,f);
             fputc('-',f);
-            fputs(v[i].descrip,f);
+            fputs(array_cat[i].descrip,f);
             fputc('\n',f);
         }
     }
     fclose(f);
-    free(v);
+    free(array_cat);
 }
-producto * volcar_producto(int *tamanio)
+void cargar_producto()
 {
     FILE *f;
     char aux[51];//Cadena auxiliar para rellenar los datos, 51 es el valor de la cadena más larga
-    static producto *v;
     char j;
     int i;
-    if ((v=(producto *)malloc(sizeof(producto)))==NULL)
+    if ((array_prod=(producto *)malloc(sizeof(producto)))==NULL)
     {
         printf("Error de alocación de memoria.\n");
     }
@@ -619,46 +620,44 @@ producto * volcar_producto(int *tamanio)
         if((f=fopen(F_PRODUCTO,"r"))==NULL)
         {
             printf("ERROR: No se ha encontrado el fichero Productos.txt, no se ha podido cargar memoria de los productos.\n");
-            *tamanio=0;
+            tamanio_p=0;
         }
         else
         {
             for(i=0;j!=EOF;i++)//Bucle para obtener cada dato
             {
-                v=(producto *)realloc(v,(i+1)*sizeof(producto));
-                fgets(v[i].id_prod,8,f);
+                array_prod=(producto *)realloc(array_prod,(i+1)*sizeof(producto));
+                fgets(array_prod[i].id_prod,8,f);
                 fseek(f,1,SEEK_CUR);
                 //nombre y descrip varian en tamaño, por lo que fgets leera basura
-                obtener_dato_f(&f,v[i].nombre);
-                obtener_dato_f(&f,v[i].descrip);
-                fgets(v[i].id_categ,5,f);
+                obtener_dato_f(&f,array_prod[i].nombre);
+                obtener_dato_f(&f,array_prod[i].descrip);
+                fgets(array_prod[i].id_categ,5,f);
                 fseek(f,1,SEEK_CUR);
-                fgets(v[i].id_gestor,5,f);
+                fgets(array_prod[i].id_gestor,5,f);
                 fseek(f,1,SEEK_CUR);
                 //obtencion de enteros, primero leerlo como cadena y luego pasarlo a entero
                 obtener_dato_f(&f,aux);
-                v[i].stock=atoi(aux);
+                array_prod[i].stock=atoi(aux);
                 obtener_dato_f(&f,aux);
-                v[i].entrega=atoi(aux);
+                array_prod[i].entrega=atoi(aux);
                 obtener_dato_f(&f,aux);
-                v[i].importe=atoi(aux);
+                array_prod[i].importe=atoi(aux);
                 j=fgetc(f);
                 fseek(f,-1,SEEK_CUR);
             }
-            *tamanio=i;
+            tamanio_p=i;
             fclose(f);
         }
         
     }
-    return v;
 }
-categoria * volcar_categoria(int *tamanio)//No Probada todavia
+void cargar_categoria()
 {
     FILE *f;
     int i;
-    static categoria *v;
     char j='-';
-    if ((v=(categoria *)malloc(sizeof(categoria)))==NULL)
+    if ((array_cat=(categoria *)malloc(sizeof(categoria)))==NULL)
     {
         printf("Error de alocación de memoria.\n");
     }
@@ -667,52 +666,51 @@ categoria * volcar_categoria(int *tamanio)//No Probada todavia
         if((f=fopen(F_CATEGORIAS,"r"))==NULL)
         {
             printf("ERROR: No se ha encontrado el fichero Categorias.txt, no se ha podido cargar memoria de las categorias.\n");
-            *tamanio=0;
+            tamanio_c=0;
         }
         else
         {
             for(i=0;j!=EOF;i++)//Bucle para obtener cada dato
             {
-                v=(categoria *)realloc(v,((i+1)*sizeof(categoria)));
-                fgets(v[i].id_cat,5,f);
+                array_cat=(categoria *)realloc(array_cat,((i+1)*sizeof(categoria)));
+                fgets(array_cat[i].id_cat,5,f);
                 fseek(f,1,SEEK_CUR);
-                fgets(v[i].descrip,51,f);//Dejara de leer en EOF o en '/n'
-                quitaenter(v[i].descrip);
+                fgets(array_cat[i].descrip,51,f);//Dejara de leer en EOF o en '/n'
+                quitaenter(array_cat[i].descrip);
                 j=fgetc(f);
                 fseek(f,-1,SEEK_CUR);
             }
-            *tamanio=i;
+            tamanio_c=i;
             fclose(f);
         }
     }
-    return v;
 }
-int idacat(char *descrip,categoria *c,char *id,int tamanio)
+int idacat(char *descrip,char *id)
 {
     descrip[0]='-';
     descrip[1]='\0';
     int encontrado=1,indice=0;
-    for (int i=0;(i<tamanio)&&(encontrado);i++)
+    for (int i=0;(i<tamanio_c)&&(encontrado);i++)
     {
-        if (strcmp(c[i].id_cat,id)==0)
+        if (strcmp(array_cat[i].id_cat,id)==0)
         {
-            strcpy(descrip,c[i].descrip);
+            strcpy(descrip,array_cat[i].descrip);
             encontrado=0;
             indice=i;
         }
     }
     return indice;
 }
-void cataid(char *id,categoria *c,char *descrip,int tamanio)
+void cataid(char *id,char *descrip)
 {
     id[0]='-';
     id[1]='\0';
     int encontrado=1;
-    for (int i=0;(i<tamanio)&&(encontrado);i++)
+    for (int i=0;(i<tamanio_c)&&(encontrado);i++)
     {
-        if (strcmp(c[i].descrip,descrip)==0)
+        if (strcmp(array_cat[i].descrip,descrip)==0)
         {
-            strcpy(id,c[i].id_cat);
+            strcpy(id,array_cat[i].id_cat);
             encontrado=0;
         }
     }
@@ -808,53 +806,53 @@ static int cadena_valida(char *v)
 //Cabecera: static void lista_prod(producto *lista,categoria *c)
 //Precondicion: Todos los campos de lista y c deben estar inicializados
 //Poscondicion: Imprime por pantalla lista como una lista de los productos
-static void lista_prod(producto *lista,categoria *c,int tamanio_p,int tamanio_c)
+static void lista_prod()
 {
     char descrip_cat[51];//auxiliar para guardar la descripcion de la categoria
     printf("-------------------------------------------------------\n");
     for(int i=0;i<tamanio_p;i++)
     {
-        idacat(descrip_cat,c,lista[i].id_categ,tamanio_c);
-        printf("Nombre: %s\n",lista[i].nombre);
-        printf("Descripcion: %s\n",lista[i].descrip);
+        idacat(descrip_cat,array_prod[i].id_categ);
+        printf("Nombre: %s\n",array_prod[i].nombre);
+        printf("Descripcion: %s\n",array_prod[i].descrip);
         printf("Categoria: %s\n",descrip_cat);
-        printf("Precio: %d euros\n",lista[i].importe);
-        printf("Stock: %d unidades\n",lista[i].stock);
-        printf("Entrega en %d dias\n",lista[i].entrega);
-        printf("Identificador: %s\n",lista[i].id_prod);
+        printf("Precio: %d euros\n",array_prod[i].importe);
+        printf("Stock: %d unidades\n",array_prod[i].stock);
+        printf("Entrega en %d dias\n",array_prod[i].entrega);
+        printf("Identificador: %s\n",array_prod[i].id_prod);
         printf("-------------------------------------------------------\n");
     }
 }
 //Cabecera: static void lista_cat(categoria *lista)
 //Precondicion: Todos los campos de lista deben estar inicializados, tamanio <= nº de elementos de lista.
 //Poscondicon: Imprime por pantalla lista como una lista de las categorias
-static void lista_cat(categoria *lista,int tamanio)
+static void lista_cat()
 {
     printf("-------------------------------------------------------\n");
-    for(int i=0;i<tamanio;i++)
+    for(int i=0;i<tamanio_c;i++)
     {
-        printf("Descripcion: %s\n",lista[i].descrip);
-        printf("Identificador: %s\n",lista[i].id_cat);
+        printf("Descripcion: %s\n",array_cat[i].descrip);
+        printf("Identificador: %s\n",array_cat[i].id_cat);
         printf("-------------------------------------------------------\n");
     }
 }
 //Cabecera: static void lista_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc)
 //Precondicion: Todas las entradas asignadas, todos los elementos de asoc deben ser menores que el numero de elementos del vector p
 //Poscondicion: Imprime por pantalla todos los productos que apunte cada indice de asoc en p
-static void lista_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc)
+static void lista_prod_asoc(int *asoc,int tamanio_asoc)
 {
     char descrip_cat[51];//auxiliar para guardar la descripcion de la categoria
     printf("-------------------------------------------------------\n");
     for(int i=0;i<tamanio_asoc;i++)
     {
-        idacat(descrip_cat,c,p[asoc[i]].id_categ,tamanio_c);
-        printf("Nombre: %s\n",p[asoc[i]].nombre);
-        printf("Descripcion: %s\n",p[asoc[i]].descrip);
+        idacat(descrip_cat,array_prod[asoc[i]].id_categ);
+        printf("Nombre: %s\n",array_prod[asoc[i]].nombre);
+        printf("Descripcion: %s\n",array_prod[asoc[i]].descrip);
         printf("Categoria: %s\n",descrip_cat);
-        printf("Precio: %d€\n",p[asoc[i]].importe);
-        printf("Stock: %d unidades\n",p[asoc[i]].stock);
-        printf("Entrega en %d dias\n",p[asoc[i]].entrega);
-        printf("Identificador: %s\n",p[asoc[i]].id_prod);
+        printf("Precio: %d€\n",array_prod[asoc[i]].importe);
+        printf("Stock: %d unidades\n",array_prod[asoc[i]].stock);
+        printf("Entrega en %d dias\n",array_prod[asoc[i]].entrega);
+        printf("Identificador: %s\n",array_prod[asoc[i]].id_prod);
         printf("-------------------------------------------------------\n");
     }
 }
@@ -871,42 +869,42 @@ static void quitaenter(char *c)
 //Cabecera: static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p)
 //Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
 //Poscondicion: Muestra por pantalla una lista de los productos de forma mas compacta
-static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p)
+static void listado_prod()
 {
     int i;
     char aux[51];
     printf("Identificador-Nombre-Descripcion-Categoria-Precio-Stock-Entrega-Gestor.\n");
     for (i=0;i<tamanio_p;i++)
     {
-        idacat(aux,c,p[i].id_categ,tamanio_c);
-        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",p[i].id_prod,p[i].nombre,p[i].descrip,aux,p[i].importe,p[i].stock,p[i].entrega,"Por implementar");
+        idacat(aux,array_prod[i].id_categ);
+        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",array_prod[i].id_prod,array_prod[i].nombre,array_prod[i].descrip,aux,array_prod[i].importe,array_prod[i].stock,array_prod[i].entrega,"Por implementar");
     }
 }
 //Cabecera: static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_p)
 //Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
 //Poscondicion: Muestra por pantalla una lista de los productos de forma mas compacta a traves de un vector que asocia las posiciones de los productos
-static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc)
+static void listado_prod_asoc(int *asoc,int tamanio_asoc)
 {
     int i;
     char aux[51];
     printf("Identificador-Nombre-Descripcion-Categoria-Precio-Stock-Entrega-Gestor.\n");
     for (i=0;i<tamanio_asoc;i++)
     {
-        idacat(aux,c,p[i].id_categ,tamanio_c);
-        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",p[asoc[i]].id_prod,p[asoc[i]].nombre,p[asoc[i]].descrip,aux,p[asoc[i]].importe,p[asoc[i]].stock,p[asoc[i]].entrega,"Por implementar");
+        idacat(aux,array_prod[i].id_categ);
+        printf("%s|%s|%s|%s|%d euros|%d Uds.|%d dias|%s\n",array_prod[asoc[i]].id_prod,array_prod[asoc[i]].nombre,array_prod[asoc[i]].descrip,aux,array_prod[asoc[i]].importe,array_prod[asoc[i]].stock,array_prod[asoc[i]].entrega,"Por implementar");
     }
 }
 //Cabecera: static void borrar_producto(producto **p,int *tamanio_prod,int indice)
 //Precondicion: *tamanio_prod debe ser el numero de indices de *p, indice<*tamanio_prod
 //Poscondicion: borra el elemento indice del vector p y reduce el tamaño del vector en uno
-static void borrar_producto(producto **p,int *tamanio_prod,int indice)
+static void borrar_producto(int indice)
 {
-    for (int i=indice;i<(*tamanio_prod)-1;i++)//Borra el producto mediante la sustitucion de este por el siguiente
+    for (int i=indice;i<(tamanio_p)-1;i++)//Borra el producto mediante la sustitucion de este por el siguiente
     {
-        (*p)[i]=(*p)[i+1];
+        array_prod[i]=array_prod[i+1];
     }
-    *tamanio_prod=(*tamanio_prod)-1;
-    *p=(producto *)realloc(*p,*tamanio_prod*sizeof(producto));
+    tamanio_p=(tamanio_p)-1;
+    array_prod=(producto *)realloc(array_prod,tamanio_p*sizeof(producto));
 }
 //Cabecera: static void modificar_producto(sesion ses);
 //Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente
@@ -948,7 +946,7 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
     else
     {
         printf("Como proveedor, solo puede modificar los productos asociados a su nombre.\n");
-        listado_prod_asoc(array_prod,asoc,array_cat,tamanio_c,tamanio_asoc);
+        listado_prod_asoc(asoc,tamanio_asoc);
         do{
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a modificar.\nId: ");
@@ -983,7 +981,7 @@ static void menu_modificar_producto (int indice)
     char seleccion,aux[51],confirmar,id[8],descrip[51];
 
     system ("cls");
-    lista_prod_asoc(array_prod,asoc,array_cat,tamanio_c,1);
+    lista_prod_asoc(asoc,1);
     printf("Que desea modificar?\n1)Nombre\n2)Descripcion\n3)Compromiso de entrega\n4)Importe\n5)Stock\n6)Categoria\n7)Atras");
     seleccion=getchar();
     while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
@@ -1084,10 +1082,10 @@ static void menu_modificar_producto (int indice)
         menu_modificar_producto(indice);
         break;
         case '6'://Categoria
-        lista_cat(array_cat,tamanio_c);
+        lista_cat();
         printf("Escribe el nombre de la categoria a asignar\n");
         fgets(aux,51,stdin);
-        cataid(aux,array_cat,id,tamanio_c);
+        cataid(aux,id);
         if (id[0]=='-')
         {
             printf("Error, el nombre introducido no coincide con ninguna categoria\n");
@@ -1095,7 +1093,7 @@ static void menu_modificar_producto (int indice)
         }
         else
         {
-            idacat(descrip,array_cat,array_prod[indice].id_categ,tamanio_c);
+            idacat(descrip,array_prod[indice].id_categ);
             printf("Va a remplazar el siguiente valor\n Categoria: %s <- %s \n Escriba 's' para confirmar",descrip,aux);
             confirmar=getchar();
             if (confirmar=='s')
@@ -1131,7 +1129,7 @@ static void modificar_categoria()
     listado_cat();
     printf("Escriba el identificador de la categoria a la que quiera cambiar el nombre.\n");
     fgets(id,5,stdin);
-    indice=idacat(descrip,array_cat,id,tamanio_c);
+    indice=idacat(descrip,id);
     while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     if (descrip[0]=='-')
     {
