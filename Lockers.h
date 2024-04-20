@@ -17,7 +17,7 @@ typedef struct {
 typedef struct {
 
     char id_locker[11];
-    int Num_compT;
+    int Num_comp;
     char cod_locker[7];
     estado est_locker;      // Ocupado o vacio
     char fecha_ocup[11];     // Formato dd/mm/aa

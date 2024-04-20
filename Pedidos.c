@@ -1,19 +1,12 @@
 #include "Pedidos.h"
 #include <stdio.h>
-#include "estado.h"
 #include <stdlib.h>
 #include <string.h>
-# include <time.h>
+#include <time.h>
 
-#define LINEA 100
+#define LINEA 150
 
-
-typedef struct fecha{
-    int dia, mes, anno;
-}fecha;
-
-
-void fecha_actual( char fecha_act[11]){
+void fecha_actual( char fecha_act[11] , int mes){
 
     fecha fecha_actual;
     time_t t = time(NULL);
@@ -23,7 +16,7 @@ void fecha_actual( char fecha_act[11]){
 
     // Pasamos los datos desde la estructura tm a fecha
     fecha_actual.dia = tiempo_actual.tm_mday;
-    fecha_actual.mes = tiempo_actual.tm_mon + 1;
+    fecha_actual.mes = tiempo_actual.tm_mon + 1 + mes;
     fecha_actual.anno = tiempo_actual.tm_year + 1900;
 
     sprintf(dd,"%i",fecha_actual.dia);
@@ -111,6 +104,7 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // FUNCIONA
             }else{
 
                 strcpy((*ped)[i].id_locker, strtok(NULL, "-\n"));
+                strcpy((*ped)[i].id_cod_prom, strtok(NULL, "-\n"));
 
             }
 
@@ -126,9 +120,9 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // FUNCIONA
 }
 
 
-void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // FUNCIONA
+void carga_prod_pedido( Pedido *ped,ProductoPedido **pr_ped ,int *n_ped ,int *n_pr_ped){     // FUNCIONA
 
-    int i,j;
+    int i,j,k;
     char line[LINEA]="0";
     char contador_lineas[LINEA]="0";
     char estado[18]="\0";
@@ -178,6 +172,7 @@ void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped){     // FUNCIONA
                 (*pr_ped)[i].est_pedido = entregado;
 
                 strcpy((*pr_ped)[i].id_transp, strtok(NULL, "-\n"));
+
                 strcpy((*pr_ped)[i].fecha_entr_dev, strtok(NULL, "-\n"));
 
 
@@ -276,6 +271,8 @@ void volcado_pedidos ( Pedido *p, int *n_ped ){
 
                 strcat(line, "-");
                 strcat(line, p[i].id_locker);
+                strcat(line, "-");
+                strcat(line, p[i].id_cod_prom);
 
             }else printf("Error en el estado del pedido ( volcado )");
 
@@ -302,9 +299,9 @@ void volcado_pedidos ( Pedido *p, int *n_ped ){
 
 
 
-void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped ){
+void volcado_prod_pedidos ( Pedido *ped,ProductoPedido *pr_p ,int *n_ped ,int *n_pr_ped ){
 
-    int i;
+    int i,j;
     char line[LINEA]="\0",unidades[6]="\0",importe[6]="\0";
     FILE *f;
 
@@ -367,6 +364,7 @@ void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped ){
                     strcat(line, pr_p[i].id_transp);
                     strcat(line, "-");
                     strcat(line, pr_p[i].fecha_entr_dev);
+
                     break;
                 case devuelto:
 
@@ -447,12 +445,63 @@ void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos+1] , char 
 }
 
 
+void hacer_pedido (Pedido **ped, ProductoPedido **pr_ped, int *n_ped ,int *n_pr_ped, int unidades , int importe ,char id_prod[8],char id_cliente[8] ){
 
-void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8]){
+    *ped = ( Pedido *)realloc(*ped, (*n_ped+1) * sizeof(Pedido));
+
+    crear_siguiente_id(7,(*ped)[*n_ped].id_pedido,(*ped)[*n_ped-1].id_pedido);
+
+    fecha_actual((*ped)[*n_ped].fecha_ped,0);
+    strcpy((*ped)[*n_ped].id_cliente,id_cliente);
+
+
+    printf("Como quiere el pedido? ( domicilio o locker ): ");
+    fflush(stdin);
+    gets((*ped)[*n_ped].lugar_entrega);
+
+    if (strcmp((*ped)[*n_ped].lugar_entrega,"domicilio")==0){
+
+        printf("Cod_prom: ");
+        fflush(stdin);
+        gets((*ped)[*n_ped].id_cod_prom);
+
+    }else if ( strcmp((*ped)[*n_ped].lugar_entrega,"locker")==0 ){
+
+        printf("Id_Lock: ");
+        fflush(stdin);
+        gets((*ped)[*n_ped].id_locker);
+
+
+    }else printf("Error en el lugar de entrega (añadir pedido)");
+
+
+
+    *pr_ped = ( ProductoPedido *)realloc(*pr_ped, (*n_pr_ped+1) * sizeof(ProductoPedido));
+
+    strcpy( (*pr_ped)[*n_pr_ped].id_prod,id_prod);
+
+    strcpy( (*pr_ped)[*n_pr_ped].id_pedido,(*ped)[*n_ped].id_pedido);
+    (*pr_ped)[*n_pr_ped].unidades = unidades;
+
+    fecha_actual((*pr_ped)[*n_pr_ped].fecha_entrega,1);
+
+    (*pr_ped)[*n_pr_ped].importe = importe;
+    (*pr_ped)[*n_pr_ped].est_pedido = enPreparacion;
+
+    (*n_ped)++;
+    (*n_pr_ped)++;
+
+}
+
+
+
+
+void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8] , usu tipo_usu){
 
     int i=0,j,n;
     char borrado[8]="#######";
     char id_sig[8]="\0";
+
 
     while ( i<*n_ped  && strcmp( (*ped)[i].id_pedido , borrado) != 0 ){
 
@@ -476,7 +525,10 @@ void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8]){
         printf("Fecha_pedido: ");
         gets((*ped)[*n_ped].fecha_ped);
 
-        strcpy( (*ped)[*n_ped].id_cliente , usu_act);
+        printf("Id_cliente: ");
+        fflush(stdin);
+        gets((*ped)[*n_ped].id_cliente);
+
         fflush(stdin);
         printf("Lugar_entrega: ");
         gets((*ped)[*n_ped].lugar_entrega);
@@ -504,55 +556,54 @@ void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8]){
         (*n_ped)++;
 
 
-
-
-
-    }else{
-
-        if ( i == 0){
-
-            strcpy( (*ped)[i].id_pedido , "0000001");
-
-        }else{
-
-            crear_siguiente_id(7,id_sig,(*ped)[i-1].id_pedido);
-
-            strcpy( (*ped)[i].id_pedido,id_sig);
-
-            system("cls");
-
-            printf("Fecha_pedido: ");
-            fflush(stdin);
-            gets((*ped)[i].fecha_ped);
-            strcpy( (*ped)[*n_ped].id_cliente , usu_act);
-            printf("Lugar_entrega: ");
-            fflush(stdin);
-            gets((*ped)[i].lugar_entrega);
-
-            if (strcmp((*ped)[i].lugar_entrega,"domicilio") == 0){
-
-                printf("Id_cod_prom: ");
-                fflush(stdin);
-                gets((*ped)[i].id_cod_prom);
-
-            }else if ( strcmp((*ped)[i].lugar_entrega,"locker") == 0 ){
-
-                printf("Id_locker: ");
-                fflush(stdin);
-                gets((*ped)[i].id_locker);
-
             }else{
 
-                printf("Error con el lugar de entrega de pedido en alta");
-                exit(1);
+                if ( i == 0){
+
+                    strcpy( (*ped)[i].id_pedido , "0000001");
+
+                }else{
+
+                    crear_siguiente_id(7,id_sig,(*ped)[i-1].id_pedido);
+
+                    strcpy( (*ped)[i].id_pedido,id_sig);
+
+                    system("cls");
+
+                    printf("Fecha_pedido: ");
+                    fflush(stdin);
+                    gets((*ped)[i].fecha_ped);
+                    strcpy( (*ped)[*n_ped].id_cliente , usu_act);
+                    printf("Lugar_entrega: ");
+                    fflush(stdin);
+                    gets((*ped)[i].lugar_entrega);
+
+                    if (strcmp((*ped)[i].lugar_entrega,"domicilio") == 0){
+
+                        printf("Id_cod_prom: ");
+                        fflush(stdin);
+                        gets((*ped)[i].id_cod_prom);
+
+                    }else if ( strcmp((*ped)[i].lugar_entrega,"locker") == 0 ){
+
+                        printf("Id_locker: ");
+                        fflush(stdin);
+                        gets((*ped)[i].id_locker);
+
+                    }else{
+
+                        printf("Error con el lugar de entrega de pedido en alta");
+                        exit(1);
+
+                    }
+
+                }
+
+
 
             }
 
-        }
 
-
-
-    }
 
 
 }
@@ -685,8 +736,15 @@ void modificar_pedido ( Pedido *ped , ProductoPedido *pr_ped ,int *n_ped , int *
 
 void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int *n_pr_ped, char id_cliente[8] , int opcion_pedido , usu tipo_usu ){
 
-    int i=0;
-    char zero_8[8]="\0",zero_7[7]="\0",zero_11[11]="\0",zero_5[5]="\0";
+    int i=0,error=0;
+    char zero_8[8]="\0",zero_7[7]="\0",zero_11[11]="\0",zero_5[5]="\0",codigo_lock[7]="\0";
+
+    printf("Introduce el codigo del locker: ");
+    fflush(stdin);
+    gets(codigo_lock);
+
+    //if (strcmp(codigo_lock,))
+
 
     i=0;
 
@@ -694,34 +752,23 @@ void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int 
         i++;
     }
 
-    if ( prod_ped[i].est_pedido != enLocker ){
+    if (strcmp(ped[opcion_pedido].id_pedido,prod_ped[i].id_pedido)==0){
 
-        printf("Este pedido no esta en locker.\n");
-        system("pause");
+        strcpy( prod_ped[i].id_locker,zero_11);
+        strcpy( prod_ped[i].cod_locker,zero_7);
+        fecha_actual( prod_ped[i].fecha_entr_dev,0);
 
-
-    }else{
-
-
-        for ( i=0 ; i<*n_pr_ped ; i++ ){
-
-            if (strcmp(ped[opcion_pedido].id_pedido,prod_ped[i].id_pedido)==0){
-
-                strcpy( prod_ped[i].id_locker,zero_11);
-                strcpy( prod_ped[i].cod_locker,zero_7);
-                fecha_actual( prod_ped[i].fecha_entr_dev );
-
-                prod_ped[i].est_pedido = entregado;
-
-            }
-
-        }
-
-        printf("\nHas recogido el pedido.\n");
-        system("pause");
-
+        prod_ped[i].est_pedido = entregado;
 
     }
+
+
+
+    printf("\nHas recogido el pedido.\n");
+    system("pause");
+
+
+
 
     system("cls");
     menu_pedidos_clientes(ped, prod_ped, n_pedidos,n_pr_ped,id_cliente,cliente);
@@ -732,32 +779,14 @@ void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int 
 
 void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu){
 
-    int i,cont=0,ind_prod_ped,error=0;
+    int i=0,cont=0,ind_prod_ped,error=0;
     char c,op,estado_ped_nuevo[14]="\0",zero_8[8]="\0",zero_7[7]="\0",zero_11[11]="\0",zero_5[5]="\0";
 
     system("cls");
 
-    printf("---------------- Productos asociados al pedido ----------------\n\n");
+    while (i< *n_pr_ped && strcmp( pr_p[i].id_pedido,id_ped)!=0) i++;
 
-    for ( i=0 ; i< *n_pr_ped ; i++ ){
-
-        if (strcmp( pr_p[i].id_pedido,id_ped)==0){
-
-            printf("[%i].%s-%i\n",cont,pr_p[i].id_prod,pr_p[i].unidades);
-            cont++;
-
-        }
-
-    }
-
-    printf("---------------------------------------------------------------\n");
-    printf("Escriba el id del producto que desee ver: ");
-    scanf("%i",&ind_prod_ped);
-    fflush(stdin);
-
-    ind_prod_ped--;
-
-    system("cls");
+    ind_prod_ped = i;
 
     printf("------------------------- Producto %i --------------------------\n\n",ind_prod_ped+1);
 
@@ -896,12 +925,6 @@ void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped
                 } while (error == 1);
 
 
-
-
-
-
-
-
             }else if ( c == 'n' || c == 'N'){
 
 
@@ -911,43 +934,6 @@ void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped
         } while ( c != 's' && c != 'S' && c != 'n' && c != 'N');
 
     }
-
-
-
-
-    if ( cont != 1){
-
-        do{
-
-            printf("---------------------------------------------\n");
-            printf("Quiere ver otro producto? (s/n): ");
-            fflush(stdin);
-            scanf("%c",&op);
-
-            printf("\n");
-            system("cls");
-
-            if ( op == 's' || op == 'S') menu_prod_ped(ped,pr_p,n_ped,n_pr_ped,id_ped,id_cliente,tipo_usu);
-            else if ( op == 'n' || op == 'N' ){
-
-                if ( tipo_usu == cliente ){
-
-                    menu_pedidos_clientes(ped, pr_p, n_ped, n_pr_ped, id_cliente,cliente);
-
-                }else if ( tipo_usu == admin ){
-
-
-                    menu_pedidos_admin(ped, pr_p, n_ped, n_pr_ped,admin);
-
-                }
-
-
-            }else printf("Escribe s o n\n");
-
-        }while ( op != 's' && op != 'S' && op != 'n' && op != 'N' );
-
-
-    }else{
 
         printf("\n");
         system("cls");
@@ -963,7 +949,7 @@ void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped
 
         }
 
-    }
+
 
 }
 
@@ -972,9 +958,10 @@ void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped
 
 void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos,int *n_pr_ped, char id_cliente[8] , usu tipo_usu ){
 
-    int i,j,op_ped,op_accion_pedido,existe=0;
+    int i,j,k,op_ped,op_accion_pedido,existe=0;
     int opcion,error=0;
     char c='a',resp_2;
+    char fecha_act[11]="\0";
 
     printf("--------- Todos sus pedidos ---------\n\n");
 
@@ -1022,7 +1009,7 @@ void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedid
 
             case 1:
 
-                printf("Escribe el id del pedido que quiera ver: ");
+                printf("Escribe la id del pedido para ver los productos asociados a este:");
                 scanf("%i",&op_accion_pedido);
 
                 menu_prod_ped( ped,prod_ped, n_pedidos,n_pr_ped ,ped[op_accion_pedido-1].id_pedido ,id_cliente, cliente);
@@ -1034,64 +1021,66 @@ void menu_pedidos_clientes( Pedido *ped , ProductoPedido *prod_ped, int *n_pedid
                 break;
             case 2:
 
-                do{
+                for (i=0 ; i<*n_pedidos ; i++ ){
 
-                    printf("Escribe el id del pedido que quiera recoger: ");
-                    scanf("%i",&op_accion_pedido);
+                    if ( strcmp( id_cliente , ped[i].id_cliente ) == 0){
 
-                    if (strcmp(id_cliente,ped[op_accion_pedido-1].id_cliente)!=0){
+                        k=0;
+                        while( k<*n_pr_ped && strcmp(ped[i].id_pedido,prod_ped[k].id_pedido)!=0 ){
+                            k++;
+                        }
 
-                        printf("Elije un pedido valido.\n");
-                        error=1;
+                        if ( prod_ped[k].est_pedido == enLocker) existe = 1;
                     }
 
-                }while ( error == 1);
+                }
 
-                recoger_pedido( ped , prod_ped, n_pedidos,n_pr_ped, id_cliente , op_accion_pedido-1, cliente );
+                if ( existe == 1 ){
+
+                    do{
+
+                        printf("Escribe el id del pedido que quiera recoger: ");
+                        scanf("%i",&op_accion_pedido);
+
+
+                        if (strcmp(id_cliente,ped[op_accion_pedido-1].id_cliente)!=0 || prod_ped[k].est_pedido != enLocker){
+
+                            printf("Elije un pedido valido.\n");
+                            error=1;
+                        }
+
+                    }while ( error == 1 );
+
+
+                    recoger_pedido( ped , prod_ped, n_pedidos,n_pr_ped, id_cliente , op_accion_pedido-1, cliente );
+
+                }else{
+
+                    printf("\nNo tiene ningun pedido en locker.");
+                    system("pause");
+                    system("cls");
+                    menu_pedidos_clientes(ped, prod_ped, n_pedidos,n_pr_ped,id_cliente,cliente);
+                }
+
+
 
                 break;
             case 3:
-
-                volcado_pedidos(ped,n_pedidos);
-                volcado_prod_pedidos(prod_ped,n_pr_ped);
-
-                exit(1);
-
+                break;
             default:
 
                 printf("Elije un numero del 1 al 3\n");
                 break;
         }
 
-    }while ( op_ped != 1 && op_ped != 2 && op_ped != 3 && op_ped != 4 && op_ped != 5);
-
-
-
-    printf("------------------------------------------------\n\n");
-
-    do{
-
-        printf("Escribe la id del pedido para ver los productos asociados a este:");
-        scanf("%i",&opcion);
-
-
-        if (strcmp(id_cliente,ped[opcion-1].id_cliente) != 0 ){
-
-            printf("Introduzca un numeo vaido.\n");
-
-        }
-
-    }while( strcmp(id_cliente,ped[opcion-1].id_cliente) != 0);
-
-
-    menu_prod_ped(ped,prod_ped,n_pedidos,n_pr_ped,ped[opcion-1].id_pedido,id_cliente,cliente);
+    }while ( op_ped < 1 || op_ped > 3);
 
 
 }
 
-/*
 
-void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Trasnportista *transp, int *n_transp,  int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] ){
+
+void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Transportista *transp, int *n_transp,  int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] ){
 
     int i,j,op,error=0;
     char c='a';
@@ -1104,9 +1093,9 @@ void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Trasnportista
 
         for ( i=0 ; i< *n_pr_ped ; i++ ){
 
-            if (strcmp(tranp[i].ciudad_rep,prov_cliente)==0){
+            if (strcmp(transp[i].Ciudad,prov_cliente)==0){
 
-                printf("[%c].%s\n",c,tranp[i].id_transp);
+                printf("[%c].%s\n",c,transp[i].Id_transp);
                 c++;
             }
 
@@ -1115,7 +1104,7 @@ void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Trasnportista
         printf("Escribe el id de un transportista: ");
         scanf("%i",&op);
 
-        if (strcmp(transp[op-1].ciudad_rep,prov_cliente)!=0){
+        if (strcmp(transp[op-1].Ciudad,prov_cliente)!=0){
 
             error = 1;
             printf("\nElije uno de los transportistas dados.");
@@ -1127,22 +1116,19 @@ void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Trasnportista
     }while ( error == 1 );
 
 
-    for ( i=0 ; i< *n_pr_ped ; i++ ){
+    i=0;
+    while ( strcmp(ped[indice_p].id_pedido,prod_ped[i].id_pedido)!=0){
 
-        if ( strcmp(ped[indice_p].id_pedido,prod_ped[i].id_pedido)==0){
-
-            strcpy(prod_ped[i].id_transp,transp[op-1].id_transp);
-
-        }
-
+        i++;
     }
+
+    strcpy(prod_ped[i].id_transp,transp[op-1].Id_transp);
+
+
 
 }
 
-*/
 
-
-/*
 
 void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n_lock, int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] ){
 
@@ -1159,7 +1145,7 @@ void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n
 
             if (strcmp(lock[i].provincia,prov_cliente)==0){
 
-                printf("[%c].%s\n",c,lock[i].id_lock);
+                printf("[%c].%s\n",c,lock[i].id_locker);
                 c++;
             }
 
@@ -1184,7 +1170,7 @@ void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n
 
         if ( strcmp(ped[indice_p].id_pedido,prod_ped[i].id_pedido)==0){
 
-            strcpy(prod_ped[i].id_lock,lock[op-1].id_lock);
+            strcpy(prod_ped[i].id_locker,lock[op-1].id_locker);
 
         }
 
@@ -1192,7 +1178,7 @@ void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n
 
 }
 
-*/
+
 
 
 
@@ -1665,7 +1651,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
                 }
 
-            } while (tipo_ped != 1 && tipo_ped != 2 && tipo_ped != 3 && tipo_ped != 4 && tipo_ped != 5 && tipo_ped != 6 && tipo_ped != 7);
+            } while (tipo_ped < 1 ||  tipo_ped > 7);
 
 
         }else if (resp == 'n' || resp == 'N') {
@@ -1725,7 +1711,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
                 case 1:
 
-                    crear_pedido(&ped,n_pedidos,"0000004");
+                    crear_pedido(&ped,n_pedidos,NULL,admin);
 
                     system("cls");
 
@@ -1833,11 +1819,7 @@ void menu_pedidos_admin( Pedido *ped ,ProductoPedido *prod_ped,  int *n_pedidos 
 
                     break;
                 case 7:
-
-                    volcado_pedidos(ped,n_pedidos);
-                    volcado_prod_pedidos(prod_ped,n_pr_ped);
-
-                    exit(1);
+                    break;
                 default:
 
                     printf("Elije un numero del 1 al 7\n\n");
@@ -1861,9 +1843,9 @@ void menu_pedidos_prov(Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos, us
 
 }
 
-void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos ,int *n_pr_ped,char id_tr_act[5], usu tipo_usu) {
+void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_pr_ped,char id_tr_act[5], usu tipo_usu) {
 
-    int i,j,op,op_prod;
+    int i,j,k,l,op,op_prod,n_comp_act;
     char c='a',confirma,zero_11[11]="\0",zero_7[7]="\0";
 
 
@@ -1919,24 +1901,38 @@ void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos 
                         j++;
                     }
 
+                    prod_ped[op_prod-1].est_pedido = entregado;
+
                     if (strcmp(ped[j].lugar_entrega,"domicilio")==0){
 
                         strcpy(prod_ped[op_prod-1].id_locker,zero_11);
                         strcpy(prod_ped[op_prod-1].cod_locker,zero_7);
 
-                        fecha_actual(prod_ped[op_prod-1].fecha_entr_dev);
-
-                        prod_ped[op_prod-1].est_pedido = entregado;
+                        fecha_actual(prod_ped[op_prod-1].fecha_entr_dev,0);
 
                         printf("\nLa entrega se ha confirmado.\n");
 
                     }else if (strcmp(ped[j].lugar_entrega,"locker")==0){
 
-                        // FALTA ASOCIAR UN LOCKER
+                        k=0;
+                        while (strcmp(ped[j].id_locker,lock[k].id_locker)!=0) k++;
 
-                        fecha_actual(prod_ped[op_prod-1].fecha_entr_dev);
+                        if ( lock[k].Num_compT - lock[k].Num_compOcup !=0 ){
 
-                        prod_ped[op_prod-1].est_pedido = entregado;
+                            n_comp_act = lock[k].Num_compOcup + 1;
+
+                            l=0;
+                            while ( c_lock[l].Num_comp != n_comp_act ) l++;
+
+                            strcpy(prod_ped[op-1].id_locker,ped[j].id_locker);
+                            strcpy(prod_ped[op-1].cod_locker,c_lock[l].cod_locker);
+
+                        }
+
+
+                        fecha_actual(prod_ped[op_prod-1].fecha_entr_dev,0);
+
+
 
                         printf("\nLa entrega se ha confirmado.\n");
 
@@ -1944,24 +1940,16 @@ void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos 
                     }else printf("Error con el lugar de entrega (entrega)\n");
 
 
-                    system("pause");
-                    system("cls");
-                    menu_pedidos_transp(ped, prod_ped, n_pedidos,n_pr_ped,"0002",transportista);
-
-                }else{
-
-                    system("cls");
-                    menu_pedidos_transp(ped, prod_ped, n_pedidos,n_pr_ped,"0002",transportista);
-
                 }
+
+                system("pause");
+                system("cls");
+                menu_pedidos_transp(lock,c_lock,ped, prod_ped,n_lock ,n_c_lock,n_pedidos,n_pr_ped,"0002",transportista);
+
 
                 break;
             case 2:
-
-                volcado_pedidos(ped,n_pedidos);
-                volcado_prod_pedidos(prod_ped,n_pr_ped);
-
-                exit(1);
+                break;
             default:
                 printf("Elije una opcion valida.\n");
                 break;
@@ -1973,16 +1961,14 @@ void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos 
 }
 
 
-    void menu_pedidos(Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, usu tipo_usu) {
-
-        char id_cliente[8]="0000004";
+    void menu_pedidos(Cliente *clt, Transportista *transp ,Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_cliente, int *n_transp, int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_prod_ped, usu tipo_usu, int id_act ) {
 
         switch (tipo_usu) {
 
 
             case cliente:
 
-                menu_pedidos_clientes(ped, prod_ped, n_pedidos, n_prod_ped, id_cliente,cliente);
+                menu_pedidos_clientes(ped, prod_ped, n_pedidos, n_prod_ped, clt[id_act].Id_cliente,cliente);
 
                 break;
             case admin:
@@ -1997,7 +1983,7 @@ void menu_pedidos_transp (Pedido *ped, ProductoPedido *prod_ped, int *n_pedidos 
                 break;
             case transportista:
 
-                menu_pedidos_transp(ped, prod_ped, n_pedidos,n_prod_ped,"0002",transportista);
+                menu_pedidos_transp(lock,c_lock,ped, prod_ped,n_lock,n_c_lock, n_pedidos,n_prod_ped,transp[id_act].Id_transp,transportista);
 
                 break;
             default:

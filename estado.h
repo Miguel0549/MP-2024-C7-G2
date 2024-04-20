@@ -22,10 +22,10 @@ typedef enum {
 
 typedef enum{
 
-    cliente,
-    admin,
-    proveedor,
-    transportista,
+    cliente,        // 0
+    admin,          // 1
+    proveedor,      // 2
+    transportista,  // 3
 
 
 }usu;

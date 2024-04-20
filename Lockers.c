@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LINEA 100
+#define LINEA 150
 
 
 // Caberea: void carga_lockers( Locker ** )
@@ -110,7 +110,7 @@ void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock){ 
             strcpy((*c_lock)[i].id_locker, strtok(line, "-\n"));
             strcpy(Num_compT, strtok(NULL, "-\n"));
 
-            (*c_lock)[i].Num_compT = strtol(Num_compT,&ptr,10);
+            (*c_lock)[i].Num_comp = strtol(Num_compT,&ptr,10);
 
             strcpy((*c_lock)[i].cod_locker, strtok(NULL, "-\n"));
             strcpy(estado, strtok(NULL, "-\n"));
@@ -218,7 +218,7 @@ void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock ){
             strcpy(line, c_l[i].id_locker);
             strcat(line, "-");
 
-            sprintf(Num_compT,"%i",c_l[i].Num_compT);
+            sprintf(Num_compT,"%i",c_l[i].Num_comp);
 
             strcat(line, Num_compT);
             strcat(line, "-");
@@ -261,9 +261,12 @@ void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock ){
 
 
 
+void stock_lockers (){
 
 
 
+
+}
 
 
 
