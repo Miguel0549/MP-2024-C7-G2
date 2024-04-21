@@ -6,7 +6,7 @@
 #include "descuentos.h"
 //#include "sesiones.h"
 //#include "sesiones.c"
-#define LINE 100
+#define LINE 150
 
 #include "Devoluciones.h"
 
@@ -184,15 +184,25 @@ void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,int *n_desc,int*n_d
 //precondición: sea **d un doble puntero a una estructura descuentos 
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
 void carga_descuentos(Descuentos **d,int *n_desc){
+
     int i,j;
     char c;
-    char line[LINE]="\0";
+    char line[LINE]="\0",contador_lineas[LINE]="0";
     char estado[10]="\0";
     FILE *f;
     j=0;
-    if((f=fopen("descuentos.txt","r"))==NULL){
+    if((f=fopen("Files\\descuentos.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
     }else{
+
+
+        while(!feof(f)){
+
+            fgets(contador_lineas,LINE,f);
+            (*n_desc)++;
+
+        }
+
     
         }
         if(((*d) = (Descuentos *)calloc(*n_desc, sizeof(Descuentos)))==NULL){
@@ -207,12 +217,11 @@ void carga_descuentos(Descuentos **d,int *n_desc){
             for(i=j;i<*n_desc;i++){                    
 
                 fgets(line,LINE,f);
-                strcpy((*d)[i].Id_cod, strtok(line,"-"));
+                strcpy((*d)[i].Id_cod, strtok(line,"-\n"));
                 strcpy((*d)[i].Descrip, strtok(NULL, "-\n"));  //cargamos los datos tipo char
-                strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
 
-                strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
-                    
+                    strcpy(estado, strtok(NULL, "-\n"));//introducimos la siguiente cadena entre los '-'
+
 
                     if(strcmp(estado,"codpro")==0){
                         (*d)[i].Tipo=codpro;
@@ -222,7 +231,7 @@ void carga_descuentos(Descuentos **d,int *n_desc){
                     }else{puts("Error del campo TIPO"); }
 
                     for(int k=0;k<10;k++) estado[k]='\0';
-                
+
                     strcpy(estado, strtok(NULL, "-\n"));
                     
                     if(strcmp(estado,"activo")==0){
@@ -233,6 +242,9 @@ void carga_descuentos(Descuentos **d,int *n_desc){
                     }else{puts("Error del campo ESTADO"); }
 
                     for(int k=0;k<10;k++) estado[k]='\0';
+
+                    strcpy((*d)[i].Importe, strtok(NULL, "-\n"));
+
                     strcpy(estado, strtok(NULL, "-\n"));
 
                     if(strcmp(estado, "todos")==0){
@@ -256,15 +268,23 @@ void carga_descuentos(Descuentos **d,int *n_desc){
 //postcondición: carga en el vector de estructura Descuentos los datos desde el fichero descuentos.txt
 void carga_descuentos_clientes(Descuentos_clientes **dc,int *n_desc_c){
     int i,j;
-    char line[LINE]="\0";
+    char line[LINE]="\0",contador_lineas[LINE]="0";
     char estado[10]="\0";
     char c;
     FILE *f;
     j=0;
-    if((f=fopen("descuentos_clientes.txt","r"))==NULL){
+    if((f=fopen("Files\\descuentos_clientes.txt","r"))==NULL){
         printf("Error al abrir el archivo\n");
     }else{
-        
+
+        while(!feof(f)){
+
+            fgets(contador_lineas,LINE,f);
+            (*n_desc_c)++;
+
+        }
+
+
         *dc = (Descuentos_clientes *)calloc(*n_desc_c, sizeof(Descuentos_clientes));
         if(*dc==NULL){
             printf("Error al reservar memoria para los Descuentos\n");
@@ -311,7 +331,7 @@ void volcado_descuentos(Descuentos **d,int*n_desc){
     FILE *f;
     aux=*n_desc;
 
-    if ((f = fopen("Descuentos.txt", "w+")) == NULL) {
+    if ((f = fopen("Files\\descuentos.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -371,7 +391,7 @@ void volcado_descuentos_clientes(Descuentos_clientes **dc,int *n_desc_c){
     char line[LINE]="\0";
     FILE *f;
 
-    if ((f = fopen("Descuentos_clientes.txt", "w+")) == NULL) {
+    if ((f = fopen("Files\\descuentos_clientes.txt", "w+")) == NULL) {
 
         printf("Error al abrir el archivo");
 
@@ -438,7 +458,7 @@ void listar_descuentos_propios(Descuentos **d, Descuentos_clientes **dc,char *Id
              puts((*dc)[i].Id_cod);
              printf("Cantidad:");
              puts((*d)[j].Importe);
-             printf("Fecha de expedición:");
+             printf("Fecha de expedicion:");
              puts((*dc)[i].f_asignacion);
              printf("Fecha de caducidad:");
              puts((*dc)[i].f_caducidad);

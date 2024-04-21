@@ -479,7 +479,7 @@ void devolucion_cliente ( Devoluciones *dev, int *n_dev , int indice_dev ){
 
 
 
-void modificar_devolucion ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, int indice_dev){
+void modificar_devolucion (  Devoluciones *dev, int indice_dev){
 
     char estado[15]="\0",confirma;
 
@@ -536,30 +536,332 @@ void modificar_devolucion ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones 
 
 void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, char id_cliente[8], usu tipo_u){
 
-    int i,j,existe=0,op,op_menu,cifras=0,n,indice_dev;
+    int i,j,existe,op,op_menu,cifras,n,indice_dev;
     char c='a',borrado[8]="#######",vector_id[8]="\0",*num;
 
-    printf("-------------------- Sus devoluciones --------------------\n\n");
+    do{
 
-    for (i = 0; i < *n_dev; i++) {
+        existe = 0;
+        cifras = 0;
 
-        if (strcmp(dev[i].id_pedido,borrado)!=0){
+        printf("-------------------- Sus devoluciones --------------------\n\n");
 
-            j=0;
+        for (i = 0; i < *n_dev; i++) {
 
-            while (  j<*n_pedidos && strcmp(dev[i].id_pedido,ped[j].id_pedido)!=0){
+            if (strcmp(dev[i].id_pedido,borrado)!=0){
 
-                j++;
+                j=0;
+
+                while (  j<*n_pedidos && strcmp(dev[i].id_pedido,ped[j].id_pedido)!=0){
+
+                    j++;
+                }
+
+
+                if ( j<*n_pedidos){
+
+                    if (strcmp(ped[j].id_cliente,id_cliente) == 0){
+
+                        if ( dev[i].est_dev == pediente || dev[i].est_dev == aceptado ){
+
+                            existe=1;
+
+                            printf("[%c].%s-%s-%s-", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
+
+                            switch (dev[i].est_dev) {
+
+                                case pediente:
+                                    printf("pendiente-%s\n", dev[i].fecha_cad);
+                                    break;
+                                case aceptado:
+                                    printf("aceptado-%s\n", dev[i].fecha_acp);
+                                    break;
+                                case denegado:
+                                    printf("pendiente\n");
+                                    break;
+                                case enviado:
+                                    printf("enviado\n");
+                                    break;
+                                case recibido:
+                                    printf("recibido\n");
+                                    break;
+                                default:
+                                    printf("Error con el estado de la devolucion.\n");
+                                    system("pause");
+                                    exit(1);
+
+                            }
+
+
+                            c++;
+
+                        }
+
+
+
+                    }
+
+
+                }
+
+
             }
 
+        }
 
-            if ( j<*n_pedidos){
+        if ( existe == 0 ){
 
-                if (strcmp(ped[j].id_cliente,id_cliente) == 0){
+            printf("\nNo tiene devoluciones asocidadas.\n");
+            system("pause");
 
-                    if ( dev[i].est_dev == pediente || dev[i].est_dev == aceptado ){
+        }else{
 
-                        existe=1;
+            do{
+
+                printf("----------------------------------------------------\n");
+
+                printf("Elija una opcion.\n1.Ver devolucion\n2.Salir\n");
+                scanf("%i",&op_menu);
+
+                switch (op_menu) {
+                    case 1:
+
+                        do{
+
+
+                            printf("Escribe el id del pedido para interactuar con el: ");
+                            scanf("%i",&op);
+
+                            n=op;
+
+                            while ( n > 1){
+
+                                n /= 10;
+                                cifras++;
+
+                            }
+
+                            num = (char *) calloc(cifras+1,sizeof(char));
+
+                            vector_id[0]= '0';
+
+                            for (i=0 ; i<6-cifras; i++ ){
+
+                                strcat(vector_id,"0");
+
+                            }
+
+                            sprintf(num,"%i",op);
+
+                            strcat(vector_id,num);
+
+                            indice_dev=0;
+
+                            while( indice_dev<*n_dev && strcmp(vector_id,dev[indice_dev].id_pedido)!=0){
+
+                                indice_dev++;
+                            }
+
+                            if ( indice_dev >= *n_dev){
+
+                                printf("\nIntroduce una id correcta.");
+                                system("pause");
+                            }
+
+                        }while( indice_dev >= *n_dev );
+
+                        devolucion_cliente(dev,n_dev,indice_dev);
+
+                        system("cls");
+
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        printf("Escribe un numero del 1 al 2");
+                        break;
+                }
+
+            }while ( op_menu != 1 && op_menu != 2);
+
+        }
+
+
+
+    } while ( op_menu != 2 && existe == 1);
+
+
+}
+
+
+
+
+
+
+void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u) {
+
+    int i, op_dev,op,tipo_dev,existe=0;
+    char c = 'a',resp,borrado[8]="#######";
+
+    do{
+
+        do{
+
+            printf("Desea listar las devoluciones segun su estado? (s/n):");
+            fflush(stdin);
+            scanf("%c", &resp);
+
+            system("cls");
+
+
+            if (resp == 's' || resp == 'S'){
+
+                do{
+
+                    printf("1.Pendiente\n2.Aceptado\n3.Denegado\n4.Enviado\n5.Recibido\n");
+                    printf("Elija el tipo de devolucion (1-5):");
+                    scanf("%i", &tipo_dev);
+
+                    system("cls");
+
+                    switch (tipo_dev) {
+
+                        case 1:
+
+                            printf("-------------------- Devoluciones pendientes --------------------\n\n");
+
+                            for ( i=0 ; i<*n_dev ; i++ ){
+
+                                if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
+
+                                    if ( dev[i].est_dev == pediente ){
+
+                                        existe = 1;
+
+                                        printf("[%c].%s-%s-%s-pendiente-%s\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev,dev[i].fecha_cad);
+
+                                        c++;
+                                    }
+
+                                }
+
+                            }
+
+                            break;
+                        case 2:
+
+                            printf("-------------------- Devoluciones aceptadas --------------------\n\n");
+
+                            for ( i=0 ; i<*n_dev ; i++ ){
+
+                                if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
+
+                                    if ( dev[i].est_dev == aceptado ){
+
+                                        existe = 1;
+
+                                        printf("[%c].%s-%s-%s-aceptado-%s\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev,dev[i].fecha_acp);
+
+                                        c++;
+                                    }
+
+                                }
+
+
+                            }
+
+                            break;
+                        case 3:
+
+                            printf("-------------------- Devoluciones denegadas --------------------\n\n");
+
+                            for ( i=0 ; i<*n_dev ; i++ ){
+
+                                if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
+
+                                    if ( dev[i].est_dev == denegado ){
+
+                                        existe = 1;
+
+                                        printf("[%c].%s-%s-%s-denegado\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
+
+                                        c++;
+                                    }
+
+                                }
+
+
+
+                            }
+
+                            break;
+                        case 4:
+
+                            printf("-------------------- Devoluciones enviadas --------------------\n\n");
+
+                            for ( i=0 ; i<*n_dev ; i++ ){
+
+                                if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
+
+                                    if ( dev[i].est_dev == enviado ){
+
+                                        existe = 1;
+
+                                        printf("[%c].%s-%s-%s-enviado\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
+
+                                        c++;
+                                    }
+
+                                }
+
+
+                            }
+
+                            break;
+                        case 5:
+
+                            printf("-------------------- Devoluciones recibidas --------------------\n\n");
+
+                            for ( i=0 ; i<*n_dev ; i++ ){
+
+                                if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
+
+                                    if ( dev[i].est_dev == recibido ){
+
+                                        existe = 1;
+
+                                        printf("[%c].%s-%s-%s-recibido\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
+
+                                        c++;
+                                    }
+
+                                }
+
+
+                            }
+
+                            break;
+                        default:
+
+                            system("cls");
+                            printf("Escribe un numero del (1-5)\n");
+                            system("pause");
+                            system("cls");
+
+                            break;
+                    }
+
+
+                }while( tipo_dev < 1 || tipo_dev > 5);
+
+
+            }else if ( resp == 'n' || resp == 'N'){
+
+                printf("-------------------- Todas las devoluciones --------------------\n\n");
+
+                for (i = 0; i < *n_dev; i++) {
+
+                    if (strcmp(dev[i].id_pedido,borrado)!=0){
 
                         printf("[%c].%s-%s-%s-", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
 
@@ -594,366 +896,74 @@ void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluc
 
 
 
-                    }
-
-
                 }
 
+            }else{
+
+                system("cls");
+                printf("Introduce s o n\n");
+                system("pause");
 
             }
 
-    }
 
-    if ( existe == 0 ){
 
-        printf("\nNo tiene devoluciones asocidadas.\n");
-        system("pause");
-        exit(1);
+        } while (resp != 's' && resp != 'S' && resp != 'n' && resp != 'N');
 
-    }
 
 
 
-    printf("----------------------------------------------------\n");
 
-    printf("Elija una opcion.\n1.Ver devolucion\n2.Salir\n");
-    scanf("%i",&op_menu);
+        do {
 
-    switch (op_menu) {
-        case 1:
+            printf("\nElija una opcion:\n");
+            printf("1.alta\n2.baja\n3.modificar\n4.ver devolucion\n5.salir\n");
+            scanf("%i", &op_dev);
 
-            do{
 
+            switch (op_dev) {
+                case 1:
 
-                printf("Escribe el id del pedido para interactuar con el: ");
-                scanf("%i",&op);
+                    crear_devolucion( ped,prod_ped,&dev,n_dev,n_pedidos,n_prod_ped);
 
-                n=op;
+                    system("cls");
 
-                while ( n > 1){
+                    break;
+                case 2:
 
-                    n /= 10;
-                    cifras++;
+                    printf("Que devolucion quiere borrar?: ");
+                    scanf("%i",&op);
+                    eliminar_devolucion(dev,op-1);
 
-                }
+                    system("cls");
 
-                num = (char *) calloc(cifras+1,sizeof(char));
+                    break;
+                case 3:
 
-                vector_id[0]= '0';
+                    printf("Que devolucion quiere modificar?: ");
+                    scanf("%i",&op);
+                    modificar_devolucion(dev,op-1);
+                    system("cls");
 
-                for (i=0 ; i<6-cifras; i++ ){
 
-                    strcat(vector_id,"0");
+                    break;
+                case 4:
 
-                }
+                    ver_devolucion(dev,n_dev);
 
-                sprintf(num,"%i",op);
-
-                strcat(vector_id,num);
-
-                indice_dev=0;
-
-                while( indice_dev<*n_dev && strcmp(vector_id,dev[indice_dev].id_pedido)!=0){
-
-                    indice_dev++;
-                }
-
-                if ( indice_dev >= *n_dev){
-
-                    printf("\nIntroduce una id correcta.");
-                    system("pause");
-                }
-
-            }while( indice_dev >= *n_dev );
-
-
-
-            devolucion_cliente(dev,n_dev,indice_dev);
-
-            system("cls");
-            menu_devoluciones_clientes(ped,prod_ped,dev,n_dev,n_pedidos,n_prod_ped,"0000008",cliente);
-
-            break;
-        case 2:
-            volcado_devoluciones(dev,n_dev);
-            exit(1);
-        default:
-            break;
-    }
-
-
-
-
-}
-
-
-
-
-
-
-void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u) {
-
-    int i, op_dev,op,tipo_dev,existe=0;
-    char c = 'a',resp,borrado[8]="#######";
-
-    do{
-
-        printf("Desea listar las devoluciones segun su estado? (s/n):");
-        fflush(stdin);
-        scanf("%c", &resp);
-
-        system("cls");
-
-
-        if (resp == 's' || resp == 'S'){
-
-            do{
-
-                printf("1.Pendiente\n2.Aceptado\n3.Denegado\n4.Enviado\n5.Recibido\n");
-                printf("Elija el tipo de devolucion (1-5):");
-                scanf("%i", &tipo_dev);
-
-                system("cls");
-
-                switch (tipo_dev) {
-
-                    case 1:
-
-                        printf("-------------------- Devoluciones pendientes --------------------\n\n");
-
-                        for ( i=0 ; i<*n_dev ; i++ ){
-
-                            if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
-
-                                if ( dev[i].est_dev == pediente ){
-
-                                    existe = 1;
-
-                                    printf("[%c].%s-%s-%s-pendiente-%s\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev,dev[i].fecha_cad);
-
-                                    c++;
-                                }
-
-                            }
-
-                        }
-
-                        break;
-                    case 2:
-
-                        printf("-------------------- Devoluciones aceptadas --------------------\n\n");
-
-                        for ( i=0 ; i<*n_dev ; i++ ){
-
-                            if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
-
-                                if ( dev[i].est_dev == aceptado ){
-
-                                    existe = 1;
-
-                                    printf("[%c].%s-%s-%s-aceptado-%s\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev,dev[i].fecha_acp);
-
-                                    c++;
-                                }
-
-                            }
-
-
-                        }
-
-                        break;
-                    case 3:
-
-                        printf("-------------------- Devoluciones denegadas --------------------\n\n");
-
-                        for ( i=0 ; i<*n_dev ; i++ ){
-
-                            if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
-
-                                if ( dev[i].est_dev == denegado ){
-
-                                    existe = 1;
-
-                                    printf("[%c].%s-%s-%s-denegado\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
-
-                                    c++;
-                                }
-
-                            }
-
-
-
-                        }
-
-                        break;
-                    case 4:
-
-                        printf("-------------------- Devoluciones enviadas --------------------\n\n");
-
-                        for ( i=0 ; i<*n_dev ; i++ ){
-
-                            if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
-
-                                if ( dev[i].est_dev == enviado ){
-
-                                    existe = 1;
-
-                                    printf("[%c].%s-%s-%s-enviado\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
-
-                                    c++;
-                                }
-
-                            }
-
-
-                        }
-
-                        break;
-                    case 5:
-
-                        printf("-------------------- Devoluciones recibidas --------------------\n\n");
-
-                        for ( i=0 ; i<*n_dev ; i++ ){
-
-                            if ( strcmp(dev[i].id_pedido,borrado)!=0 ){
-
-                                if ( dev[i].est_dev == recibido ){
-
-                                    existe = 1;
-
-                                    printf("[%c].%s-%s-%s-recibido\n", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
-
-                                    c++;
-                                }
-
-                            }
-
-
-                        }
-
-                        break;
-                    default:
-
-                        system("cls");
-                        printf("Escribe un numero del (1-5)\n");
-                        system("pause");
-                        system("cls");
-
-                        break;
-                }
-
-
-            }while( tipo_dev < 1 || tipo_dev > 5);
-
-
-        }else if ( resp == 'n' || resp == 'N'){
-
-            printf("-------------------- Todas las devoluciones --------------------\n\n");
-
-            for (i = 0; i < *n_dev; i++) {
-
-                if (strcmp(dev[i].id_pedido,borrado)!=0){
-
-                    printf("[%c].%s-%s-%s-", c, dev[i].id_pedido, dev[i].id_prod, dev[i].fecha_dev);
-
-                    switch (dev[i].est_dev) {
-
-                        case pediente:
-                            printf("pendiente-%s\n", dev[i].fecha_cad);
-                            break;
-                        case aceptado:
-                            printf("aceptado-%s\n", dev[i].fecha_acp);
-                            break;
-                        case denegado:
-                            printf("pendiente\n");
-                            break;
-                        case enviado:
-                            printf("enviado\n");
-                            break;
-                        case recibido:
-                            printf("recibido\n");
-                            break;
-                        default:
-                            printf("Error con el estado de la devolucion.\n");
-                            system("pause");
-                            exit(1);
-
-                    }
-
-
-                    c++;
-
-                }
-
-
+                    break;
+                case 5:
+                default:
+                    printf("Escribe un numero del 1 al 5.");
+                    break;
 
             }
 
-        }else{
 
-            system("cls");
-            printf("Introduce s o n\n");
-            system("pause");
-
-        }
+        } while (op_dev < 1 || op_dev > 5);
 
 
-
-    } while (resp != 's' && resp != 'S' && resp != 'n' && resp != 'N');
-
-
-
-
-
-    do {
-
-        printf("\nElija una opcion:\n");
-        printf("1.alta\n2.baja\n3.modificar\n4.ver devolucion\n5.salir\n");
-        scanf("%i", &op_dev);
-
-
-        switch (op_dev) {
-            case 1:
-
-                crear_devolucion( ped,prod_ped,&dev,n_dev,n_pedidos,n_prod_ped);
-
-                system("cls");
-                menu_devoluciones_admin(ped,prod_ped,dev,n_dev,n_pedidos,n_prod_ped,admin);
-
-                break;
-            case 2:
-
-                printf("Que devolucion quiere borrar?: ");
-                scanf("%i",&op);
-                eliminar_devolucion(dev,op-1);
-
-                system("cls");
-                menu_devoluciones_admin(ped,prod_ped,dev,n_dev,n_pedidos,n_prod_ped,admin);
-
-                break;
-            case 3:
-
-                printf("Que devolucion quiere modificar?: ");
-                scanf("%i",&op);
-                modificar_devolucion(ped,prod_ped,dev,n_dev,n_pedidos,n_prod_ped,op-1);
-
-                system("cls");
-                menu_devoluciones_admin(ped,prod_ped,dev,n_dev,n_pedidos,n_prod_ped,admin);
-
-                break;
-            case 4:
-
-                ver_devolucion(dev,n_dev);
-
-                break;
-            case 5:
-            default:
-                break;
-
-        }
-
-
-    } while (op_dev < 1 || op_dev > 5);
+    }while( op_dev != 5);
 
 
 }

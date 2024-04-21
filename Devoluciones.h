@@ -21,7 +21,7 @@ void volcado_devoluciones ( Devoluciones *d, int *n_dev );
 
 void crear_devolucion( Pedido *ped, ProductoPedido *prod_ped, Devoluciones **dev, int *n_dev, int *n_pedidos, int *n_prod_ped );
 void eliminar_devolucion ( Devoluciones *dev , int indice_dev);
-void modificar_devolucion ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, int indice_dev );
+void modificar_devolucion ( Devoluciones *dev, int indice_dev );
 
 void devolucion_cliente ( Devoluciones *dev, int *n_dev , int indice_dev );
 void hacer_devolucion_cliente ( Devoluciones **dev , int *n_dev , char id_prod[8] , char id_ped[8]);

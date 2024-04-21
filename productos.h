@@ -1,7 +1,7 @@
 #ifndef PRODUCTOS_H
 #define PRODUCTOS_H
-#define F_PRODUCTO "Productos.txt"
-#define F_CATEGORIAS "Categorias.txt"
+#define F_PRODUCTO "Files\\Productos.txt"
+#define F_CATEGORIAS "Files\\Categorias.txt"
 
 #include "Devoluciones.h"
 
@@ -26,6 +26,12 @@ typedef struct {
     char id_cat[5];
     char descrip[51];
 }categoria;
+
+
+extern producto *array_prod;
+extern categoria *array_cat;
+extern int tamanio_p,tamanio_c;
+
 //extern producto *array_prod;//Vector de productos el cual se inicializa con volcar_producto y se libera con guardar_producto.
 //extern categoria *array_cat;//Vector de categorias el cual se inicializa con volcar_categoria y se libera con guardar_categoria.
 //extern int tamanio_p,tamanio_c;//Enteros utilizados para almacenar el tamaño del producto y categoria

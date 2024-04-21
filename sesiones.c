@@ -175,111 +175,129 @@ void borrar_adminprov_con_id(Adminprov**vector_admin,char *Id_admin, int *n_admi
 }
 
 
-void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev , usu tipo_usu, int id_usu_act){
+void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ){
 
     int op;
 
-    printf("                Transportista: %s                 \n",transp[id_usu_act].Nombre);
-    printf("-----------------------------------------------------------\n");
 
     do{
 
-        printf("1.Perfil\n2.Repartos\n3.Retornos\n4.Salir\n");
-        scanf("%i",&op);
+        printf("                Transportista: %s                 \n",transp[id_usu_act].Nombre);
+        printf("-----------------------------------------------------------\n");
 
-        system("cls");
+        do{
 
-        switch (op) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
+            printf("1.Perfil\n2.Repartos\n3.Retornos\n4.Salir\n");
+            scanf("%i",&op);
 
-                menu_pedidos(client,transp,lock,c_lock,ped,pr_p,n_cliente,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,transportista,id_usu_act);
+            system("cls");
 
-                system("cls");
+            switch (op) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
 
-                menu_principal_cliente(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,transportista,id_usu_act);
+                    menu_pedidos_transp(lock,c_lock,ped,pr_p,n_lock,n_c_lock,n_ped,n_pr_p,transp[id_usu_act].Id_transp,transportista);
+
+                    system("cls");
+
+                    break;
+                case 4:
+
+                    volcado_adminprov(&admp,n_admp);
+                    volcado_transp(&transp,n_transp);
+                    volcado_cliente(&client,n_cliente);
+
+                    volcado_pedidos(ped,n_ped);
+                    volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
+                    volcado_devoluciones(dev,n_dev);
+
+                    volcado_lockers(lock,n_lock);
+                    volcado_comp_lockers(c_lock,n_c_lock);
+
+                    volcado_descuentos(&desc,n_desc);
+                    volcado_descuentos_clientes(&desc_cl,n_desc_cl);
+
+                    guardar_producto();
+                    guardar_categoria();
+
+                    exit(1);
+
+                default:
+                    printf("\nEscribe un numero valido.");
+                    break;
+            }
 
 
-                break;
-            case 4:
+        }while( op < 1 || op > 10 );
 
-                volcado_adminprov(&admp,n_admp);
-                volcado_transp(&transp,n_transp);
-                volcado_cliente(&client,n_cliente);
-
-                volcado_pedidos(ped,n_ped);
-                volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
-                volcado_devoluciones(dev,n_dev);
-
-                volcado_lockers(lock,n_lock);
-                volcado_comp_lockers(c_lock,n_c_lock);
-                exit(1);
-
-            default:
-                printf("\nEscribe un numero valido.");
-                break;
-        }
-
-
-    }while( op < 1 || op > 10 );
+    }while(1);
 
 
 }
 
 
-void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev , usu tipo_usu, int id_usu_act){
+void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ){
 
     int op;
 
-    printf("                EMPRESA: %s                 \n",admp[id_usu_act].Nombre);
-    printf("-----------------------------------------------------------\n");
-
     do{
 
-        printf("1.Perfil\n2.Productos\n3.Pedidos\n4.Salir\n");
-        scanf("%i",&op);
+        printf("                EMPRESA: %s                 \n",admp[id_usu_act].Nombre);
+        printf("-----------------------------------------------------------\n");
 
-        system("cls");
+        do{
 
-        switch (op) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
+            printf("1.Perfil\n2.Productos\n3.Pedidos\n4.Salir\n");
+            scanf("%i",&op);
 
-                menu_pedidos(client,transp,lock,c_lock,ped,pr_p,n_cliente,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,proveedor,id_usu_act);
+            system("cls");
 
-                system("cls");
+            switch (op) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
 
-                menu_principal_proveedor(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,proveedor,id_usu_act);
+                    //menu_pedidos_prov(ped,pr_p,prod,n_ped,n_pr_p,n_prod,proveedor);
 
-
-                break;
-            case 4:
-
-                volcado_adminprov(&admp,n_admp);
-                volcado_transp(&transp,n_transp);
-                volcado_cliente(&client,n_cliente);
-
-                volcado_pedidos(ped,n_ped);
-                volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
-                volcado_devoluciones(dev,n_dev);
-
-                volcado_lockers(lock,n_lock);
-                volcado_comp_lockers(c_lock,n_c_lock);
-                exit(1);
-
-            default:
-                printf("\nEscribe un numero valido.");
-                break;
-        }
+                    system("cls");
 
 
-    }while( op < 1 || op > 10 );
+                    break;
+                case 4:
+
+                    volcado_adminprov(&admp,n_admp);
+                    volcado_transp(&transp,n_transp);
+                    volcado_cliente(&client,n_cliente);
+
+                    volcado_pedidos(ped,n_ped);
+                    volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
+                    volcado_devoluciones(dev,n_dev);
+
+                    volcado_lockers(lock,n_lock);
+                    volcado_comp_lockers(c_lock,n_c_lock);
+
+                    volcado_descuentos(&desc,n_desc);
+                    volcado_descuentos_clientes(&desc_cl,n_desc_cl);
+
+                    guardar_producto();
+                    guardar_categoria();
+
+                    exit(1);
+
+                default:
+                    printf("\nEscribe un numero valido.");
+                    break;
+            }
+
+
+        }while( op < 1 || op > 10 );
+
+    }while(1);
 
 
 }
@@ -287,147 +305,177 @@ void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportist
 
 
 
-void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev , usu tipo_usu, int id_usu_act){
+void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ){
 
     int op;
 
-    printf("                 Administrador                 \n");
-    printf("-----------------------------------------------------------\n");
+    do{
+
+        printf("                 Administrador                 \n");
+        printf("-----------------------------------------------------------\n");
+
+        do{
+
+            printf("1.Perfil\n2.Clientes\n3.Proveedores\n4.Productos\n5.Categorias\n6.Pedidos\n7.Transportista\n8.Descuento\n9.Devoluciones\n10.Salir\n");
+            scanf("%i",&op);
+
+            system("cls");
+
+            switch (op) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+
+                    menu_pedidos_admin(ped,pr_p,n_ped,n_pr_p,admin);
+
+                    system("cls");
+
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+
+                    menu_devoluciones_admin(ped,pr_p,dev,n_dev,n_ped,n_pr_p,admin);
+                    system("cls");
+
+                    break;
+                case 10:
+                    volcado_adminprov(&admp,n_admp);
+                    volcado_transp(&transp,n_transp);
+                    volcado_cliente(&client,n_cliente);
+
+                    volcado_pedidos(ped,n_ped);
+                    volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
+                    volcado_devoluciones(dev,n_dev);
+
+                    volcado_lockers(lock,n_lock);
+                    volcado_comp_lockers(c_lock,n_c_lock);
+
+                    volcado_descuentos(&desc,n_desc);
+                    volcado_descuentos_clientes(&desc_cl,n_desc_cl);
+
+                    guardar_producto();
+                    guardar_categoria();
+
+                    exit(1);
+                default:
+                    printf("\nEscribe un numero valido.");
+                    break;
+            }
+
+
+        }while( op < 1 || op > 10 );
+
+    } while (1);
+
+
+}
+
+
+void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ) {
+
+    int op;
 
     do{
 
-        printf("1.Perfil\n2.Clientes\n3.Proveedores\n4.Productos\n5.Categorias\n6.Pedidos\n7.Transportista\n8.Descuento\n9.Devoluciones\n10.Salir\n");
-        scanf("%i",&op);
+        printf("                 Usuario: %s                 \n",client[id_usu_act].Nombr_cliente);
+        printf("-----------------------------------------------------------\n");
 
-        system("cls");
+        do{
 
-        switch (op) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
+            printf("1.Perfil\n2.Productos\n3.Descuentos\n4.Pedidos\n5.Devoluciones\n6.Salir\n");
+            scanf("%i",&op);
 
-                menu_pedidos(client,transp,lock,c_lock,ped,pr_p,n_cliente,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,admin,id_usu_act);
+            system("cls");
 
-                system("cls");
+            switch (op) {
+                case 1:
 
-                menu_principal_admin(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,admin,id_usu_act);
+                    datos_cliente(client,id_usu_act);
 
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
+                    system("cls");
 
-                menu_devoluciones_admin(ped,pr_p,dev,n_dev,n_ped,n_pr_p,admin);
-                system("cls");
-                menu_principal_admin(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,admin,id_usu_act);
+                    break;
+                case 2:
 
-                break;
-            case 10:
-                volcado_adminprov(&admp,n_admp);
-                volcado_transp(&transp,n_transp);
-                volcado_cliente(&client,n_cliente);
+                    menu_cliente_prod();
 
-                volcado_pedidos(ped,n_ped);
-                volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
-                volcado_devoluciones(dev,n_dev);
+                    system("cls");
 
-                volcado_lockers(lock,n_lock);
-                volcado_comp_lockers(c_lock,n_c_lock);
-                exit(1);
-            default:
-                printf("\nEscribe un numero valido.");
-                break;
-        }
+                    break;
+                case 3:
+
+                    listar_descuentos_propios(&desc,&desc_cl,client[id_usu_act].Id_cliente,n_desc);
+
+                    system("pause");
+                    system("cls");
+
+                    break;
+                case 4:
+
+                    menu_pedidos_clientes(ped, pr_p,c_lock, n_ped, n_pr_p,n_c_lock, client[id_usu_act].Id_cliente,cliente);
+                    system("cls");
+
+                    break;
+                case 5:
+
+                    menu_devoluciones_clientes(ped,pr_p,dev,n_dev,n_ped,n_pr_p,client[id_usu_act].Id_cliente,cliente);
+                    system("cls");
+
+                    break;
+                case 6:
+
+                    volcado_adminprov(&admp,n_admp);
+                    volcado_transp(&transp,n_transp);
+                    volcado_cliente(&client,n_cliente);
+
+                    volcado_pedidos(ped,n_ped);
+                    volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
+                    volcado_devoluciones(dev,n_dev);
+
+                    volcado_lockers(lock,n_lock);
+                    volcado_comp_lockers(c_lock,n_c_lock);
+
+                   // volcado_descuentos(&desc,n_desc);
+                   // volcado_descuentos_clientes(&desc_cl,n_desc_cl);
+
+                    guardar_producto();
+                    guardar_categoria();
+
+                    exit(1);
+                default:
+                    printf("\nEscribe un numero valido.");
+                    break;
+            }
 
 
-    }while( op < 1 || op > 10 );
+        }while( op < 1 || op > 6 );
+
+    }while(1);
+
 
 
 
 
 }
 
+void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ){
 
-void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev , usu tipo_usu, int id_usu_act ) {
+    int *n_prod,*n_cat;
 
-    int op;
+    n_prod = &tamanio_p;
+    n_cat = &tamanio_c;
 
-    printf("                 Usuario: %s                 \n",client[id_usu_act].Nombr_cliente);
-    printf("-----------------------------------------------------------\n");
-
-    do{
-
-        printf("1.Perfil\n2.Productos\n3.Descuentos\n4.Pedidos\n5.Devoluciones\n6.Salir\n");
-        scanf("%i",&op);
-
-        system("cls");
-
-        switch (op) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-
-                menu_pedidos(client,transp,lock,c_lock,ped,pr_p,n_cliente,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,cliente,id_usu_act);
-                system("cls");
-                menu_principal_cliente(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,cliente,id_usu_act);
-
-
-                break;
-            case 5:
-
-                menu_devoluciones_clientes(ped,pr_p,dev,n_dev,n_ped,n_pr_p,client[id_usu_act].Id_cliente,cliente);
-                system("cls");
-                menu_principal_cliente(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,cliente,id_usu_act);
-
-
-
-                break;
-            case 6:
-
-                volcado_adminprov(&admp,n_admp);
-                volcado_transp(&transp,n_transp);
-                volcado_cliente(&client,n_cliente);
-
-                volcado_pedidos(ped,n_ped);
-                volcado_prod_pedidos(ped,pr_p,n_ped,n_pr_p);
-                volcado_devoluciones(dev,n_dev);
-
-                volcado_lockers(lock,n_lock);
-                volcado_comp_lockers(c_lock,n_c_lock);
-
-                exit(1);
-            default:
-                printf("\nEscribe un numero valido.");
-                break;
-        }
-
-
-    }while( op < 1 || op > 6 );
-
-
-
-
-
-
-
-
-}
-
-void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev , usu tipo_usu , int id_usu_act){
 
 
     switch (tipo_usu) {
@@ -435,22 +483,22 @@ void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp 
 
         case cliente:
 
-            menu_principal_cliente(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,cliente,id_usu_act);
+            menu_principal_cliente(client,admp,transp,lock,c_lock,ped,pr_p,dev,array_prod,array_cat,desc,desc_cl,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,n_prod,n_cat,n_desc,n_desc_cl,cliente,id_usu_act);
 
             break;
         case admin:
 
-            menu_principal_admin(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,admin,id_usu_act);
+            menu_principal_admin(client,admp,transp,lock,c_lock,ped,pr_p,dev,array_prod,array_cat,desc,desc_cl,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,n_prod,n_cat,n_desc,n_desc_cl,admin,id_usu_act);
 
             break;
         case proveedor:
 
-            menu_principal_proveedor(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,proveedor,id_usu_act);
+            menu_principal_proveedor(client,admp,transp,lock,c_lock,ped,pr_p,dev,array_prod,array_cat,desc,desc_cl,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,n_prod,n_cat,n_desc,n_desc_cl,proveedor,id_usu_act);
 
             break;
         case transportista:
 
-            menu_principal_transportista(client,admp,transp,lock,c_lock,ped,pr_p,dev,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,transportista,id_usu_act);
+            menu_principal_transportista(client,admp,transp,lock,c_lock,ped,pr_p,dev,array_prod,array_cat,desc,desc_cl,n_cliente,n_admp,n_transp,n_lock,n_c_lock,n_ped,n_pr_p,n_dev,n_prod,n_cat,n_desc,n_desc_cl,cliente,id_usu_act);
 
             break;
         default:
@@ -757,14 +805,6 @@ void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *tra
         default:
             break;
     }
-
-
-
-
-
-
-
-
 
 
 }

@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define LINE 150
+
+ producto *array_prod;
+ categoria *array_cat;
+ int tamanio_p,tamanio_c;
+
+
 //PROTOTIPO DE FUNCIONES PRIVADAS
 static void obtener_dato_f(FILE **f,char *n);
 static int buscar_id_f(FILE **f,char *n);
@@ -21,12 +28,7 @@ static void menu_modificar_producto (int indice);
 static void listado_cat();
 static void modificar_categoria();
 
-//Declaracion de variables privadas
-static producto *array_prod;
-static categoria *array_cat;
-static int tamanio_p,tamanio_c;
-
-void menu_cliente_prod ()
+void menu_cliente_prod ( )
 {
     char seleccion,salida;
     int *asoc,i,j=0,a;//asoc es un vector de enteros cuyos elementos son las indices de los productos a buscar
@@ -52,7 +54,7 @@ void menu_cliente_prod ()
             }
             else
             {
-                asoc=(int *)malloc(tamanio_p*sizeof(int));
+                asoc=(int *)malloc((tamanio_p)*sizeof(int));
                 for (i=0;i<tamanio_p;i++)//Obtencion de asoc
                 {
                     if (strcmp(array_prod[i].id_categ,idcat)==0)
@@ -86,7 +88,7 @@ void menu_cliente_prod ()
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             fgets(nombre,51,stdin);
             quitaenter(nombre);
-                asoc=(int *)malloc(tamanio_p*sizeof(int));
+                asoc=(int *)malloc((tamanio_p)*sizeof(int));
                 for (i=0;i<tamanio_p;i++)//Obtencion de asoc
                 {
                     if (strstr(array_prod[i].nombre,nombre)!=NULL)
@@ -123,7 +125,7 @@ void menu_adminprov_prod (sesion ses)
 {
     int i,tamanio_asoc=0,*asoc,a;
     char seleccion;
-    asoc=(int *)malloc(tamanio_p*sizeof(int));
+    asoc=(int *)malloc((tamanio_p)*sizeof(int));
     system("cls");
     printf("Sus productos.\n");
     for (i=0;i<tamanio_p;i++)
@@ -180,7 +182,7 @@ void menu_admin_cat()
     switch (seleccion)
     {
         case '1'://Alta
-        alta_categoria(&array_cat,&tamanio_c);
+        alta_categoria();
         menu_admin_cat();
         break;
         case '2'://Modificar
@@ -470,7 +472,7 @@ void baja_categoria()
     //system("cls");
     printf("Comienzo de borrado de una categoria.\n");
     lista_cat(array_cat,tamanio_c);
-    asoc=(int *)malloc(tamanio_p*sizeof(producto));//asoc es un vector que va a contener todas los indices de los productos que coincidan con la categoria a borrar
+    asoc=(int *)malloc((tamanio_p)*sizeof(producto));//asoc es un vector que va a contener todas los indices de los productos que coincidan con la categoria a borrar
     do{
         printf("Escribe el identificador de la id a borrar.\n");
         fgets(id_cat,5,stdin);
@@ -516,7 +518,7 @@ void baja_categoria()
                             array_cat[i]=array_cat[i+1];
                         }
                         tamanio_c--;
-                        array_cat=(categoria *)realloc(array_cat,tamanio_c*sizeof(categoria));
+                        array_cat=(categoria *)realloc(array_cat,(tamanio_c)*sizeof(categoria));
                         printf("Borrado de categoria con exito\n");
                     }
                     else
@@ -533,7 +535,7 @@ void baja_categoria()
                             array_cat[i]=array_cat[i+1];
                         }
                         tamanio_c--;
-                        array_cat=(categoria *)realloc(array_cat,tamanio_c*sizeof(categoria));
+                        array_cat=(categoria *)realloc(array_cat,(tamanio_c)*sizeof(categoria));
                         printf("Borrado de categoria con exito\n");
                 }
             }
@@ -554,7 +556,7 @@ void guardar_producto ()
 {
     FILE *f;
     int i;
-    if ((f=fopen(F_PRODUCTO,"w"))==NULL)
+    if ((f=fopen("Files\\Productos.txt","w"))==NULL)
     {
         printf("Error de apertura de fichero., no se han guardado los datos");
     }
@@ -611,47 +613,50 @@ void cargar_producto()
     char aux[51];//Cadena auxiliar para rellenar los datos, 51 es el valor de la cadena más larga
     char j;
     int i;
-    if ((array_prod=(producto *)malloc(sizeof(producto)))==NULL)
+
+
+    if((f=fopen(F_PRODUCTO,"r"))==NULL)
     {
-        printf("Error de alocación de memoria.\n");
+            printf("ERROR: No se ha encontrado el fichero Productos.txt, no se ha podido cargar memoria de los productos.\n");
+            tamanio_p=0;
     }
     else
     {
-        if((f=fopen(F_PRODUCTO,"r"))==NULL)
-        {
-            printf("ERROR: No se ha encontrado el fichero Productos.txt, no se ha podido cargar memoria de los productos.\n");
-            tamanio_p=0;
-        }
-        else
-        {
-            for(i=0;j!=EOF;i++)//Bucle para obtener cada dato
-            {
-                array_prod=(producto *)realloc(array_prod,(i+1)*sizeof(producto));
-                fgets(array_prod[i].id_prod,8,f);
-                fseek(f,1,SEEK_CUR);
-                //nombre y descrip varian en tamaño, por lo que fgets leera basura
-                obtener_dato_f(&f,array_prod[i].nombre);
-                obtener_dato_f(&f,array_prod[i].descrip);
-                fgets(array_prod[i].id_categ,5,f);
-                fseek(f,1,SEEK_CUR);
-                fgets(array_prod[i].id_gestor,5,f);
-                fseek(f,1,SEEK_CUR);
-                //obtencion de enteros, primero leerlo como cadena y luego pasarlo a entero
-                obtener_dato_f(&f,aux);
-                array_prod[i].stock=atoi(aux);
-                obtener_dato_f(&f,aux);
-                array_prod[i].entrega=atoi(aux);
-                obtener_dato_f(&f,aux);
-                array_prod[i].importe=atoi(aux);
-                j=fgetc(f);
-                fseek(f,-1,SEEK_CUR);
-            }
-            tamanio_p=i;
-            fclose(f);
-        }
-        
+        for(i=0;j!=EOF;i++){
+
+            array_prod=(producto *)realloc(array_prod,(i+1)*sizeof(producto));
+            fgets(array_prod[i].id_prod,8,f);
+            fseek(f,1,SEEK_CUR);
+            //nombre y descrip varian en tamaño, por lo que fgets leera basura
+            obtener_dato_f(&f,array_prod[i].nombre);
+            obtener_dato_f(&f,array_prod[i].descrip);
+            fgets(array_prod[i].id_categ,5,f);
+            fseek(f,1,SEEK_CUR);
+            fgets(array_prod[i].id_gestor,5,f);
+            fseek(f,1,SEEK_CUR);
+            //obtencion de enteros, primero leerlo como cadena y luego pasarlo a entero
+            obtener_dato_f(&f,aux);
+            array_prod[i].stock=atoi(aux);
+            obtener_dato_f(&f,aux);
+            array_prod[i].entrega=atoi(aux);
+            obtener_dato_f(&f,aux);
+            array_prod[i].importe=atoi(aux);
+            j=fgetc(f);
+            fseek(f,-1,SEEK_CUR);
+
+
+
+            }//Bucle para obtener cada dato{
+
+
     }
+
+    (tamanio_p)=i;
+    fclose(f);
+
 }
+        
+
 void cargar_categoria()
 {
     FILE *f;
@@ -680,7 +685,7 @@ void cargar_categoria()
                 j=fgetc(f);
                 fseek(f,-1,SEEK_CUR);
             }
-            tamanio_c=i;
+            (tamanio_c)=i;
             fclose(f);
         }
     }
@@ -904,7 +909,7 @@ static void borrar_producto(int indice)
         array_prod[i]=array_prod[i+1];
     }
     tamanio_p=(tamanio_p)-1;
-    array_prod=(producto *)realloc(array_prod,tamanio_p*sizeof(producto));
+    array_prod=(producto *)realloc(array_prod,(tamanio_p)*sizeof(producto));
 }
 //Cabecera: static void modificar_producto(sesion ses);
 //Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente

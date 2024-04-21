@@ -82,7 +82,7 @@ int indice_con_id_cliente(Cliente**vector_cliente,char *id_cliente,int num_clien
 void crear_fichero_clientes()
 {
     FILE* f2;
-    if ((f2 = fopen("clientes.txt", "a+")) == NULL)
+    if ((f2 = fopen("Files\\clientes.txt", "a+")) == NULL)
         printf("Error al abrir el archivo\n");
     fclose(f2);
 }
@@ -224,4 +224,73 @@ void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clie
             (*vector_cliente)[i-1]=(*vector_cliente)[i];
     }
     (*n_clientes)=aux-1;
+}
+
+
+void modificar_cliente ( Cliente **clt, int id_act ){
+
+    printf("Nombre: ");
+    fflush(stdin);
+    gets((*clt)[id_act].Nombr_cliente);
+
+    printf("Direccion: ");
+    fflush(stdin);
+    gets((*clt)[id_act].Dir_cliente);
+
+    printf("Localidad: ");
+    fflush(stdin);
+    gets((*clt)[id_act].Localidad);
+
+    printf("Provincia: ");
+    fflush(stdin);
+    gets((*clt)[id_act].Provincia);
+
+    printf("Email (30): ");
+    fflush(stdin);
+    gets((*clt)[id_act].email);
+
+    printf("Contrasena (15): ");
+    fflush(stdin);
+    gets((*clt)[id_act].Contrasenna);
+
+
+    system("cls");
+    printf("\nHas modificado tus datos corectamente.\n");
+    system("pause");
+    system("cls");
+
+}
+
+void datos_cliente ( Cliente *clt , int id_act){
+
+    int i;
+    char resp;
+
+    printf("------------------------------------------------------\n\n");
+    printf("Nombre: %s\nDireccion: %s\nLocalidad: %s\nProvincia: %s\nEmail: %s\nContrasena: %s\n\n",clt[id_act].Nombr_cliente,
+           clt[id_act].Dir_cliente,
+           clt[id_act].Localidad,
+           clt[id_act].Provincia,
+           clt[id_act].email,
+           clt[id_act].Contrasenna);
+    printf("------------------------------------------------------\n\n");
+
+    do{
+
+        printf("Quiere cambiar sus datos?(s/n): ");
+        fflush(stdin);
+        scanf("%c",&resp);
+
+        system("cls");
+
+        if ( resp == 's' || resp == 'S' ){
+
+            modificar_cliente(&clt,id_act);
+
+        }else if ( resp != 's' & resp != 'S' && resp != 'n' & resp != 'N' ) printf("\nEscribe s o n");
+
+    } while (resp != 's' & resp != 'S' && resp != 'n' & resp != 'N');
+
+
+
 }

@@ -21,5 +21,7 @@ void siguiente_id(char*cad,int i);
 void carga_cliente(Cliente **c,int *n_clien);
 void volcado_cliente(Cliente **c,int *n_clien);
 void nuevo_cliente(Cliente **c,int *n_cliente);
+void modificar_cliente ( Cliente **clt, int id_act );
+void datos_cliente ( Cliente *clt , int id_act);
 
 #endif //PROYECTO_MP_CLIENTES_H
