@@ -162,3 +162,88 @@ void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_tr
     }
     (*n_transp)=aux-1;
 }
+
+
+void listado_transportista ( Transportista *transp, int *n_transp ){
+
+    int i=0,j;
+    char c='a',resp,op[5];
+
+    printf("--------------- Transportistas ------------------------------\n\n");
+
+    for ( i=0 ; i<*n_transp ; i++ ){
+
+        printf("[%c].%s-%s\n",c,transp[i].Id_transp,transp[i].Nombre);
+
+        c++;
+    }
+
+    printf("\n\n-----------------------------------------------\n");
+
+    system("pause");
+
+
+    do{
+
+        printf("\n Quiere modificar algun transportista? (s/n): ");
+        fflush(stdin);
+        scanf("%c",&resp);
+
+        if ( resp == 's' || resp == 'S'){
+
+            do{
+
+                printf("Escribe el id del transportista a modificar: ");
+                fflush(stdin);
+                gets(op);
+
+                j=0;
+                while ( j<*n_transp && strcmp(op,transp[j].Id_transp) !=0) j++;
+
+                if ( j >= *n_transp) printf("\nEscribe un id valido\n");
+
+            }while ( j >= *n_transp);
+
+            modificar_transp( &transp, j );
+
+        }
+
+
+    }while( resp != 's' && resp != 'S' && resp != 'n' && resp != 'N');
+
+
+}
+
+
+
+void modificar_transp ( Transportista **transp , int indice_transp ){
+
+    printf("Nombre: ");
+    fflush(stdin);
+    gets((*transp)[indice_transp].Nombre);
+
+    printf("Email (30): ");
+    fflush(stdin);
+    gets((*transp)[indice_transp].email);
+
+    printf("Contrasena (15): ");
+    fflush(stdin);
+    gets((*transp)[indice_transp].Contrasenna);
+
+    printf("Nombre_empresa: ");
+    fflush(stdin);
+    gets((*transp)[indice_transp].Nom_empre);
+
+    printf("Ciudad_reparto: ");
+    fflush(stdin);
+    gets((*transp)[indice_transp].Ciudad);
+
+    system("cls");
+    printf("\nHas modificado los datos corectamente.\n");
+    system("pause");
+    system("cls");
+
+
+
+
+}

@@ -344,8 +344,6 @@ void volcado_descuentos(Descuentos **d,int*n_desc){
             strcat(line, "-");
             strcat(line, (*d)[i].Descrip);
             strcat(line, "-");
-            strcat(line, (*d)[i].Importe);
-            strcat(line, "-");
             if((*d)[i].Tipo==cheqreg){
                 strcat(line,"cheqreg");
             }else if((*d)[i].Tipo==codpro){
@@ -362,6 +360,10 @@ void volcado_descuentos(Descuentos **d,int*n_desc){
             }else{
                 puts("Error en el volcado de ESTADO");
             }
+
+            strcat(line, "-");
+            strcat(line, (*d)[i].Importe);
+
 
              strcat(line, "-");
             if((*d)[i].Aplicabilidad==esizon){

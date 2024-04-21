@@ -170,6 +170,7 @@ void volcado_cliente(Cliente **c,int *n_clien){
 }
 
 void nuevo_cliente(Cliente **c,int *n_cliente){
+
     char Id[8];
     (*n_cliente)++;
     if((*c = (Cliente *)realloc(*c, *n_cliente * sizeof(Cliente)))==NULL)
@@ -182,7 +183,7 @@ void nuevo_cliente(Cliente **c,int *n_cliente){
             de_int_a_id_cliente(*n_cliente,Id);
         }else{
             strcpy(Id,(*c+(*n_cliente-2))->Id_cliente);
-            siguiente_id(Id,6);
+            crear_siguiente_id(7,Id,Id);
         }
         printf("\n Su Id de cliente es: ");
         puts(Id);
@@ -229,6 +230,8 @@ void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clie
 
 void modificar_cliente ( Cliente **clt, int id_act ){
 
+    int dinero_act=0,dinero_ad;
+
     printf("Nombre: ");
     fflush(stdin);
     gets((*clt)[id_act].Nombr_cliente);
@@ -254,8 +257,16 @@ void modificar_cliente ( Cliente **clt, int id_act ){
     gets((*clt)[id_act].Contrasenna);
 
 
+
+    sprintf((*clt)[id_act].Cartera,"%i",dinero_act);
+
+    printf("Cuanto dinero quieres ingresar en tu cartera?: ");
+    scanf("%i",&dinero_ad);
+
+    itoa(dinero_act+dinero_ad,(*clt)[id_act].Cartera,10);
+
     system("cls");
-    printf("\nHas modificado tus datos corectamente.\n");
+    printf("\nHas modificado los datos corectamente.\n");
     system("pause");
     system("cls");
 
@@ -263,7 +274,6 @@ void modificar_cliente ( Cliente **clt, int id_act ){
 
 void datos_cliente ( Cliente *clt , int id_act){
 
-    int i;
     char resp;
 
     printf("------------------------------------------------------\n\n");
@@ -292,5 +302,37 @@ void datos_cliente ( Cliente *clt , int id_act){
     } while (resp != 's' & resp != 'S' && resp != 'n' & resp != 'N');
 
 
+
+}
+
+
+void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos+1] , char vect_id[num_digitos+1]){
+
+    int j,cifras=0,n,n_aux;
+    char *aux,*nulo,*ptr;
+
+    n= strtol(vect_id,&ptr,10);
+    n++;
+    n_aux = n;
+
+    while ( n >= 1 ){
+
+        n /= 10;
+        cifras++;
+    }
+
+    aux = (char *)calloc(cifras+1,sizeof(char));
+    nulo = (char *)calloc(num_digitos-cifras,sizeof(char));
+
+    sprintf(aux,"%i",n_aux);
+
+    for ( j=0 ; j<num_digitos-cifras ; j++ ){
+
+        nulo[j]='0';
+
+    }
+
+    strcat(nulo,aux);
+    strcpy(vect_dest,nulo);
 
 }

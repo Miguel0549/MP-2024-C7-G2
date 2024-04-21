@@ -17,11 +17,13 @@ typedef struct{
 void leer_string(char*cadena, int elem);
 void siguiente_id(char*cad,int i);
 
+void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos] , char vect_id[num_digitos]);
 
 void carga_cliente(Cliente **c,int *n_clien);
 void volcado_cliente(Cliente **c,int *n_clien);
 void nuevo_cliente(Cliente **c,int *n_cliente);
 void modificar_cliente ( Cliente **clt, int id_act );
 void datos_cliente ( Cliente *clt , int id_act);
+void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes);
 
 #endif //PROYECTO_MP_CLIENTES_H

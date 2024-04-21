@@ -413,38 +413,6 @@ void eliminar_pedido ( Pedido *ped, int indice_ped){
 }
 
 
-void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos+1] , char vect_id[num_digitos+1]){
-
-    int j,cifras=0,n,n_aux;
-    char *aux,*nulo,*ptr;
-
-    n= strtol(vect_id,&ptr,10);
-    n++;
-    n_aux = n;
-
-    while ( n >= 1 ){
-
-        n /= 10;
-        cifras++;
-    }
-
-    aux = (char *)calloc(cifras+1,sizeof(char));
-    nulo = (char *)calloc(num_digitos-cifras,sizeof(char));
-
-    sprintf(aux,"%i",n_aux);
-
-    for ( j=0 ; j<num_digitos-cifras ; j++ ){
-
-        nulo[j]='0';
-
-    }
-
-    strcat(nulo,aux);
-    strcpy(vect_dest,nulo);
-
-}
-
-
 void hacer_pedido (Pedido **ped, ProductoPedido **pr_ped, int *n_ped ,int *n_pr_ped, int unidades , int importe ,char id_prod[8],char id_cliente[8] ){
 
     *ped = ( Pedido *)realloc(*ped, (*n_ped+1) * sizeof(Pedido));
@@ -774,8 +742,8 @@ void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker 
 
 void menu_prod_ped ( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu){
 
-    int i=0,cont=0,ind_prod_ped,error=0;
-    char c,op,estado_ped_nuevo[14]="\0",zero_8[8]="\0",zero_7[7]="\0",zero_11[11]="\0",zero_5[5]="\0";
+    int i=0,ind_prod_ped,error=0;
+    char c,estado_ped_nuevo[14]="\0",zero_7[7]="\0",zero_11[11]="\0",zero_5[5]="\0";
 
     system("cls");
 

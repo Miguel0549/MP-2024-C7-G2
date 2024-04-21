@@ -316,15 +316,25 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
 
         do{
 
-            printf("1.Perfil\n2.Clientes\n3.Proveedores\n4.Productos\n5.Categorias\n6.Pedidos\n7.Transportista\n8.Descuento\n9.Devoluciones\n10.Salir\n");
+            printf("1.Perfil\n2.Clientes\n3.Proveedores\n4.Productos\n5.Categorias\n6.Pedidos\n7.Transportista\n8.Descuentos\n9.Devoluciones\n10.Salir\n");
             scanf("%i",&op);
 
             system("cls");
 
             switch (op) {
                 case 1:
+
+                    datos_admin_prov(admp,id_usu_act);
+
+                    system("cls");
+
                     break;
                 case 2:
+
+                    listado_cliente(client,n_cliente);
+
+                    system("cls");
+
                     break;
                 case 3:
                     break;
@@ -340,6 +350,11 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
 
                     break;
                 case 7:
+
+                    listado_transportista(transp,n_transp);
+
+                    system("cls");
+
                     break;
                 case 8:
                     break;
@@ -381,6 +396,89 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
 
 }
 
+void listado_cliente ( Cliente *clt , int *n_clt ){
+
+    int i,j,op;
+    char c='a',resp,op_cl[8],id_cliente_borrar[8]="\0";
+
+    do{
+
+        printf("--------------------- Clientes ------------------------\n\n");
+
+        for ( i=0 ; i<*n_clt ; i++ ){
+
+            printf("[%c].%s-%s\n",c,clt[i].Id_cliente,clt[i].Nombr_cliente);
+
+
+            c++;
+        }
+
+        printf("\n\n-----------------------------------------------\n");
+
+
+        do{
+
+            printf("1.Alta\n2.Baja\n3.Modificar\n4.Salir\n");
+            scanf("%i",&op);
+
+
+            switch (op) {
+                case 1:
+
+                    nuevo_cliente(&clt,n_clt);
+
+                    system("cls");
+
+                    break;
+                case 2:
+
+                    printf("Escribe el Id del cliente a borrar: ");
+                    fflush(stdin);
+                    gets(id_cliente_borrar);
+
+
+                    borrar_cliente_con_id(&clt,id_cliente_borrar,n_clt);
+
+                    system("cls");
+
+                    break;
+                case 3:
+
+                    do{
+
+                        printf("Escribe el id del cliente a modificar: ");
+                        fflush(stdin);
+                        gets(op_cl);
+
+                        j=0;
+                        while ( j<*n_clt && strcmp(op_cl,clt[j].Id_cliente) !=0) j++;
+
+                        if ( j >= *n_clt) printf("\nEscribe un id valido\n");
+
+                    }while ( j >= *n_clt);
+
+
+                    modificar_cliente(&clt,j);
+
+                    system("cls");
+
+                    break;
+                case 4:
+                    break;
+                default:
+                    printf("Escribe un numero del 1 al 4.");
+                    break;
+            }
+
+            system("cls");
+
+        }while ( op < 1 || op > 4);
+
+
+    }while( op != 4 );
+
+
+}
 
 void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ) {
 
@@ -446,8 +544,8 @@ void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista 
                     volcado_lockers(lock,n_lock);
                     volcado_comp_lockers(c_lock,n_c_lock);
 
-                   // volcado_descuentos(&desc,n_desc);
-                   // volcado_descuentos_clientes(&desc_cl,n_desc_cl);
+                    volcado_descuentos(&desc,n_desc);
+                    volcado_descuentos_clientes(&desc_cl,n_desc_cl);
 
                     guardar_producto();
                     guardar_categoria();
@@ -465,6 +563,73 @@ void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista 
 
 
 
+
+
+}
+
+
+void datos_admin_prov ( Adminprov *admpr, int ind_admpr ){
+
+    char resp;
+
+    printf("------------------------------------------------------\n\n");
+    printf("Id_empresa: %s\nNombre_empresa: %s\nEmail: %s\nContrasena: %s\n",
+           admpr[ind_admpr].Id_empresa,
+           admpr[ind_admpr].Nombre,
+           admpr[ind_admpr].email,
+           admpr[ind_admpr].Contrasenna);
+
+
+    if ( admpr[ind_admpr].Perfil_usuario == admin ) printf("Perfil_Usuario: administrador\n\n");
+    else printf("Perfil_Usuario: proveedor\n\n");
+
+
+    printf("------------------------------------------------------\n\n");
+
+    do{
+
+        printf("Quiere cambiar sus datos?(s/n): ");
+        fflush(stdin);
+        scanf("%c",&resp);
+
+        system("cls");
+
+        if ( resp == 's' || resp == 'S' ){
+
+            modificar_admin(&admpr,ind_admpr);
+
+        }else if ( resp != 's' & resp != 'S' && resp != 'n' & resp != 'N' ) printf("\nEscribe s o n");
+
+    } while (resp != 's' & resp != 'S' && resp != 'n' & resp != 'N');
+
+
+}
+
+
+void modificar_admin ( Adminprov **admpr , int ind_admpr){
+
+
+    if ( (*admpr)[ind_admpr].Perfil_usuario != admin){
+
+        printf("Nombre: ");
+        fflush(stdin);
+        gets((*admpr)[ind_admpr].Nombre);
+
+    }
+
+    printf("Email (30): ");
+    fflush(stdin);
+    gets((*admpr)[ind_admpr].email);
+
+    printf("Contrasena (15): ");
+    fflush(stdin);
+    gets((*admpr)[ind_admpr].Contrasenna);
+
+
+    system("cls");
+    printf("\nHas modificado tus datos corectamente.\n");
+    system("pause");
+    system("cls");
 
 
 }

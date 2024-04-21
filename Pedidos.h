@@ -53,8 +53,6 @@ void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker 
 void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Transportista *transp, int *n_transp,  int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] );
 void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n_lock, int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] );
 
-void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos] , char vect_id[num_digitos]);
-
 void menu_pedidos ( Cliente *clt, Transportista *transp ,Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_cliente, int *n_transp, int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_prod_ped, usu tipo_usu ,int id_act );
 
 void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker *c_lock,int *n_pedidos, int *n_prod_ped,int *n_c_lock, char id_cliente[8] , usu tipo_usu );
