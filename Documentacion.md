@@ -233,9 +233,7 @@ El proyecto se divide en 4 módulos:
 
 MODULO PRINCIPAL 
 
-Este módulo tiene dos objetivos principalmente:
-
-Por un lado, es el encargado de gestionar el inicio de sesión para poder acceder al menú. Y, por otro lado, es el encargado de unir el resto de módulos mediante los diferentes menús que permiten usar las diferentes funciones de los otros módulos.
+Este módulo tiene un único objetivo, unir el resto de módulos, así como llamar al resto de funciones que necesite
 
 MODULO SESIONES 
 
@@ -256,4 +254,243 @@ Este módulo es el encargado de gestionar los fichero descuentos.txt y descuento
 ### Prueba de los módulos
 
 #### Pruebas de caja negra del módulo principal
+
+#### Pruebas de caja negra del módulo sesiones
+
+#### Pruebas de caja negra del módulo productos
+
+##### PROCEDIMIENTO OBTENER DATO
+
+Cabecera: static void obtener_dato_f(FILE **f,char *n)
+
+Precondicion: El tamaño de n debe ser mayor al dato que se debe introducir, f debe estar abierto en modo lectura y el cursor debe estar situado al principio del dato a leer
+
+Poscondicion: Almacena en n los caracteres leidos en f hasta que se encuentre '-' o '\n' o EOF y deja el cursor una posicion despues del dato leido
+
+DATOS DE ENTRADA: doble puntero a tipo FILE, puntero a char 
+
+DATOS DE SALIDA: ninguno, sólo modifica el puntero a char 
+
+CASO 1 
+
+Al ejecutarla, vuelca en el puntero a char un campo concreto de la información en el fichero
+
+##### FUNCIÓN  BUSCAR ID EN FICHERO
+
+Cabecera: int buscar_id (FILE *f,char *n)
+
+Precondicion: f debe ser F_PRODUCTO o F_CATEGORIAS y estar abierto para lectura
+
+Poscondicion: Devuelve la id de n dentro del fichero
+
+DATOS DE ENTRADA: puntero a FILE y puntero a char 
+
+DATOS DE SALIDA: devuleve la id 
+
+static int buscar_id_f(FILE **f,char *n);
+static void suma1(char *s,int i);
+static void lista_cat();
+static void lista_prod();
+static int cadena_valida(char *v);
+static void quitaenter(char *);
+static void lista_prod_asoc(int *asoc,int tamanio_asoc);
+static void listado_prod();
+static void listado_prod_asoc(int *asoc,int tamanio_asoc);
+static void baja_producto(int *asoc,sesion ses,int tamanio_asoc);
+static void borrar_producto(int indice);
+static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
+static void menu_modificar_producto (int indice);
+static void listado_cat();
+static void modificar_categoria();
+
+
+
+#### Pruebas de caja negra del módulo descuentos
+
+##### crear_fichero _descuentos
+
+cabecera: void crear_fichero_descuentos()
+
+precondición: ninguna
+
+postcondición:crea el fichero descuentos.txt sino existe e imprime un mensaje de error si es el caso
+
+CASO 1
+
+    Al ejecutarla, crea el archivo descuentos.txt
+
+##### crear_fichero_descuenros_clientes()
+
+cabecera: void crear_fichero_descuentos_clientes()
+
+precondición: ninguna
+
+ostcondición:crea el fichero descuentos_clientes.txt sino existe e imprime un mensaje de error si es el caso
+
+CASO 1
+
+    Al ejecutarla, crea el archivo descuentos.txt
+
+##### PROCEDIMIENTO CARGAR DESCUENTOS 
+
+ cabecera:void carga_descuentos(Descuentos **d )
+
+ precondición: recibe como doble puntero el vector de estructura
+
+ postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+
+DATOS DE ENTRADA: el vector de estructura Descuentos 
+
+DATOS DE SALIDA: ninguno
+
+CASO 1:
+
+    Al ejecutarla, carga los datos del .txt en el vector descuentos 
+
+##### PROCEDIMIENTO CARGAR DESCUENTOS CLIENTES
+
+ cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
+
+ precondición: recibe como doble puntero el vector de estructura
+
+ postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+
+DATOS DE ENTRADA: el vector de estructura Descuentos_clientes
+
+DATOS DE SALIDA: ninguno
+
+CASO 1:
+
+    Al ejecutarla, carga los datos del .txt en el vector descuentos_clientes
+
+##### PROCEDIMIENTO VOLCADO DESCUENTOS
+    
+ cabecera: void volcado_descuentos(Descuentos **d)
+
+ precondición:  recibe como doble puntero el vector de estructuras, inicializado
+
+ postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt
+
+DATOS DE ENTRADA: el vector de estructuras Descuentos
+
+DATOS DE SALIDA: ninguno
+
+CASO 1:
+
+    Al ejecutarla, vuelca desde el vector en el fichero la información sobre los descuentos
+
+##### PROCEDIMIENTO VOLCADO DESCUENTOS CLIENTES
+    
+ cabecera: void volcado_descuentos(Descuentos_clientes **dc)
+
+ precondición:  recibe como doble puntero el vector de estructuras, inicializado
+
+ postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos_clientes.txt
+
+DATOS DE ENTRADA: el vector de estructuras Descuentos_clientes
+
+DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarla, vuelca desde el vector en el fichero la información sobre los descuentos_clientes
+
+##### PROCEDIMIENTO LISTAR DESCUENTOS
+
+cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
+
+precondición: *d inicializado
+
+postcondición: lista los descuentos actuales en el vector
+
+DATOS DE ENTRADA: el vector de descuentos, así como un puntero que apunta al número total de descuentos
+
+DATOS DE SALIDA: ninguno
+
+CASO 1
+    Al ejecutarla, imprime por pantalla la información básica de todos los descuentos actuales
+
+##### PROCEDIMIENTO LISTAR DESCUENTOS CON ID
+
+cabecera:void listar_descuentos_propios(char*Id_cliente)
+
+precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
+
+postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
+
+DATOS DE ENTRADA: un puntero a char con la id de un cliente
+
+DATOS DE SALIDA: ninguno, ya que sólo imprime por pantalla la información
+
+CASO 1
+
+    Al ejecutarla, imprime por pantalla la información básica de los descuentos asociados a esa id
+
+CASO 2 
+
+    Al ejecutarla, no encuentra la id correspondiente y, por tanto sólo imprime un mensaje de error 
+
+##### FUCNIÓN COMPRIOBAR DESCUENTO
+
+
+cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
+
+precondición: **dc inicializado e Id_cod un código de descuento válido
+
+postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
+
+DATOS DE ENTRADA: el vector de estructuras descuentos_clientes y una cadena con el código de un descuento existente
+
+DATOS DE SALIDA: 0 si el desdcuento es válido y 1 sino lo es
+
+##### PROCEDIMIENTO NUEVO DESCUENTO
+
+cabecera: void nuevo_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc,int *num_desc_clien)
+
+precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+
+postcondición: ninguna
+
+DATOS DE ENTRADA: dos vectores de estructuras y dos punteros a enteros que indican el número de elemento de los mismos
+
+DATOS DE SALIDA: ninguno, ya que sólo se carga la nueva información
+
+CASO 1
+
+    Al ejecutarla, permite introducir la información del nuevo descuento por teclado, pudiendo también elegir entre múltiples opciones para los parámetros de los descuentos
+
+
+##### PROCEDIMIENTO MODIFICAR DESCUENTO
+
+cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien);
+
+precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+
+postcondición: ninguna
+
+DATOS DE ENTRADA: dos vectores de estructuras y dos punteros a enteros que indican el número de elemento de los mismos
+
+DATOS DE SALIDA: ninguno, ya que sólo se modifica y actualiza a la nueva información ambos vectores
+
+CASO 1
+
+    Al ejecutarla, permite modificar la información  de un descuento ya existente
+
+
+
+
+    void fecha_actual();
+    fecha de_string_a_fecha(char*);
+    int comparar_fechas(fecha,fecha);
+    void crear_fichero_descuentos();
+    void crear_fichero_descuentos_clientes();
+    void leer_string(char*,int);
+    int num_desc_desde_fich();
+    int num_desc_clien_desde_fich();
+    int indice_con_id_descuento(Descuentos**,char*,int);
+    int indice_con_id_descuento_cl(Descuentos_clientes**,char*,int);
+    void borrar_descuento_con_id(Descuentos**,Descuentos_clientes**,char*,int *,int*);
+
+
+
 
