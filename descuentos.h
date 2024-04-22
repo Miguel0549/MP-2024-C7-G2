@@ -1,6 +1,6 @@
 /* Fichero  en que irán las funciones del módulo descuentos que se necesiten en otros modulos*/
 
-#include "productos.h"
+#include "Devoluciones.h"
 
 typedef enum { 
     codpro, cheqreg, // tipos de descuentos

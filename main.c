@@ -1,4 +1,4 @@
-#include "sesiones.h"
+#include "Principal.h"
 
 
 int main(){
@@ -29,7 +29,6 @@ int main(){
     n_admp = &admin_prov;
     n_desc = &descuento;
     n_desc_cl = &descuento_cl;
-
 
     usu_act = &id_usu_act;
     tipo_usu = &t_usu;

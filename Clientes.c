@@ -135,11 +135,13 @@ void volcado_cliente(Cliente **c,int *n_clien){
     char line[LINE]="\0";
     FILE *f;
 
-    if ((f = fopen("Files\\clientes.txt", "w+")) == NULL) {
+    if ((f = fopen("Files\\clientes.txt", "w")) == NULL) {
 
         printf("Error al abrir el archivo");
 
     } else {
+
+        rewind(f);
 
         for ( i=0 ; i<*n_clien ; i++ ){
             // strcpy(line,"\n");
@@ -228,9 +230,9 @@ void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clie
 }
 
 
-void modificar_cliente ( Cliente **clt, int id_act ){
+void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu){
 
-    int dinero_act=0,dinero_ad;
+    int dinero_act=0,dinero_ad,dinero_tot=0;
 
     printf("Nombre: ");
     fflush(stdin);
@@ -257,13 +259,27 @@ void modificar_cliente ( Cliente **clt, int id_act ){
     gets((*clt)[id_act].Contrasenna);
 
 
+    if ( tipo_usu != admin ){
 
-    sprintf((*clt)[id_act].Cartera,"%i",dinero_act);
+        dinero_act = atoi((*clt)[id_act].Cartera);
 
-    printf("Cuanto dinero quieres ingresar en tu cartera?: ");
-    scanf("%i",&dinero_ad);
+        printf("Cuanto dinero quieres ingresar en tu cartera?: ");
+        scanf("%i",&dinero_ad);
 
-    itoa(dinero_act+dinero_ad,(*clt)[id_act].Cartera,10);
+        dinero_tot = dinero_act + dinero_ad;
+
+        itoa(dinero_tot,(*clt)[id_act].Cartera,10);
+
+    }else{
+
+        printf("A cuanto dinero quieres actualizar?: ");
+        scanf("%i",&dinero_tot);
+
+        itoa(dinero_tot,(*clt)[id_act].Cartera,10);
+
+    }
+
+
 
     system("cls");
     printf("\nHas modificado los datos corectamente.\n");
@@ -295,7 +311,7 @@ void datos_cliente ( Cliente *clt , int id_act){
 
         if ( resp == 's' || resp == 'S' ){
 
-            modificar_cliente(&clt,id_act);
+            modificar_cliente(&clt,id_act,cliente);
 
         }else if ( resp != 's' & resp != 'S' && resp != 'n' & resp != 'N' ) printf("\nEscribe s o n");
 

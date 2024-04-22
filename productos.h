@@ -3,7 +3,7 @@
 #define F_PRODUCTO "Files\\Productos.txt"
 #define F_CATEGORIAS "Files\\Categorias.txt"
 
-#include "Devoluciones.h"
+#include "sesiones.h"
 
 #include <stdio.h>
 //REMOVER DESPUES, PERTENECE AL MODULO DE SESIONES
@@ -63,7 +63,7 @@ void cargar_categoria();
 //Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
-void alta_producto();
+void alta_producto( char *id , int *n_admpr);
 //Cabecera: void mod_prod(producto)
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod
@@ -99,4 +99,7 @@ void cataid(char *id,char *descrip);
 //Precondicion: El usuario actual debe ser un administrador
 //Poscondicion: Muestra por pantalla un menu el cual el usuario puede dar de alta, modificar o borrar cualquier categoria
 void menu_admin_cat();
+void menu_modificar_producto (int indice);
+void borrar_producto(int indice);
+
 #endif

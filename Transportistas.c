@@ -216,27 +216,29 @@ void listado_transportista ( Transportista *transp, int *n_transp ){
 
 
 
-void modificar_transp ( Transportista **transp , int indice_transp ){
+void modificar_transp ( Transportista *transp , int indice_transp ){
+
+    system("cls");
 
     printf("Nombre: ");
     fflush(stdin);
-    gets((*transp)[indice_transp].Nombre);
+    gets(transp[indice_transp].Nombre);
 
     printf("Email (30): ");
     fflush(stdin);
-    gets((*transp)[indice_transp].email);
+    gets(transp[indice_transp].email);
 
     printf("Contrasena (15): ");
     fflush(stdin);
-    gets((*transp)[indice_transp].Contrasenna);
+    gets(transp[indice_transp].Contrasenna);
 
     printf("Nombre_empresa: ");
     fflush(stdin);
-    gets((*transp)[indice_transp].Nom_empre);
+    gets(transp[indice_transp].Nom_empre);
 
     printf("Ciudad_reparto: ");
     fflush(stdin);
-    gets((*transp)[indice_transp].Ciudad);
+    gets(transp[indice_transp].Ciudad);
 
     system("cls");
     printf("\nHas modificado los datos corectamente.\n");
@@ -244,6 +246,41 @@ void modificar_transp ( Transportista **transp , int indice_transp ){
     system("cls");
 
 
+
+
+}
+
+
+void datos_transportista ( Transportista *transp , int ind_transp ){
+
+    char resp;
+
+    system("cls");
+
+    printf("------------------------------------------------------\n\n");
+    printf("Nombre: %s\nEmail: %s\nContrasena: %s\nNombre_empresa: %s\nCiudad_reparto: %s\n\n",
+           transp[ind_transp].Nombre,
+           transp[ind_transp].email,
+           transp[ind_transp].Contrasenna,
+           transp[ind_transp].Nom_empre,
+           transp[ind_transp].Ciudad);
+    printf("------------------------------------------------------\n\n");
+
+    do{
+
+        printf("Quiere cambiar sus datos?(s/n): ");
+        fflush(stdin);
+        scanf("%c",&resp);
+
+        system("cls");
+
+        if ( resp == 's' || resp == 'S' ){
+
+            modificar_transp(transp,ind_transp);
+
+        }else if ( resp != 's' & resp != 'S' && resp != 'n' & resp != 'N' ) printf("\nEscribe s o n");
+
+    } while (resp != 's' & resp != 'S' && resp != 'n' & resp != 'N');
 
 
 }

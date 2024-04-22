@@ -1809,6 +1809,8 @@ void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *pe
     int i,j,k,l,op,op_prod,n_comp_act;
     char c='a',confirma,zero_11[11]="\0",zero_7[7]="\0";
 
+    system("cls");
+
     do{
 
         printf("---------------------- Todos sus repartos ---------------------\n\n");

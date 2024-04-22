@@ -973,29 +973,9 @@ void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devolucion
 void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u){
 
 
+
     
 
 }
-
-
-
-
-
-
-
-          //  menu_devoluciones_clientes(ped, prod_ped,dev, n_dev, n_pedidos,n_prod_ped, id_cliente,cliente);
-
-
-
-           // menu_devoluciones_admin(ped, prod_ped,dev ,n_dev, n_pedidos,n_prod_ped,admin);
-
-
-
-
-           // menu_devoluciones_transportistas(ped, prod_ped,dev, n_dev,n_pedidos,n_prod_ped,"0002",transportista);
-
-
-
-
 
 
