@@ -21,9 +21,9 @@ static void quitaenter(char *);
 static void lista_prod_asoc(int *asoc,int tamanio_asoc);
 static void listado_prod();
 static void listado_prod_asoc(int *asoc,int tamanio_asoc);
-static void baja_producto(int *asoc,sesion ses,int tamanio_asoc);
+static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc);
 void borrar_producto(int indice);
-static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
+static void modificar_producto(Adminprov ses,int *asoc,int tamanio_asoc);
 void menu_modificar_producto (int indice);
 static void listado_cat();
 static void modificar_categoria();
@@ -121,7 +121,7 @@ void menu_cliente_prod ( )
 
     }
 }
-void menu_adminprov_prod (sesion ses)
+void menu_adminprov_prod (Adminprov ses)
 {
     int i,tamanio_asoc=0,*asoc,a;
     char seleccion;
@@ -130,7 +130,7 @@ void menu_adminprov_prod (sesion ses)
     printf("Sus productos.\n");
     for (i=0;i<tamanio_p;i++)
     {
-        if (strcmp(array_prod[i].id_gestor,ses.id)==0)
+        if (strcmp(array_prod[i].id_gestor,ses.Id_empresa)==0)
         {
             asoc[tamanio_asoc]=i;
             tamanio_asoc++;
@@ -140,11 +140,12 @@ void menu_adminprov_prod (sesion ses)
     listado_prod_asoc(asoc,tamanio_asoc);
     printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir\n");
     seleccion=getchar();
+    while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     system("cls");
     switch(seleccion)
     {
         case('1'):
-        alta_producto(ses.id,0);
+        alta_producto(ses.Id_empresa,0);
         free(asoc);
         menu_adminprov_prod(ses);
         break;
@@ -159,6 +160,7 @@ void menu_adminprov_prod (sesion ses)
         menu_adminprov_prod(ses);
         break;
         case('4'):
+        modificar_producto(ses,asoc,tamanio_asoc);
         free(asoc);
         menu_adminprov_prod(ses);
         break;
@@ -180,7 +182,8 @@ void menu_admin_cat()
         listado_cat();
         printf("----------------------------------------------------------------------------\n\n");
         printf("Que desea hacer?\n1.Alta de categoria\n2.Modificar categoria\n3.Baja de categoria\n4.Salir\n");
-        scanf("%i",&seleccion);
+        seleccion=getchar();
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
         switch (seleccion)
         {
             case 1://Alta
@@ -209,7 +212,6 @@ void alta_producto(char *id , int *n_admpr )
     producto p;//Auxiliar para guardar temporalmente el producto nuevo
     printf("Comienzo de registro de un producto.\n");
     do{
-        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el buffer de entrada
         printf("Escribe el nombre del producto (no puede contener -,maximo 15 caracteres)\nNombre: ");
         fgets(p.nombre,16,stdin);
         quitaenter(p.nombre);
@@ -243,7 +245,7 @@ void alta_producto(char *id , int *n_admpr )
         else
         {
             system("cls");
-            printf("\nRecopilacion de los datos.\n");
+            printf("Recopilacion de los datos.\n");
             printf("Nombre: %s\n",p.nombre);
             printf("Descripcion: %s\n",p.descrip);
             printf("Categoria %s\n",aux2);
@@ -398,22 +400,22 @@ void alta_categoria()
         printf("Alta de categoria fallida. Error: %d",error);
     }
 }
-static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
+static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc)
 {
     int i,indice,a,encontrado=0;
     char salida='s';
     char id_prod[8];
     char confirmar='n';
     system("cls");
-    if(ses.perfil_usuario==admin)
+    if(ses.Perfil_usuario==admin)
     {
         printf("Como administrador, puede eliminar cualquier producto del sistema.\n");
         listado_prod();
         do{
-            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
 
             fgets(id_prod,8,stdin);
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             for (i=0;i<tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
             {
                 if(strcmp(array_prod[i].id_prod,id_prod)==0)
@@ -425,17 +427,19 @@ static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
             if (encontrado==1)
             {
                 printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",array_prod[indice].nombre);
-                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 confirmar=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 if(confirmar=='s')
                 {
                     salida='n';
                     borrar_producto(indice);
-                    printf("Baja de producto con exito");
+                    printf("Baja de producto con exito\n");
+                    system("pause");
                 }
                 else
                 {
                     printf("Eliminacion de producto abortada.\n");
+                    system("pause");
                 }
             }
 
@@ -446,9 +450,9 @@ static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
         printf("Como proveedor, solo puede borrar productos asociados a su nombre.\n");
         listado_prod_asoc(asoc,tamanio_asoc);
         do{
-            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
             fgets(id_prod,8,stdin);
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             for (i=0;i<tamanio_asoc&&encontrado;i++)//Encuentra el indice del producto a borrar
             {
                 if(strcmp(array_prod[asoc[i]].id_prod,id_prod)==0)
@@ -460,31 +464,24 @@ static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
             if (encontrado==1)
             {
                 printf("Va a borrar el producto %s,desea confirmar? Escriba 's' para confirmar\n",array_prod[indice].nombre);
-                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+                
                 confirmar=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 if(confirmar=='s')
                 {
                     salida='s';
                     borrar_producto(indice);
-                    printf("Baja de producto con exito");
+                    printf("Baja de producto con exito\n");
+                    system("pause");
                 }
                 else
                 {
                     printf("Eliminacion de producto abortada.\n");
+                    system("pause");
                 }
             }
         }while(salida=='s');
     } 
-    if(confirmar=='s')
-    {
-        printf("Borrado del producto con exito.\n");
-        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
-    }
-    else
-    {
-        printf("No se ha podido borrar el producto.\n");
-        while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
-    }
 }
 void baja_categoria()
 {
@@ -942,23 +939,23 @@ void borrar_producto(int indice)
     tamanio_p=(tamanio_p)-1;
     array_prod=(producto *)realloc(array_prod,(tamanio_p)*sizeof(producto));
 }
-//Cabecera: static void modificar_producto(sesion ses);
+//Cabecera: static void modificar_producto(Adminprov ses);
 //Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente
 //Poscondicion: Muestra por pantalla un menu por el que el usuario puede modificar cualquier caracteristica de los productos que tenga permiso modificar.
-static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
+static void modificar_producto(Adminprov ses,int *asoc,int tamanio_asoc)
 {
     int encontrado=0,indice,a,i;
     char *id_prod,salida='n';
-    if(ses.perfil_usuario==admin)
+    if(ses.Perfil_usuario==admin)
     {
         
         printf("Como administrador, puede modificar cualquier producto del sistema.\n");
-        listado_prod(array_prod,array_cat,tamanio_c,tamanio_p);
+        listado_prod();
         do{
-            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a eliminar.\nId: ");
 
             fgets(id_prod,8,stdin);
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             for (i=0;i<tamanio_p&&encontrado==0;i++)//Encuentra el indice del producto a borrar
             {
                 if(strcmp(array_prod[i].id_prod,id_prod)==0)
@@ -969,25 +966,26 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
             }
             if(encontrado==1)
             {
-                menu_modificar_producto(i);
+                menu_modificar_producto(indice);
+                salida='s';
             }
             else
             {
                 printf("No se ha encontrado la id introducida. Desea salir? Escriba s para salir");
-                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 salida=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             }
-        }while(salida=='s');
+        }while(salida!='s');
     }
     else
     {
         printf("Como proveedor, solo puede modificar los productos asociados a su nombre.\n");
         listado_prod_asoc(asoc,tamanio_asoc);
         do{
-            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             printf("Escribe el identificador del producto a modificar.\nId: ");
             fgets(id_prod,8,stdin);
-            for (i=0;i<tamanio_asoc&&encontrado;i++)//Encuentra el indice del producto a borrar
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            for (i=0;i<tamanio_asoc&&encontrado==0;i++)//Encuentra el indice del producto a borrar
             {
                 if(strcmp(array_prod[asoc[i]].id_prod,id_prod)==0)
                 {
@@ -997,15 +995,16 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
             }
             if(encontrado==1)
             {
-                menu_modificar_producto(i);
+                menu_modificar_producto(indice);
+                salida='s';
             }
             else
             {
                 printf("No se ha encontrado la id introducida. Desea salir? Escriba s para salir");
-                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 salida=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             }
-        }while(salida=='s');
+        }while(salida!='s');
     }
 }
 //Cabecera: static void menu_modificar_producto (int indice)
@@ -1018,7 +1017,7 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
 
     system ("cls");
     lista_prod_asoc(asoc,1);
-    printf("Que desea modificar?\n1)Nombre\n2)Descripcion\n3)Compromiso de entrega\n4)Importe\n5)Stock\n6)Categoria\n7)Atras");
+    printf("Que desea modificar?\n1)Nombre\n2)Descripcion\n3)Compromiso de entrega\n4)Importe\n5)Stock\n6)Categoria\n7)Atras\n");
     seleccion=getchar();
     while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
     switch (seleccion)//Captacion del dato
@@ -1064,8 +1063,8 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
         case '3'://Compromiso de entrega
         printf("Escribe el nuevo compromiso de entrega en dias.\n");
         fgets(aux,51,stdin);
-        a=atoi(aux);
-        if (a==0)
+        aux_int=atoi(aux);
+        if (aux_int<=0)
         {
             printf("Error: El valor introducido no es valido\n");
             system("pause");
@@ -1084,7 +1083,7 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
         printf("Escribe el nuevo importe en euros\n");
         fgets(aux,51,stdin);
         aux_int=atoi(aux);
-        if (aux_int==0)
+        if (aux_int<=0)
         {
             printf("Error: El valor introducido no es valido\n");
             system("pause");
@@ -1103,7 +1102,7 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
         printf("Escribe el nuevo stock\n");
         fgets(aux,51,stdin);
         aux_int=atoi(aux);
-        if (aux_int==0)
+        if (aux_int<=0)
         {
             printf("Error: El valor introducido no es valido\n");
             system("pause");
@@ -1121,8 +1120,9 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
         lista_cat();
         printf("Escribe el nombre de la categoria a asignar\n");
         fgets(aux,51,stdin);
-        cataid(aux,id);
-        if (id[0]=='-')
+        quitaenter(aux);
+        cataid(id,aux);
+        if (id[1]=='-')
         {
             printf("Error, el nombre introducido no coincide con ninguna categoria\n");
             system("pause");
@@ -1133,7 +1133,7 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
             printf("Va a remplazar el siguiente valor\n Categoria: %s <- %s \n Escriba 's' para confirmar",descrip,aux);
             confirmar=getchar();
             if (confirmar=='s')
-                strcpy(array_prod[indice].id_categ,aux);
+                strcpy(array_prod[indice].id_categ,id);
         }
         menu_modificar_producto(indice);
         case '7'://Salida

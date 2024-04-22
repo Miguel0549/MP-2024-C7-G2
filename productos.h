@@ -6,12 +6,6 @@
 #include "sesiones.h"
 
 #include <stdio.h>
-//REMOVER DESPUES, PERTENECE AL MODULO DE SESIONES
-
-typedef struct {
-    char id[8];
-    usu perfil_usuario;
-}sesion;
 
 typedef struct {
     char nombre[16];
@@ -39,10 +33,10 @@ extern int tamanio_p,tamanio_c;
 //Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
 //Poscondicion: Muestra en pantalla el menu de productos para el cliente
 void menu_cliente_prod ();
-//Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
-//Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
-//Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
-void menu_adminprov_prod (sesion ses);
+//Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,Adminprov ses)
+//Precondicion: Adminprov debe ser un administrador o proveedor y estar registrado en el sistema
+//Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa Adminprov
+void menu_adminprov_prod (Adminprov ses);
 //Cabecera: producto * volcar_producto()
 //Precondicion: 
 //poscondicion: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
