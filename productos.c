@@ -186,23 +186,23 @@ void menu_admin_cat()
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
         switch (seleccion)
         {
-            case 1://Alta
+            case '1'://Alta
                 alta_categoria();
                 break;
-            case 2://Modificar
+            case '2'://Modificar
                 modificar_categoria();
                 break;
-            case 3://Baja
+            case '3'://Baja
                 baja_categoria();
                 break;
-            case 4://Salida del programa
+            case '4'://Salida del programa
                 break;
             default://Si se introduce un caracter no valido
                 printf("Escribe un numero del 1 al 4");
                 break;
         }
 
-    }while (seleccion != 4);
+    }while (seleccion != '4');
 
 }
 void alta_producto(char *id , int *n_admpr )
@@ -332,6 +332,7 @@ void alta_categoria()
     int error,a;
     categoria c;
     char salida,carga,aux[5];
+    system("cls");
     printf("Comienzo de alta de una categoria.\n");
     do{
         printf("Escribe la descripcion de la categoria.\nEsta no puede contener guiones o ser mayor de 51 caracteres.\n");
@@ -394,10 +395,12 @@ void alta_categoria()
     if (error==0)
     {
         printf("Alta de categoria con exito.\n");
+        system("pause");
     }
     else
     {
         printf("Alta de categoria fallida. Error: %d",error);
+        system("pause");
     }
 }
 static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc)
@@ -431,7 +434,7 @@ static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc)
                 while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
                 if(confirmar=='s')
                 {
-                    salida='n';
+                    salida='s';
                     borrar_producto(indice);
                     printf("Baja de producto con exito\n");
                     system("pause");
@@ -442,8 +445,14 @@ static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc)
                     system("pause");
                 }
             }
+            else
+            {
+                printf("Error: No se ha encontrado la id, desea salir? Escriba 's' para salir.\n");
+                salida=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
+            }
 
-        }while(salida=='s');
+        }while(salida!='s');
     }
     else
     {
@@ -479,6 +488,12 @@ static void baja_producto(int *asoc,Adminprov ses,int tamanio_asoc)
                     printf("Eliminacion de producto abortada.\n");
                     system("pause");
                 }
+            }
+            else
+            {
+                printf("Error: No se ha encontrado la id, desea salir? Escriba 's' para salir.\n");
+                salida=getchar();
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
             }
         }while(salida=='s');
     } 
@@ -525,7 +540,7 @@ void baja_categoria()
                     system("cls");
 
                     listado_prod_asoc(asoc,tamanio_asoc);
-                    printf("\n\nLos siguientes productos estan asociados a la categoria a borrar.\nBorrar esta categoria tambien borrara esos productos.\nSi no quiere borrarlos, cancele y asocie dichos productos a otra categoria.\nDesea continuar? Escriba 's' para continuar.\n");
+                    printf("\nLos siguientes productos estan asociados a la categoria a borrar.\nBorrar esta categoria tambien borrara esos productos.\nSi no quiere borrarlos, cancele y asocie dichos productos a otra categoria.\nDesea continuar? Escriba 's' para continuar.\n");
                     fflush(stdin);
                     confirmar=getchar();
                     while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
