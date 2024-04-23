@@ -28,7 +28,49 @@ void menu_modificar_producto (int indice);
 static void listado_cat();
 static void modificar_categoria();
 
-void menu_cliente_prod ( )
+int reducir_stock(char *id,int resta)
+{
+    int error,encontrado=0,indice;
+    for (int i=0;i<tamanio_p&&encontrado==0;i++)
+    {
+        if (strcmp(id,array_prod[i].id_prod)==0)
+        {
+            encontrado=0;
+            indice=i;
+        }
+    }
+    if(encontrado=1&&resta<=array_prod[indice].stock)
+    {
+        array_prod[indice].stock=array_prod[indice].stock-resta;
+    }
+    else
+    {
+        error=1;
+    }
+    return error;
+}
+void menu_cliente_producto_conpedido(char *id)
+{
+    char seleccion;
+    int encontrado=0,a;
+    seleccion=menu_cliente_prod();
+    if (seleccion!='3')
+    {
+        printf("Escriba la id del producto a comprar, o bien escriba 's' para salir\n");
+        fgets(id,8,stdin);
+        for (int i=0;i<tamanio_p&&encontrado==0;i++)
+        {
+            if(strcmp(id,array_prod[i].id_prod)==0)
+                encontrado=1;
+        }
+    }
+    if (seleccion=='3'||encontrado==0)
+    {
+        strcpy(id,"0000000\0");
+    }
+    system("cls");
+}
+char menu_cliente_prod ( )
 {
     char seleccion,salida;
     int *asoc,i,j=0,a;//asoc es un vector de enteros cuyos elementos son las indices de los productos a buscar
@@ -66,6 +108,8 @@ void menu_cliente_prod ( )
                 if (j==0)
                 {
                     printf("No se ha encontrado ningun producto asociado a esa categoria.\n");
+                    seleccion='3';
+                    system("PAUSE");
                 }
                 else
                 {
@@ -74,12 +118,11 @@ void menu_cliente_prod ( )
                     
                 }
                 free(asoc);
-                printf("Pulse enter para salir.\n");
-                system("PAUSE");
+                
                 salida='s';
             }
         }while(salida!='s');
-        menu_cliente_prod();
+        
         break;
         case('2'):
         
@@ -100,26 +143,27 @@ void menu_cliente_prod ( )
                 if (j==0)
                 {
                     printf("No se ha encontrado ningun producto.\n");
+                    seleccion='3';
                 }
                 else
                 {
+                    printf("Se han encontrado los siguientes productos");
                     asoc=(int *)realloc(asoc,j*sizeof(int));
                     lista_prod_asoc(asoc,j);
                     
                 }
                 free(asoc);
-                printf("Pulse enter para salir.\n");
                 system("PAUSE");
                 salida='s';
-        
-        menu_cliente_prod();
         break;
         case ('3'):
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
         break;
         default:
-        menu_cliente_prod();
-
+        while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
+        seleccion=menu_cliente_prod();  
     }
+    return seleccion;
 }
 void menu_adminprov_prod (Adminprov ses)
 {
@@ -152,6 +196,7 @@ void menu_adminprov_prod (Adminprov ses)
         case('2'):
         free(asoc);
         menu_cliente_prod();
+        system("pause");
         menu_adminprov_prod(ses);
         break;
         case('3'):
@@ -1231,6 +1276,3 @@ void modificar_categoria()
     }
 
 }
-//POR HACER: REMPLAZAR TODAS LAS DECLARACIONES DE LOS VECTORES DE PRODUCTO Y CATEGORIA COMO SUS TAMAÑOS POR SUS VARIABLES PUBLICAS
-//POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y MENU DE CATEGORIA Y DEBUGARLO
-//POR HACER: MEJORAR LAS LIMPIEZAS DEL BUFFER DE ENTRADA

@@ -26,13 +26,24 @@ extern producto *array_prod;
 extern categoria *array_cat;
 extern int tamanio_p,tamanio_c;
 
-//extern producto *array_prod;//Vector de productos el cual se inicializa con volcar_producto y se libera con guardar_producto.
-//extern categoria *array_cat;//Vector de categorias el cual se inicializa con volcar_categoria y se libera con guardar_categoria.
-//extern int tamanio_p,tamanio_c;//Enteros utilizados para almacenar el tamaño del producto y categoria
+//Vector de productos el cual se inicializa con cargar_producto y se libera con guardar_producto.
+//Vector de categorias el cual se inicializa con cargar_categoria y se libera con guardar_categoria.
+//Enteros utilizados para almacenar el tamaño del producto y categoria
+
+//FUNCIONES PUBLICAS
+
+//Cabecera: int reducir_stock(char *id,int resta);
+//Precondicion: resta>0
+//Poscondicion: Intenta reduir el stock de id el numero resta y devuelve 0 si se ha realizado con exito o mayor que 0 si ha habido algun error.
+int reducir_stock(char *id,int resta);
+//Cabecera: void menu_cliente_producto_conpedido(char *id)
+//Precondicion: id debe ser una cadena de 8 caracteres
+//Poscondicion: Abre un menu de consulta de producto y devuelve en id la id del producto a comprar
+void menu_cliente_producto_conpedido(char *id);
 //Cabecera: void menu_cliente_prod (producto **p,categoria **c,int *tamanio_p, int *tamanio_c);
 //Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
-//Poscondicion: Muestra en pantalla el menu de productos para el cliente
-void menu_cliente_prod ();
+//Poscondicion: Muestra en pantalla el menu de productos para el cliente poder hacer consultas
+char menu_cliente_prod ();
 //Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,Adminprov ses)
 //Precondicion: Adminprov debe ser un administrador o proveedor y estar registrado en el sistema
 //Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa Adminprov
@@ -58,10 +69,6 @@ void cargar_categoria();
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
 void alta_producto( char *id , int *n_admpr);
-//Cabecera: void mod_prod(producto)
-//Precondicion: producto.id_prod=id del producto a modificar
-//Poscondicion: Cambia los datos del producto con id producto.id_prod
-void mod_prod(producto);
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe ser una cadena ya definida
 //Poscondicion: Escribe por pantalla todos los productos cuyo nombre coincida con n
