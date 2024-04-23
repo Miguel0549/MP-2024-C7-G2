@@ -39,7 +39,7 @@ int reducir_stock(char *id,int resta)
             indice=i;
         }
     }
-    if(encontrado=1&&resta<=array_prod[indice].stock)
+    if(encontrado==1&&resta<=array_prod[indice].stock)
     {
         array_prod[indice].stock=array_prod[indice].stock-resta;
     }
