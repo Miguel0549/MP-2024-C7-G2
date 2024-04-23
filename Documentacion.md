@@ -724,6 +724,87 @@ CASO 1
 
     Al ejecutarlo, se despliega un menu en el que seleccionar altas, bajas, buscquedas y asignaciones de productos a categorías
 
+#### Prueba de caja blanca módulo descuentos
+##### PRUEBAS SOBRE EL PROCEMIENTO CARGAR CATEGORÍA
+
+CÓDIGO:
+
+    void cargar_categoria()
+    {
+        FILE *f;
+        int i;
+        char j='-';         //1 inicio
+        if ((array_cat=(categoria *)malloc(sizeof(categoria)))==NULL)  //2 si
+        {
+            printf("Error de alocación de memoria.\n");     
+        }                                           
+        else        //3 sino
+        {
+            if((f=fopen(F_CATEGORIAS,"r"))==NULL)   //4 si 2
+            {
+                printf("ERROR: No se ha encontrado el fichero Categorias.txt, no se ha podido cargar memoria de las categorias.\n");
+                tamanio_c=0;                
+            }
+            else                            //5 sino 2
+            {
+                for(i=0;j!=EOF;i++)//Bucle para obtener cada dato    //6 for
+                {
+                    array_cat=(categoria *)realloc(array_cat,((i+1)*sizeof(categoria)));
+                    fgets(array_cat[i].id_cat,5,f);   
+                    fseek(f,1,SEEK_CUR);                                                     
+                    fgets(array_cat[i].descrip,51,f);//Dejara de leer en EOF o en '/n'
+                    quitaenter(array_cat[i].descrip);
+                    j=fgetc(f);
+                    fseek(f,-1,SEEK_CUR);
+                }                                                         //7 fin for
+                tamanio_c=i;                               //8 instrucciones
+                fclose(f);
+            }                                   //8 fin_ si 2
+        }                                   //9 fin_ si 1 
+    }                                       //9 fin
+
+    
+Complejidad computacional
+
+V(G) = número de regiones = 4
+
+Luego las seis rutas linealmente independientes serían: 
+
+•	Ruta 1 (aquella en la que se llega a ejecutar todo):
+
+             1-2-3-4-5-6-7-6-8-9
+
+•	Ruta 2 (aquella en la que no se hace el bucle for)
+
+             1-2-3-4-5-6-8-9
+
+•	Ruta 3 (aquella en la que se cumple el segundo if): 
+
+             1-2-3-4-8-9
+
+•	Ruta 4 (se cumple el primer if):
+
+             1-2-9
+
+
+Ruta 1
+
+Suponemos que para esta ruta, se hace correctamente la reserva de memoria, así como la apertura del fichero, por lo que entraría en el primer else y el segundo, en el for, hace al menos una iteración, ya que el fichero tiene al menos una categoría y termina el procedimiento
+
+Ruta 2
+
+Suponemos, para esta ruta que se hace correctamente la reserva de memoria así como la apertura del fichero, si bien el primer carácter del mismo es EOF, es decir está vacío, por lo que no entra en el bucle for y termina el procedimiento
+
+Ruta 3
+
+Suponemos, para esta ruta que se hace correctamente la reserva de memoria, pero que falla la apertura de fichero, lo que imprime un mensaje de error y finaliza el procdimiento
+
+Ruta 4
+
+Suponemos, para esta ruta que falla la reserva de memoria, impriminedo un mensaje de error y finalizando el programa
+
+![Grafo de control de flujo del procedimiento](GCF_Productos.png "Grafo de control de flujo del procedimiento")
+
 ### MODULO DESCUENTOS
 #### Pruebas de caja negra del módulo descuentos
 
@@ -1206,7 +1287,10 @@ Si la cadena que pasamos por parámetro es "black001", elimininará, liberando l
 
 
 ### MODULO PEDIDOS DEVOLUCIONES
-#### Pruebas de integración de caja negra del módulo pedidos devoluciones
+#### Pruebas de caja negra del módulo pedidos devoluciones
+
+##### PROCEDIMEINTO CARGAR DEVOLUCIONES
+
 
 
 void carga_devoluciones( Devoluciones **dev ,int *n_dev);
@@ -1254,5 +1338,12 @@ void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , 
 void menu_pedidos_transp(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , int *n_pr_ped, char id_tr_act[5], usu tipo_usu);
 
 void menu_prod_ped( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu);
+
+#### Prueba de caja blanca del módulo devoluciones
+
+
+![Grafo de control de flujo del procedimiento](GCF_Pedidos.png "Grafo de control de flujo del procedimiento")
+
+
 
 
