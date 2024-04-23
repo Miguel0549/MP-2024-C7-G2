@@ -24,7 +24,7 @@ void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos] , char ve
 
 void carga_cliente(Cliente **c,int *n_clien);
 void volcado_cliente(Cliente **c,int *n_clien);
-void nuevo_cliente(Cliente **c,int *n_cliente);
+void nuevo_cliente(Cliente **c,int *n_cliente, int *ind_usu_act);
 void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu );
 void datos_cliente ( Cliente *clt , int id_act);
 void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes);

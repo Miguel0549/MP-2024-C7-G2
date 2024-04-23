@@ -2,4 +2,4 @@
 0002-audio HIFI
 0003-accesorios
 0004-Perifericos ordenador
-0006-Juegos
+0005-Gaming

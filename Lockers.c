@@ -251,23 +251,105 @@ void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock ){
         }
 
 
-
     }
-
 
     fclose(f);
 
 }
 
 
+void siguiente_id_desc_o_lock(char *vect_dest , char *vect_id, char *tipo){
 
-void stock_lockers (){
+    int j,cifras=0,n,n_aux;
+    char *aux,*nulo,*ptr,aux_parte_letra[11]="\0",aux_parte_num[8]="\0",aux_id[11];
 
+    strcpy(aux_id,vect_id);
+
+    if ( strcmp(tipo,"cheqreg")==0 ){
+
+        strcpy(aux_parte_letra, strtok(aux_id,"e"));
+        strcat(aux_parte_letra,"e");
+
+    }else if ( strcmp(tipo,"descuento")==0){
+
+        strcpy(aux_parte_letra, strtok(aux_id,"g"));
+        strcat(aux_parte_letra,"g");
+
+    }else{
+
+        strcpy(aux_parte_letra, strtok(aux_id,"k"));
+        strcat(aux_parte_letra,"k");
+
+    }
+
+    strcpy(aux_parte_num, strtok(NULL,"\0"));
+
+
+    n= strtol(aux_parte_num,&ptr,10);
+    n++;
+    n_aux = n;
+
+    while ( n >= 1 ){
+
+        n /= 10;
+        cifras++;
+    }
+
+    if (strcmp(tipo,"descuento")==0){
+
+        aux = (char *)calloc(cifras+1,sizeof(char));
+        nulo = (char *)calloc(7-cifras,sizeof(char));
+
+        sprintf(aux,"%i",n_aux);
+
+        for ( j=0 ; j<5-cifras ; j++ ){
+
+            nulo[j]='0';
+
+        }
+
+        strcat(nulo,aux);
+        strcat(aux_parte_letra,nulo);
+
+        strcpy(vect_dest,aux_parte_letra);
+
+    }else if ( strcmp(tipo,"cheqreg")==0){
+
+        aux = (char *)calloc(cifras+1,sizeof(char));
+        nulo = (char *)calloc(8-cifras,sizeof(char));
+
+        sprintf(aux,"%i",n_aux);
+
+        for ( j=0 ; j<7-cifras ; j++ ){
+
+            nulo[j]='0';
+
+        }
+
+        strcat(nulo,aux);
+        strcat(aux_parte_letra,nulo);
+        strcpy(vect_dest,aux_parte_letra);
+
+    }else{
+
+        aux = (char *)calloc(cifras+1,sizeof(char));
+        nulo = (char *)calloc(6-cifras,sizeof(char));
+
+        sprintf(aux,"%i",n_aux);
+
+        for ( j=0 ; j<6-cifras ; j++ ){
+
+            nulo[j]='0';
+
+        }
+
+        strcat(nulo,aux);
+        strcat(aux_parte_letra,nulo);
+
+        strcpy(vect_dest,aux_parte_letra);
+    }
 
 
 
 }
-
-
-
 

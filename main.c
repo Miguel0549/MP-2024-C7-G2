@@ -1,4 +1,5 @@
 #include "Principal.h"
+#include <stdlib.h>
 
 
 int main(){
@@ -14,7 +15,7 @@ int main(){
     Descuentos *desc;
     Descuentos_clientes *desc_cl;
 
-    int pedido=0,pr_ped=0,devoluciones=0,lockers=0,comp_lockers=0,trasp=0,cliente=0,admin_prov=0,descuento=0,descuento_cl=0,id_usu_act;
+    int pedido=0,pr_ped=0,devoluciones=0,lockers=0,comp_lockers=0,trasp=0,client=0,admin_prov=0,descuento=0,descuento_cl=0,id_usu_act;
     int *n_ped,*n_prod_ped,*n_lock,*n_c_lock,*n_dev,*n_cliente,*n_tranp,*n_admp,*usu_act,*n_prod,*n_cat,*n_desc,*n_desc_cl;
     usu t_usu;
     usu *tipo_usu;
@@ -24,7 +25,7 @@ int main(){
     n_lock = &lockers;
     n_c_lock = &comp_lockers;
     n_dev = &devoluciones;
-    n_cliente = &cliente;
+    n_cliente = &client;
     n_tranp = &trasp;
     n_admp = &admin_prov;
     n_desc = &descuento;
@@ -46,8 +47,9 @@ int main(){
     carga_descuentos_clientes(&desc_cl,n_desc_cl);
     carga_devoluciones(&dev,n_dev);
 
-    menu_inicio_sesion(clt,admp,transp,n_cliente,n_admp,n_tranp,usu_act,tipo_usu);
-    menu_principal(clt,admp,transp,l,c_l,ped,p_ped,dev,desc,desc_cl,n_cliente,n_admp,n_tranp,n_lock,n_c_lock,n_ped,n_prod_ped,n_dev,n_desc,n_desc_cl,t_usu,id_usu_act);
+
+    //menu_inicio_sesion(&clt,&admp,&transp,n_cliente,n_admp,n_tranp,usu_act,tipo_usu);
+    menu_principal(clt,admp,transp,l,c_l,ped,p_ped,dev,desc,desc_cl,n_cliente,n_admp,n_tranp,n_lock,n_c_lock,n_ped,n_prod_ped,n_dev,n_desc,n_desc_cl,transportista,2);
 
 
 

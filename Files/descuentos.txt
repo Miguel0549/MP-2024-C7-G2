@@ -1,2 +1,6 @@
-black001-Black Friday-codpro-activo-10-esizon
-black002-cheque regalo nivel 1-cheqreg-activo-5-todos
+codig00001-Black Friday-codpro-activo-10-esizon
+codig00002-cheque regalo nivel 1-codpro-activo-5-todos
+che0000001-Navidad-cheqreg-activo-8-todos
+che0000003-Reyes-cheqreg-activo-9-todos
+codig00003-Fiesta-codpro-inactivo-6-todos
+codig00004-MP-codpro-activo-5-esizon

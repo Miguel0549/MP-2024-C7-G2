@@ -56,7 +56,7 @@ void volcado_descuentos_clientes(Descuentos_clientes **,int*);
 //cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
 //precondición: *d inicializado
 //postcondición: lista los descuentos actuales en el vector
-void listar_descuentos(Descuentos**,int*);
+void listar_descuentos(Descuentos*,int*);
 
 //cabecera:void listar_descuentos_propios(char*Id_cliente)
 //precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
@@ -72,9 +72,13 @@ int comprobar_descuento(Descuentos_clientes**,char *);
  //precondición:
  //postcondición:
 
-void nuevo_descuento(Descuentos**,Descuentos_clientes**,int*,int*);
+void nuevo_descuento(Descuentos **d,Descuentos_clientes **dc,Cliente *clt ,int *n_desc,int*n_desc_clien, int *n_cliente);
+
+void menu_descuentos( Descuentos **desc , Descuentos_clientes **desc_cl, Cliente *clt , int *n_desc , int *n_desc_cl , int *n_clt );
 
 void modificar_descuento(Descuentos**,Descuentos_clientes**,int*,int*,int*);
+
+void asignar_cod_prom_cliente( Descuentos_clientes **desc_cl , int *n_desc_cl , char id_desc[11] );
 
 //cabecera:void pasar_ids_desde_fich(char*cadena,int*num_linea);
 //precondición: sea cadena* un puntero a char de 11 caracteres inicializado a 0, *num_linea un puntero a entero que contiene el número de la linea que se va a usar

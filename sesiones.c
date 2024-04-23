@@ -102,9 +102,10 @@ void volcado_adminprov(Adminprov **a,int*n_admin){
 }
 
 
-void nuevo_adminprov(Adminprov **a,int *n_adminprov, usu tipo_usu){
+void nuevo_adminprov(Adminprov **a,int *n_adminprov, usu tipo_usu , int *ind_usu_act ){
 
     char Id[7],nomb[21];
+    *ind_usu_act = *n_adminprov;
     (*n_adminprov)++;
     if((*a = (Adminprov *)realloc(*a, *n_adminprov * sizeof(Adminprov)))==NULL)
     {
@@ -403,7 +404,7 @@ void inicio_sesion_transportista (  Transportista *transp , int *n_transp , int 
 
 
 
-void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp ){
+void registro ( Cliente **client , Adminprov **admp , Transportista **transp, int *n_cliente, int *n_admp , int *n_transp , usu *tipo_usu , int *ind_usu_act ){
 
     int op;
 
@@ -415,13 +416,17 @@ void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *
 
         switch (op) {
             case 1:
-                nuevo_cliente(&client,n_cliente);
+
+                *tipo_usu=cliente;
+                nuevo_cliente(client,n_cliente,ind_usu_act);
                 break;
             case 2:
-                nuevo_adminprov(&admp,n_admp,proveedor);
+                *tipo_usu=proveedor;
+                nuevo_adminprov(admp,n_admp,proveedor,ind_usu_act);
                 break;
             case 3:
-                nuevo_transportista(&transp,n_transp);
+                *tipo_usu=transportista;
+                nuevo_transportista(transp,n_transp,ind_usu_act);
                 break;
             default:
                 printf("\nEscribe un numero del 1 al 3");
@@ -430,7 +435,7 @@ void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *
 
     }while( op<1 || op>3);
 
-
+    system("cls");
 }
 
 
@@ -483,7 +488,7 @@ void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, 
 }
 
 
-void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu ){
+void menu_inicio_sesion ( Cliente **client , Adminprov **admp , Transportista **transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu ){
 
     int op;
 
@@ -496,13 +501,13 @@ void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *tra
 
         case 1:
 
-            inicio_sesion(client,admp,transp,n_cliente,n_admp,n_transp,usu_act,tipo_usu);
+            inicio_sesion(*client,*admp,*transp,n_cliente,n_admp,n_transp,usu_act,tipo_usu);
 
             break;
         case 2:
 
-            registro(client,admp,transp,n_cliente,n_admp,n_transp);
-            
+            registro(client,admp,transp,n_cliente,n_admp,n_transp,tipo_usu,usu_act);
+
             break;
         default:
             break;

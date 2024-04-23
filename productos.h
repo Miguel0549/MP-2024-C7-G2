@@ -38,7 +38,7 @@ extern int tamanio_p,tamanio_c;
 //Cabecera: void menu_cliente_prod (producto **p,categoria **c,int *tamanio_p, int *tamanio_c);
 //Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
 //Poscondicion: Muestra en pantalla el menu de productos para el cliente
-void menu_cliente_prod ();
+char menu_cliente_prod ();
 //Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
 //Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
 //Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
@@ -101,5 +101,8 @@ void cataid(char *id,char *descrip);
 void menu_admin_cat();
 void menu_modificar_producto (int indice);
 void borrar_producto(int indice);
+
+void menu_cliente_producto_conpedido( Pedido **ped , ProductoPedido **prod_ped , int *n_ped , int *n_pr_ped , char id_cliente[8] );
+int reducir_stock(char *id,int resta);
 
 #endif

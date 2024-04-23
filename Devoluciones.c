@@ -326,11 +326,11 @@ void crear_devolucion( Pedido *ped, ProductoPedido *prod_ped, Devoluciones **dev
 
 }
 
-void ver_devolucion (  Devoluciones *dev ,  int *indice_dev ){
+void ver_devolucion (  Devoluciones *dev ,  int indice_dev ){
 
     char op;
 
-    switch (dev[*indice_dev].est_dev) {
+    switch (dev[indice_dev].est_dev) {
 
         case pediente:
 
@@ -344,9 +344,9 @@ void ver_devolucion (  Devoluciones *dev ,  int *indice_dev ){
 
                 if ( op == 's' || op == 'S'){
 
-                    dev[*indice_dev].est_dev = aceptado;
+                    dev[indice_dev].est_dev = aceptado;
 
-                    fecha_actual(dev[*indice_dev].fecha_acp,0);
+                    fecha_actual(dev[indice_dev].fecha_acp,0);
 
                     printf("\nDevolucion aceptada.\n");
                     system("pause");
@@ -375,7 +375,7 @@ void ver_devolucion (  Devoluciones *dev ,  int *indice_dev ){
 
                 if ( op == 's' || op == 'S'){
 
-                    dev[*indice_dev].est_dev = recibido;
+                    dev[indice_dev].est_dev = recibido;
 
                     // stock ++
 
@@ -949,7 +949,12 @@ void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devolucion
                     break;
                 case 4:
 
-                    ver_devolucion(dev,n_dev);
+                    printf("Introduce el indice del pedido que quiera ver: ");
+                    scanf("%i",&op);
+
+                    ver_devolucion(dev,op-1);
+
+                    system("cls");
 
                     break;
                 case 5:

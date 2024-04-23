@@ -100,8 +100,10 @@ void volcado_transp(Transportista **t,int *n_trans){
 }
 
 
-void nuevo_transportista(Transportista **t,int *n_transport){
+void nuevo_transportista(Transportista **t,int *n_transport, int *ind_usu_act){
+
     char Id[5];
+    *ind_usu_act = *n_transport;
     (*n_transport)++;
     if((*t = (Transportista*)realloc(*t, *n_transport * sizeof(Transportista)))==NULL)
     {
@@ -204,7 +206,7 @@ void listado_transportista ( Transportista *transp, int *n_transp ){
 
             }while ( j >= *n_transp);
 
-            modificar_transp( &transp, j );
+            modificar_transp( transp, j );
 
         }
 

@@ -11,10 +11,10 @@ typedef struct
 }Adminprov;
 
 
-void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu );
+void menu_inicio_sesion ( Cliente **client , Adminprov **admp , Transportista **transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu );
 
 void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu);
-void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp );
+void registro ( Cliente **client , Adminprov **admp , Transportista **transp, int *n_cliente, int *n_admp , int *n_transp , usu *tipo_usu , int *ind_usu_act );
 
 void inicio_sesion_cliente ( Cliente *client , int *n_cliente , int *usu_act);
 void inicio_sesion_admin (  Adminprov *admp ,  int *n_admp , int *usu_act );
@@ -36,4 +36,4 @@ void volcado_adminprov(Adminprov**,int*);
 //cabecera: void nuevo_adminprov(Adminprov **,int *);
 //precondición: **a doble puntero a estructura inicializado y *n_adminprov puntero que apunta al numero actual de admin/proveedores
 //postcondición: amplia el vector de estructuras e inicializa desde entrada de teclado un nuevo admin/proveedor
-void nuevo_adminprov(Adminprov **,int *, usu );
+void nuevo_adminprov(Adminprov **,int *, usu , int *ind_usu_act );

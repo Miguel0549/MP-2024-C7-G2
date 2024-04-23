@@ -171,11 +171,17 @@ void volcado_cliente(Cliente **c,int *n_clien){
 
 }
 
-void nuevo_cliente(Cliente **c,int *n_cliente){
+void nuevo_cliente(Cliente **c,int *n_cliente , int *ind_usu_act){
 
     char Id[8];
+    int indice;
+
+    indice = *n_cliente;
+    *ind_usu_act = indice;
     (*n_cliente)++;
-    if((*c = (Cliente *)realloc(*c, *n_cliente * sizeof(Cliente)))==NULL)
+
+
+    if((*c = (Cliente *)realloc(*c, (*n_cliente) * sizeof(Cliente)))==NULL)
     {
         printf("Error al reservar memoria para los Clientes\n");
         exit(1);
@@ -184,34 +190,36 @@ void nuevo_cliente(Cliente **c,int *n_cliente){
         if(*n_cliente==1){
             de_int_a_id_cliente(*n_cliente,Id);
         }else{
-            strcpy(Id,(*c+(*n_cliente-2))->Id_cliente);
+            strcpy(Id,(*c)[indice-1].Id_cliente);
             crear_siguiente_id(7,Id,Id);
+
         }
         printf("\n Su Id de cliente es: ");
         puts(Id);
-        strcpy((*c)[*n_cliente-1].Id_cliente,Id);
+        strcpy((*c)[indice].Id_cliente,Id);
 
 
         printf("\nIntrozuca su nombre y apellidos(20 caracteres):\n");
-        leer_string((*c)[*n_cliente-1].Nombr_cliente,21);
+        leer_string((*c)[indice].Nombr_cliente,21);
 
-        printf("\nIntroduzca su dirección(50 caracteres):\n");
-        leer_string((*c)[*n_cliente-1].Dir_cliente,51);
+        printf("\nIntroduzca su direccion(50 caracteres):\n");
+        leer_string((*c)[indice].Dir_cliente,51);
 
         printf("\nIntroduzca su localidad(20 caracteres):\n");
-        leer_string((*c)[*n_cliente-1].Localidad,21);
+        leer_string((*c)[indice].Localidad,21);
 
         printf("\nIntroduzca su Provincia(20 caracteres):\n");
-        leer_string((*c)[*n_cliente-1].Provincia,21);
+        leer_string((*c)[indice].Provincia,21);
 
-        printf("\nIntroduzca su correco electrónico(31 caracteres):\n");
-        leer_string((*c)[*n_cliente-1].email,31);
+        printf("\nIntroduzca su correco electronico(31 caracteres):\n");
+        leer_string((*c)[indice].email,31);
 
-        printf("\nCree e introduzca una contraseña(hasta 15 dígitos):\n");
-        leer_string((*c)[*n_cliente-1].Contrasenna,16);
+        printf("\nCree e introduzca una contrasena(hasta 15 dígitos):\n");
+        leer_string((*c)[indice].Contrasenna,16);
 
-        strcpy((*c)[*n_cliente-1].Cartera,"000000");
+        strcpy((*c)[indice].Cartera,"000000");
     }
+
 }
 
 
@@ -325,7 +333,7 @@ void datos_cliente ( Cliente *clt , int id_act){
 void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos+1] , char vect_id[num_digitos+1]){
 
     int j,cifras=0,n,n_aux;
-    char *aux,*nulo,*ptr;
+    char *aux,nulo[8]="\0",*ptr;
 
     n= strtol(vect_id,&ptr,10);
     n++;
@@ -338,7 +346,6 @@ void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos+1] , char 
     }
 
     aux = (char *)calloc(cifras+1,sizeof(char));
-    nulo = (char *)calloc(num_digitos-cifras,sizeof(char));
 
     sprintf(aux,"%i",n_aux);
 

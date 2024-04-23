@@ -93,126 +93,150 @@ void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transpor
 
 }
 
-void listado_prod ( Adminprov *admpr , producto *prod, int *n_prod ,int *n_admpr,int ind_admpr , usu tipo_usu ){
+void listado_prod ( Adminprov *admpr , int *n_prod ,int *n_admpr,int ind_admpr , usu tipo_usu ){
 
-    int i,j,op;
-    char c='a',id_prod[8]="\0";
+    int i,j,op,error=0;
+    char c,id_prod[8]="\0";
 
-    system("cls");
+    do{
 
+        c='a';
 
-    if ( tipo_usu == admin ){
-
-
-        printf("---------------------- Todos los productos ------------------------\n\n");
-
-        for ( i=0 ; i<*n_prod ; i++ ){
-
-            printf("[%c].%s-%s-%s\n",c,prod[i].id_prod,prod[i].id_categ,prod[i].nombre);
-            c++;
-
-        }
-
-        printf("-------------------------------------------------------------\n\n");
+        system("cls");
 
 
-    }else{
+        if ( tipo_usu == admin ){
 
 
-        printf("---------------------- Sus productos ------------------------\n\n");
+            printf("---------------------- Todos los productos ------------------------\n\n");
 
-        for ( i=0 ; i<*n_prod ; i++ ){
+            for ( i=0 ; i<*n_prod ; i++ ){
 
-            if ( strcmp(prod[i].id_gestor,admpr[ind_admpr].Id_empresa)==0 ){
-
-                printf("[%c].%s-%s-%s\n",c,prod[i].id_prod,prod[i].id_categ,prod[i].nombre);
+                printf("[%c].%s-%s-%s\n",c,array_prod[i].id_prod,array_prod[i].id_categ,array_prod[i].nombre);
                 c++;
 
             }
 
-        }
-
-        printf("-------------------------------------------------------------\n\n");
-
-    }
+            printf("-------------------------------------------------------------\n\n");
 
 
-    do{
-
-        printf("1.Alta\n2.Baja\n3.Modificar\n4.Salir\n");
-        scanf("%i",&op);
+        }else{
 
 
-        switch (op) {
-            case 1:
+            printf("---------------------- Sus productos ------------------------\n\n");
 
-                if ( tipo_usu == admin ){
+            for ( i=0 ; i<*n_prod ; i++ ){
 
-                    alta_producto(NULL,n_admpr);
+                if ( strcmp(array_prod[i].id_gestor,admpr[ind_admpr].Id_empresa)==0 ){
 
-                }else{
-
-                    alta_producto(admpr[ind_admpr].Id_empresa,n_admpr);
+                    printf("[%c].%s-%s-%s\n",c,array_prod[i].id_prod,array_prod[i].id_categ,array_prod[i].nombre);
+                    c++;
 
                 }
 
+            }
 
+            printf("-------------------------------------------------------------\n\n");
 
-                system("cls");
-
-                break;
-            case 2:
-
-                do{
-
-                    printf("Escribe el Id del producto a borrar: ");
-                    fflush(stdin);
-                    gets(id_prod);
-
-                    j=0;
-                    while ( j<*n_prod && strcmp(id_prod,prod[j].id_prod) !=0) j++;
-
-                    if ( j >= *n_prod || strcmp(prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0 ) printf("\nEscribe un id valido\n");
-
-                }while ( j >= *n_prod || strcmp(prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0);
-
-                borrar_producto(j);
-
-                system("cls");
-
-                break;
-            case 3:
-
-                do{
-
-                    printf("Escribe el id del producto a modificar: ");
-                    fflush(stdin);
-                    gets(id_prod);
-
-                    j=0;
-                    while ( j<*n_prod && strcmp(id_prod,prod[j].id_prod) !=0) j++;
-
-                    if ( j >= *n_prod || strcmp(prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0 ) printf("\nEscribe un id valido\n");
-
-                }while ( j >= *n_prod || strcmp(prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0);
-
-                menu_modificar_producto(j);
-
-                system("cls");
-
-                break;
-            case 4:
-                break;
-            default:
-                printf("Escribe un numero del 1 al 4.");
-                break;
         }
 
-        system("cls");
 
-    }while ( op < 1 || op > 4);
+        do{
+
+            printf("1.Alta\n2.Baja\n3.Modificar\n4.Salir\n");
+            scanf("%i",&op);
 
 
+            switch (op) {
+                case 1:
+
+                    if ( tipo_usu == admin ){
+
+                        alta_producto(NULL,n_admpr);
+
+
+                    }else{
+
+                        alta_producto(admpr[ind_admpr].Id_empresa,n_admpr);
+
+                    }
+
+                    system("cls");
+
+                    break;
+                case 2:
+
+                    do{
+
+                        error = 0;
+
+                        printf("Escribe el Id del producto a borrar: ");
+                        fflush(stdin);
+                        gets(id_prod);
+
+                        j=0;
+                        while (   j<*n_prod && strcmp(id_prod,array_prod[j].id_prod )!=0  ) j++;
+
+                        if ( tipo_usu == admin ){
+
+                            if ( j >= *n_prod ){
+
+                                printf("\nEscribe un id valido\n");
+                                error = 1;
+
+                            }
+
+                        }else{
+
+                            if ( j >= *n_prod || strcmp(array_prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0 ){
+
+                                printf("\nEscribe un id valido\n");
+                                error = 1;
+
+                            }
+
+                        }
+
+                    }while ( error == 1);
+
+                    borrar_producto(j);
+
+                    system("cls");
+
+                    break;
+                case 3:
+
+                    do{
+
+                        printf("Escribe el id del producto a modificar: ");
+                        fflush(stdin);
+                        gets(id_prod);
+
+                        j=0;
+                        while ( j<*n_prod && strcmp(id_prod,array_prod[j].id_prod) !=0) j++;
+
+                        if ( j >= *n_prod || strcmp(array_prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0 ) printf("\nEscribe un id valido\n");
+
+                    }while ( j >= *n_prod || strcmp(array_prod[j].id_gestor,admpr[ind_admpr].Id_empresa)!=0);
+
+                    menu_modificar_producto(j);
+
+                    system("cls");
+
+                    break;
+                case 4:
+                    break;
+                default:
+                    printf("Escribe un numero del 1 al 4.");
+                    break;
+            }
+
+            system("cls");
+
+        }while ( op < 1 || op > 4);
+
+
+    }while(op != 4);
 
 }
 
@@ -244,7 +268,7 @@ void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportist
                     break;
                 case 2:
 
-                    listado_prod(admp,prod,n_prod,n_admp,id_usu_act,proveedor);
+                    listado_prod(admp,n_prod,n_admp,id_usu_act,proveedor);
 
                     system("cls");
 
@@ -334,7 +358,7 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
                     break;
                 case 4:
 
-                    listado_prod(admp,prod,n_prod,n_admp,-1,admin);
+                    listado_prod(admp,n_prod,n_admp,-1,admin);
 
                     system("cls");
 
@@ -362,7 +386,7 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
                     break;
                 case 8:
 
-                    listar_descuentos(&desc,n_desc);
+                    menu_descuentos(&desc,&desc_cl,client,n_desc,n_desc_cl,n_cliente);
 
                     system("cls");
 
@@ -434,7 +458,7 @@ void listado_cliente ( Cliente *clt , int *n_clt ){
             switch (op) {
                 case 1:
 
-                    nuevo_cliente(&clt,n_clt);
+                    nuevo_cliente(&clt,n_clt,NULL);
 
                     system("cls");
 
@@ -515,7 +539,7 @@ void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista 
                     break;
                 case 2:
 
-                    menu_cliente_prod();
+                    menu_cliente_producto_conpedido(&ped,&pr_p,n_ped,n_pr_p,client[id_usu_act].Id_cliente);
 
                     system("cls");
 
@@ -682,7 +706,7 @@ void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
             switch (op) {
                 case 1:
 
-                    nuevo_adminprov(&admpr,n_admpr,admin);
+                    nuevo_adminprov(&admpr,n_admpr,admin,NULL);
 
                     system("cls");
 

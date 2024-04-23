@@ -108,8 +108,6 @@ void carga_pedidos( Pedido **ped ,int *n_ped){     // FUNCIONA
 
             }
 
-
-
         }
 
         rewind(f);
@@ -438,6 +436,10 @@ void hacer_pedido (Pedido **ped, ProductoPedido **pr_ped, int *n_ped ,int *n_pr_
         printf("Id_Lock: ");
         fflush(stdin);
         gets((*ped)[*n_ped].id_locker);
+
+        printf("Cod_prom: ");
+        fflush(stdin);
+        gets((*ped)[*n_ped].id_cod_prom);
 
 
     }else printf("Error en el lugar de entrega (añadir pedido)");
@@ -1806,8 +1808,9 @@ void menu_pedidos_prov(Pedido *ped, ProductoPedido *prod_ped,producto *prod, int
 
 void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_pr_ped,char id_tr_act[5], usu tipo_usu) {
 
-    int i,j,k,l,op,op_prod,n_comp_act;
+    int i,j,k,l,op,n_comp_act;
     char c='a',confirma,zero_11[11]="\0",zero_7[7]="\0";
+    char op_prod[8]="\0";
 
     system("cls");
 
@@ -1820,7 +1823,7 @@ void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *pe
 
             if ( i < *n_pr_ped && strcmp(prod_ped[i].id_transp,id_tr_act)==0 && prod_ped[i].est_pedido == enReparto){
 
-                printf("[%c].%s-%i-%i-%s\n",c,prod_ped[i].id_prod,prod_ped[i].unidades,prod_ped[i].importe,prod_ped[i].fecha_entrega);
+                printf("[%c].%s-%s-%i-%i-%s\n",c,prod_ped[i].id_pedido,prod_ped[i].id_prod,prod_ped[i].unidades,prod_ped[i].importe,prod_ped[i].fecha_entrega);
                 c++;
 
             }
@@ -1840,17 +1843,19 @@ void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *pe
 
                     do{
 
-                        printf("\nEscribe la id de un producto: ");
-                        scanf("%i", &op_prod);
+                        printf("\nEscribe la id del producto a entregar: ");
+                        fflush(stdin);
+                        gets(op_prod);
 
-                    }while( strcmp(prod_ped[op_prod-1].id_transp,id_tr_act)!=0 && prod_ped[op_prod-1].est_pedido != enReparto);
+                        i=0;
+                        while(i<*n_pr_ped && strcmp(op_prod,prod_ped[i].id_prod)!=0) i++;
 
-
+                    }while( i >= *n_pr_ped || prod_ped[i].est_pedido != enReparto);
 
                     do{
 
                         system("cls");
-                        printf("-------------------------------- Producto %i -------------------------\n\n",op);
+                        printf("-------------------------------- Producto %i -------------------------\n\n",i+1);
                         printf("Confirma la entrega de este pedido?(s/n): ");
                         fflush(stdin);
                         scanf("%c",&confirma);
@@ -1861,18 +1866,18 @@ void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *pe
                     if ( confirma == 'S' || confirma == 's'){
 
                         j=0;
-                        while ( j<*n_pedidos && strcmp(ped[j].id_pedido,prod_ped[op_prod-1].id_pedido)!=0){
+                        while ( j<*n_pedidos && strcmp(ped[j].id_pedido,prod_ped[i].id_pedido)!=0){
                             j++;
                         }
 
-                        prod_ped[op_prod-1].est_pedido = entregado;
+                        prod_ped[i].est_pedido = entregado;
 
                         if (strcmp(ped[j].lugar_entrega,"domicilio")==0){
 
-                            strcpy(prod_ped[op_prod-1].id_locker,zero_11);
-                            strcpy(prod_ped[op_prod-1].cod_locker,zero_7);
+                            strcpy(prod_ped[i].id_locker,zero_11);
+                            strcpy(prod_ped[i].cod_locker,zero_7);
 
-                            fecha_actual(prod_ped[op_prod-1].fecha_entr_dev,0);
+                            fecha_actual(prod_ped[i].fecha_entr_dev,0);
 
                             printf("\nLa entrega se ha confirmado.\n");
 
@@ -1888,13 +1893,13 @@ void menu_pedidos_transp ( Locker *lock, CompartimentoLocker *c_lock ,Pedido *pe
                                 l=0;
                                 while ( c_lock[l].Num_comp != n_comp_act ) l++;
 
-                                strcpy(prod_ped[op-1].id_locker,ped[j].id_locker);
-                                strcpy(prod_ped[op-1].cod_locker,c_lock[l].cod_locker);
+                                strcpy(prod_ped[i].id_locker,ped[j].id_locker);
+                                strcpy(prod_ped[i].cod_locker,c_lock[l].cod_locker);
 
-                            }
+                            }else printf("Error en la entrega por el locker.");
 
 
-                            fecha_actual(prod_ped[op_prod-1].fecha_entr_dev,0);
+                            fecha_actual(prod_ped[i].fecha_entr_dev,0);
 
 
 

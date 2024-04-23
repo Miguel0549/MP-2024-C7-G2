@@ -28,99 +28,173 @@ void menu_modificar_producto (int indice);
 static void listado_cat();
 static void modificar_categoria();
 
-void menu_cliente_prod ( )
+
+
+int reducir_stock(char *id,int resta)
 {
+    int error=0,encontrado=0,indice;
+
+    for (int i=0;i<tamanio_p&&encontrado==0;i++){
+
+        if (strcmp(id,array_prod[i].id_prod)==0)
+        {
+            encontrado=1;
+            indice=i;
+        }
+    }
+
+    if(encontrado==1&&resta<=array_prod[indice].stock){
+        array_prod[indice].stock -= resta;
+    }else{
+        error=1;
+    }
+    return error;
+}
+
+
+
+void menu_cliente_producto_conpedido( Pedido **ped , ProductoPedido **prod_ped , int *n_ped , int *n_pr_ped , char id_cliente[8] )
+{
+    char id[8]="\0";
+    producto  p;
+    int unidades;
+
+    char seleccion;
+    int encontrado=0,a;
+    seleccion=menu_cliente_prod();
+    if (seleccion!='3')
+    {
+        printf("Escriba la id del producto a comprar, o bien escriba 's' para salir\n");
+        fflush(stdin);
+        fgets(id,8,stdin);
+        for (int i=0;i<tamanio_p&&encontrado==0;i++)
+        {
+            if(strcmp(id,array_prod[i].id_prod)==0){
+
+                encontrado=1;
+                p = array_prod[i];
+
+                do{
+
+                    printf("Cuantas unidades desea comprar?: ");
+                    scanf("%i",&unidades);
+
+                }while( reducir_stock(p.id_prod,unidades) == 1);
+
+                hacer_pedido(ped,prod_ped,n_ped,n_pr_ped,unidades,p.importe,p.id_prod,id_cliente);
+
+
+            }
+
+        }
+    }
+    if (seleccion=='3'||encontrado==0)
+    {
+        strcpy(id,"0000000\0");
+    }
+    system("cls");
+}
+
+
+char menu_cliente_prod ( )
+{
+
+
     char seleccion,salida;
     int *asoc,i,j=0,a;//asoc es un vector de enteros cuyos elementos son las indices de los productos a buscar
     char nombre[51],idcat[8];
     system("cls");
     printf("Que desea realizar?\n1)Consulta por categoria\n2)Consulta por nombre\n3)Salir\n");
+    fflush(stdin);
     seleccion=getchar();
     switch (seleccion)
     {
-        case('1'): 
-        do{
-            system("cls");
-            lista_cat();
-            printf("Escriba el nombre de la categoria a buscar\n");
-            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
-            fgets(nombre,51,stdin);
-            quitaenter(nombre);
-            cataid(idcat,nombre);
-            if (idcat[0]=='-')
-            {
-                printf("Error, categoria no encontrada, ¿desea salir? s/n\n");
-                salida=getchar();
-            }
-            else
-            {
-                asoc=(int *)malloc((tamanio_p)*sizeof(int));
-                for (i=0;i<tamanio_p;i++)//Obtencion de asoc
+        case('1'):
+            do{
+                system("cls");
+                lista_cat();
+                printf("Escriba el nombre de la categoria a buscar\n");
+                while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
+                fgets(nombre,51,stdin);
+                quitaenter(nombre);
+                cataid(idcat,nombre);
+                if (idcat[0]=='-')
                 {
-                    if (strcmp(array_prod[i].id_categ,idcat)==0)
-                    {
-                        asoc[j]=i;
-                        j++;
-                    }
-                }
-                if (j==0)
-                {
-                    printf("No se ha encontrado ningun producto asociado a esa categoria.\n");
+                    printf("Error, categoria no encontrada, ¿desea salir? s/n\n");
+                    salida=getchar();
                 }
                 else
                 {
-                    asoc=(int *)realloc(asoc,j*sizeof(int));
-                    lista_prod_asoc(asoc,j);
-                    
+                    asoc=(int *)malloc((tamanio_p)*sizeof(int));
+                    for (i=0;i<tamanio_p;i++)//Obtencion de asoc
+                    {
+                        if (strcmp(array_prod[i].id_categ,idcat)==0)
+                        {
+                            asoc[j]=i;
+                            j++;
+                        }
+                    }
+                    if (j==0)
+                    {
+                        printf("No se ha encontrado ningun producto asociado a esa categoria.\n");
+                        seleccion='3';
+                        system("PAUSE");
+                    }
+                    else
+                    {
+                        asoc=(int *)realloc(asoc,j*sizeof(int));
+                        lista_prod_asoc(asoc,j);
+
+                    }
+                    free(asoc);
+
+                    salida='s';
                 }
-                free(asoc);
-                printf("Pulse enter para salir.\n");
-                system("PAUSE");
-                salida='s';
-            }
-        }while(salida!='s');
-        menu_cliente_prod();
-        break;
+            }while(salida!='s');
+
+            break;
         case('2'):
-        
+
             system("cls");
             printf("Escriba el nombre del producto a buscar\n");
             while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
             fgets(nombre,51,stdin);
             quitaenter(nombre);
-                asoc=(int *)malloc((tamanio_p)*sizeof(int));
-                for (i=0;i<tamanio_p;i++)//Obtencion de asoc
+            asoc=(int *)malloc((tamanio_p)*sizeof(int));
+            for (i=0;i<tamanio_p;i++)//Obtencion de asoc
+            {
+                if (strstr(array_prod[i].nombre,nombre)!=NULL)
                 {
-                    if (strstr(array_prod[i].nombre,nombre)!=NULL)
-                    {
-                        asoc[j]=i;
-                        j++;
-                    }
+                    asoc[j]=i;
+                    j++;
                 }
-                if (j==0)
-                {
-                    printf("No se ha encontrado ningun producto.\n");
-                }
-                else
-                {
-                    asoc=(int *)realloc(asoc,j*sizeof(int));
-                    lista_prod_asoc(asoc,j);
-                    
-                }
-                free(asoc);
-                printf("Pulse enter para salir.\n");
-                system("PAUSE");
-                salida='s';
-        
-        menu_cliente_prod();
-        break;
-        case ('3'):
-        break;
-        default:
-        menu_cliente_prod();
+            }
+            if (j==0)
+            {
+                printf("No se ha encontrado ningun producto.\n");
+                seleccion='3';
+            }
+            else
+            {
+                printf("Se han encontrado los siguientes productos\n");
+                asoc=(int *)realloc(asoc,j*sizeof(int));
+                lista_prod_asoc(asoc,j);
 
+            }
+            free(asoc);
+            system("PAUSE");
+            salida='s';
+            break;
+        case ('3'):
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
+            break;
+        default:
+            while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el Buffer de entrada
+            seleccion=menu_cliente_prod();
     }
+    return seleccion;
 }
+
 void menu_adminprov_prod (sesion ses)
 {
     int i,tamanio_asoc=0,*asoc,a;
@@ -141,6 +215,7 @@ void menu_adminprov_prod (sesion ses)
     printf("Que desea realizar?\n1)Alta de un nuevo prducto\n2)Busqueda de productos\n3)Baja de un producto\n4)Modificar un producto\n5)Salir\n");
     seleccion=getchar();
     system("cls");
+
     switch(seleccion)
     {
         case('1'):
@@ -171,7 +246,7 @@ void menu_adminprov_prod (sesion ses)
 }
 void menu_admin_cat()
 {
-    int a,seleccion;
+    int seleccion;
 
     do{
 
@@ -211,14 +286,17 @@ void alta_producto(char *id , int *n_admpr )
     do{
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpia el buffer de entrada
         printf("Escribe el nombre del producto (no puede contener -,maximo 15 caracteres)\nNombre: ");
+        fflush(stdin);
         fgets(p.nombre,16,stdin);
         quitaenter(p.nombre);
         printf("\nEscribe una descripcion del producto (no puede contener -,maximo 50 caracteres)\nDescripcion: ");
+        fflush(stdin);
         fgets(p.descrip,51,stdin);
         quitaenter(p.descrip);
         
         lista_cat();
         printf("Escribe la categoria que quieras asociar al producto.\nCategoria: ");
+        fflush(stdin);
         fgets(aux2,51,stdin);
         quitaenter(aux2);
         cataid(p.id_categ,aux2);
@@ -289,6 +367,7 @@ void alta_producto(char *id , int *n_admpr )
                 if((array_prod=(producto *)realloc(array_prod,(tamanio_p)*(sizeof(producto))))!=NULL)//agrega espacio al vector para poner el nuevo producto
                 {
                     array_prod[(tamanio_p)-1]=p;
+
                     error=0;
                     salida='s';
                 }
@@ -607,7 +686,11 @@ void guardar_producto ()
             fprintf(f,"%d",array_prod[i].entrega);
             fputc('-',f);
             fprintf(f,"%d",array_prod[i].importe);
-            fputc('\n',f);
+
+            if(i < tamanio_p - 1) {
+                fputc('\n',f);
+            }
+
         }
     }
     fclose(f);
@@ -941,6 +1024,11 @@ void borrar_producto(int indice)
     }
     tamanio_p=(tamanio_p)-1;
     array_prod=(producto *)realloc(array_prod,(tamanio_p)*sizeof(producto));
+
+    system("cls");
+    printf("Ha eliminado el producto exitosamente.\n");
+    system("pause");
+
 }
 //Cabecera: static void modificar_producto(sesion ses);
 //Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente
@@ -1186,7 +1274,7 @@ void modificar_categoria()
     quitaenter(descrip);
     if(cadena_valida(descrip)==0)
     {
-        printf("Va a modificar el siguiente valor.\nDescripcion %s <- %s\nQuiere continuar? Escriba 's' para confirmar.n",array_cat[indice].descrip,descrip);
+        printf("Va a modificar el siguiente valor.\nDescripcion %s <- %s\nQuiere continuar? Escriba 's' para confirmar\n",array_cat[indice].descrip,descrip);
         confirmar=getchar();
         while ((a = getchar()) != '\n' && a != EOF) { }//Limpieza de buffer
 

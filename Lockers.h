@@ -35,4 +35,6 @@ void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock);
 void volcado_lockers ( Locker *l, int *n_lock );
 void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock );
 
+void siguiente_id_desc_o_lock(char *vect_dest , char *vect_id , char *tipo);
+
 #endif //PROYECTO_MP_LOCKERS_H
