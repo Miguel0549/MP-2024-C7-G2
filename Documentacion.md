@@ -546,93 +546,183 @@ CASO 1
 
 ##### PROCEDIMIENTO MENU PARA ADMINISTRADORES O PROVEEDORES DE PRODUCTOS
 
-//Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
-//Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
-//Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
-void menu_adminprov_prod (sesion ses);
+ Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
 
+ Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
 
-//Cabecera: producto * volcar_producto()
-//Precondicion: 
-//Postcondición: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
-void cargar_producto();
+ Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
 
+ DATOS DE ENTRADA: dobles punteros a estructuras productos y categorías, así como sus tamaños  y la estructura sesión
 
-//Cabecera: void guardar_producto(producto *v)
-//Precondicion: v debe de ser una cadena de tipo producto definida de forma dinámica
-//Poscondición: Guarda todos los miembros de producto en el fichero "Productos.txt"
-void guardar_producto();
+ DATOS DE SALIDA: ninguno
 
+CASO 1
 
-//Cabecera: categoria * guardar_categoria()
-//Precondicion: 
-//Poscondición: Guarda todos los miembros de categoria en el fichero "Categorias.txt"
-void guardar_categoria();
+    Al ejecutarlo, imprime por pantalla un menú en el que nos permite hacer altas, bajas, modificaciones y listados
 
+##### FUNCIÓN VOLCADO PRODUCTOS
 
-//Cabecera: void volcar_categoria(categoria *v)
-//Precondicion: v debe de ser una cadena de tipo categoria definida de forma dinamica
-//Poscondicion: Vuelca toda la informacion de las categorias en el fichero "Categorias.txt", devolviendolo en un array
-void cargar_categoria();
+ Cabecera: producto * volcar_producto()
 
+ Precondicion: estructura incicializada
 
-//Cabecera: void alta_producto(char *id,producto *v)
-//Precondicion: El usuario actual debe ser administrador/proveedor.
-//Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
-//otorgandole la proxima id disponible
-void alta_producto();
+ Postcondición: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
 
+ DATOS DE ENTRADA: ninguno
 
-//Cabecera: void mod_prod(producto)
-//Precondicion: producto.id_prod=id del producto a modificar
-//Poscondicion: Cambia los datos del producto con id producto.id_prod
-void mod_prod(producto);
+ DATOS DE SALIDA: un vector producto
 
+ CASO 1
 
-//Cabecera: void Busqueda_prod_nombre(char *nombre)
-//Precondicion: nombre debe ser una cadena ya definida
-//Poscondicion: Escribe por pantalla todos los productos cuyo nombre coincida con n
-void Busqueda_prod_nombre(char *n);
+    Al ejecutarla, vuelca los contenidos del vector en el fichero "Productos.txt"
 
+##### FUNCIÓN VOLCADO CATEGORÍA
 
-//Cabecera: void Busqueda_prod_cat(char *id)
-//Precondicion: id debe pertenecer a una categoria
-//Poscondicion: Escribe por pantalla todos los productos 
-//que pertenecen a la categoria con identificador id
-void Busqueda_prod_cat(char *id);
+ Cabecera: categoria * guardar_categoria()
 
+ Precondicion: estructura inicializada
 
-//Cabecera: alta_categoria(categoria *v)
-//Precondicion: v es un vector definido de forma dinamica que contiene todas las categorias registradas
-//Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
-//y cuya id es la proxima disponible
-void alta_categoria(); 
+ Poscondición: Guarda todos los miembros de categoria en el fichero "Categorias.txt"
 
+ DATOS DE ENTRADA: ninguno
 
-//Cabecera: void baja_categoria(categoria **c,int *tamanio_c);
-//Precondicion: El usuario actual debe ser administrador
-//Poscondcion: Borra la categoria que especifique el usuario y ajusta el vector de acuerdo a ello
-void baja_categoria();
+ DATOS DE SALIDA:  un vector categoría
 
+CASO 1
 
-//Cabecera: void idacat(char *descrip,categoria *c,char *id)
-//Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
-//Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
-//Si no se encuentra, se devuelve en descrip "-\0";
-int idacat(char *descrip,char *id);
+    Al ejecutarla, vuelca los contenidos del vector en el fichero "Categorias.txt"
 
+##### PROCEDIMIENTO DAR DE ALTA PRODUCTO
 
-//Cabecera: cataid(char *id,categoria *c,char *descrip,int tamanio)
-//Precondicion: descrip debe estar definido y tener 51 elementos, el final de la cadena debe terminar en '\0'
-//Poscondicion: Devuelve en id la c.id_cat de la categoria cuyo c.descrip coincida con descrip.
-void cataid(char *id,char *descrip);
+ Cabecera: void alta_producto(char *id,producto *v)
 
+ Precondicion: El usuario actual debe ser administrador/proveedor.
 
-//Cabecera: menu_admin_cat();
-//Precondicion: El usuario actual debe ser un administrador
-//Poscondicion: Muestra por pantalla un menu el cual el usuario puede dar de alta, modificar o borrar cualquier categoria
-void menu_admin_cat();
+ Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
+ otorgandole la proxima id disponible
 
+ DATOS ENTRADA: una cadena con la id y el vector productos
+
+ DATOS SALIDA: ninguno
+
+ CASO 1
+
+    Al ejecutarlo, nos permite dar de alta un nuevo producto
+
+##### PROCEDIMIENTO BUSCAR PRODUCTO POR NOMBRE
+
+ Cabecera: void Busqueda_prod_nombre(char *nombre)
+
+ Precondicion: nombre debe ser una cadena ya definida
+
+ Poscondicion: Escribe por pantalla todos los productos cuyo nombre coincida con n
+
+ DATOS DE ENTRADA: cadena que contiene el producto a buscar
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejcutarlo, el procedimento encuentra en el vector e imprime las coincidencias por pantalla
+
+##### PROCEDIMIENTO BUSQUEDA PRODUCTO POR CATEGORÍA
+
+ Cabecera: void Busqueda_prod_cat(char *id)
+
+ Precondicion: id debe pertenecer a una categoria
+
+ Poscondicion: Escribe por pantalla todos los productos 
+ que pertenecen a la categoria con identificador id
+
+ DATOS DE ENTRADA: cadena con la id de la categoría
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarla, permite bucar productos en el vector según  la cadena introducida
+
+##### PROCEDIMEINTO ALTA CATEGORÍA
+
+ Cabecera: void alta_categoria(categoria *v)
+
+ Precondicion: v es un vector definido de forma dinamica que contiene todas las categorias registradas
+
+ Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
+ y cuya id es la proxima disponible
+
+ DATOS DE ENTRADA: el vector de categorías
+
+ DATOS DE SALIDA: ninguna
+
+CASO 1
+
+    Al ejecutarlo, permite introducir la información de una nueva categoría
+
+##### PROCEDIMIENTO BAJA CATEGORÍA 
+
+ Cabecera: void baja_categoria(categoria **c,int *tamanio_c)
+
+ Precondicion: El usuario actual debe ser administrador
+
+ Poscondcion: Borra la categoria que especifique el usuario y ajusta el vector de acuerdo a ello
+
+ DATOS DE ENTRADA: un doble puntero a categoría inicializado y un puntero a entero con su tamaño
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarla, pregunta por una selección y da de baja la catergoria tras preguntar confirmación
+
+##### PROCEDIMIENTO ID DE CATEGORÍA PARA DESCRIPCIÓN
+
+ Cabecera: void idacat(char *descrip,categoria *c,char *id)
+
+ Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
+
+ Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
+ Si no se encuentra, se devuelve en descrip "-\0";
+
+ DATOS DE ENTRADA: dos cadenas, una para la descripción, otra para la id y el vector de categorías
+
+ DATOS DE SALIDA: ninguno, ya que pasa por puntero la descripción de la categoría
+
+CASO 1
+
+    Al ejecutarla, modifica la cadena descrip en la que pone la descripción de la categoría con id seleccionada
+
+##### PROCEDIMIENTO DE DESCRIPCION A ID
+
+ Cabecera: cataid(char *id,categoria *c,char *descrip,int tamanio)
+
+ Precondicion: descrip debe estar definido y tener 51 elementos, el final de la cadena debe terminar en '\0'
+
+ Poscondicion: Devuelve en id la c.id_cat de la categoria cuyo c.descrip coincida con descrip.
+
+ DATOS DE ENTRADA: dos cadenas, la id, sin inicializar y la de descripción con la que se busca, también el tamaño 
+
+ DATOS DE SALIDA: ninguno, ya que modifica el puntero a char id
+
+CASO 1
+
+    Al ejecutarla, modifica la cadena id y pone la coincida con la descripción que se le pasa
+
+##### PROCEDIMIENTO MENU CATEGORÍAS DE ADMINISTRADOR
+
+ Cabecera: menu_admin_cat()
+
+ Precondicion: El usuario actual debe ser un administrador
+
+ Poscondicion: Muestra por pantalla un menu el cual el usuario puede dar de alta, modificar o borrar cualquier categoria
+
+ DATOS DE EMTRADA: ninguno
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+
+    Al ejecutarlo, se despliega un menu en el que seleccionar altas, bajas, buscquedas y asignaciones de productos a categorías
 
 ### MODULO DESCUENTOS
 #### Pruebas de caja negra del módulo descuentos
