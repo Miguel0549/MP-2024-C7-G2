@@ -264,111 +264,386 @@ Este módulo es el encargado de gestionar los fichero descuentos.txt y descuento
 
 ##### PROCEDIMIENTO OBTENER DATO
 
-Cabecera: static void obtener_dato_f(FILE **f,char *n)
+ Cabecera: static void obtener_dato_f(FILE **f,char *n)
 
-Precondicion: El tamaño de n debe ser mayor al dato que se debe introducir, f debe estar abierto en modo lectura y el cursor debe estar situado al principio del dato a leer
+ Precondicion: El tamaño de n debe ser mayor al dato que se debe introducir, f debe estar abierto en modo lectura y el cursor debe estar situado al principio del dato a leer
 
-Poscondicion: Almacena en n los caracteres leidos en f hasta que se encuentre '-' o '\n' o EOF y deja el cursor una posicion despues del dato leido
+ Poscondicion: Almacena en n los caracteres leidos en f hasta que se encuentre '-' o '\n' o EOF y deja el cursor una posicion despues del dato leido
 
-DATOS DE ENTRADA: doble puntero a tipo FILE, puntero a char 
+ DATOS DE ENTRADA: doble puntero a tipo FILE, puntero a char 
 
-DATOS DE SALIDA: ninguno, sólo modifica el puntero a char 
+ DATOS DE SALIDA: ninguno, sólo modifica el puntero a char 
 
 CASO 1 
 
     Al ejecutarla, vuelca en el puntero a char un campo concreto de la información en el fichero
 
+##### PROCEDIMIENTO SUMAR 1  A CADENA 
 
-static void suma1(char *s,int i); suma 1 a una cadena
-static void lista_cat();     
-static void lista_prod();
-static int cadena_valida(char *v); si la cadena tiene - y quita /n
-static void quitaenter(char *);     quitar /n y sustituye por /0
-static void lista_prod_asoc(int *asoc,int tamanio_asoc); 
-static void listado_prod();
-static void listado_prod_asoc(int *asoc,int tamanio_asoc);  //compacto
-static void baja_producto(int *asoc,sesion ses,int tamanio_asoc);
-static void borrar_producto(int indice);
+ Cabecera: void suma1(char *s,int i)
+
+ Precondicion: La cadena s tiene que tener mayor tamaño que i. i tiene que ser el numero de digitos de la cadena
+
+ Poscondicon: Suma 1 en base 10 a s de i digitos.
+
+ DATOS DE ENTRADA: entero i con el número de digitos de la cadena y un puntero a char con una cadena de tamaño mayor al entero i
+
+ DATOS DE SALIDA: ninguno, ya que modifica la cadena
+
+CASO 1
+
+    AL ejecutarla, modifica el contenido de la cadena y pone en él el siguiente número
+
+##### PROCEDIMIENTO LISTAR CATEGORÍA
+
+ Cabecera: static void lista_cat(categoria *lista)
+
+ Precondicion: Todos los campos de lista deben estar inicializados, tamanio <= nº de elementos de lista.
+
+ Poscondicon: Imprime por pantalla lista como una lista de las categorias
+
+ DATOS DE ENTRADA: un puntero a categoría 
+
+ DATOS DE SALIDA: ninguno, ya que sólo imprime por pantalla
+
+CASO 1
+
+    Al ejecutarla, imprime por pantalla todas las categorias dadas de alta
+
+CASO 2
+
+    Al ejecutarla, no imprime nada ya que no hay ninguna categoría dada de alta 
+
+##### PROCEDIMIENTO LISTAR PRODUCTOS
+
+ Cabecera: static void lista_prod(producto *lista,categoria *c)
+
+ Precondicion: Todos los campos de lista y c deben estar inicializados
+
+ Poscondicion: Imprime por pantalla lista como una lista de los productos
+
+ DATOS DE ENTRADA: un puntero a producto y otro a categoria
+
+ DATOS DE SALIDA: ninguno, ya que sólo imprime por pantalla
+
+CASO 1
+
+    Al ejecutarla, imprime por pantalla todas los productos dadas de alta
+
+CASO 2
+
+    Al ejecutarla, no imprime nada ya que no hay ningún producto dado de alta
+
+
+##### FUNCIÓN CADENA VÁLIDA
+
+ Cabecera: static int cadena_valida(char *v,int size)
+
+ Precondicion: v tiene que ser una cadena obtenida mediante fgets y size el tamaño de la cadena
+
+ Poscondicion: Devuelve 0 si la cadena cumple con las restricciones y devuelve distinto de 0 si se produce un error  y establece '/n' como fin de la cadena, si lo hay.
+
+ DATOS DE ENTRADA: cadena a comprobar 
+
+ DATOS DE SALIDA: 0 si la cadena cumple las restricciones y distinto de 0 si hay un error
+
+CASO 1
+
+    Al ejecutarla, devuelve 0 porque la cadena cumplpe con las condiciones
+
+CASO 2
+    Al ejecutarla, devuelve distinto de 0 porque la cadena  tiene -
+
+##### PROCEDIMIENTO QUITAR SALTO DE LÍNEA
+
+ Cabecera: static void quitaenter(char *c)
+
+ Precondicion: La cadena debe estar definida con un '/0'
+
+ Poscondicion: Establece '\n', si no lo hay, como final de la cadena
+
+ DATOS DE ENTRADA: una cadena
+ 
+ DATOS DE SALIDA: ninguna, ya  que sólo modifica la cadena
+
+CASO 1
+
+    Al ejecutarlo, quita el salto de linea de la cadena pasada por parámetro
+
+##### PROCEDIMIENTO LISTAR PRODUCTOS 
+
+ Cabecera: static void lista_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_asoc)
+
+ Precondicion: Todas las entradas asignadas, todos los elementos de asoc deben ser menores que el numero de elementos del vector p
+
+ Poscondicion: Imprime por pantalla todos los productos que apunte cada indice de asoc en p
+
+ DATOS DE ENTRADA: vector productos ,vector categorías y vector de enteros que asocie índices, tamaño de las categorías 
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarlo, imprime por pantalla los productos que apunte cada índice del vector asoc
+
+CASO 2
+
+    Al ejecutarlo, no imprime nada ya que no hay ningún producto guardado en memoria
+
+
+##### PROCEDIMIENTO LISTADO (COMPLETO) DE PRODUCTOS
+
+ Cabecera: static void listado_prod(producto *p,categoria *c,int tamanio_c,int tamanio_p)
+
+ Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
+
+ Poscondicion: Muestra por pantalla una lista de los productos 
+
+ DATOS DE ENTRADA: vector de productos y de categorñias y sus respectivos tamaños
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+
+    Al ejecutarlo, muetra por pantalla un listado  de los datos de productos
+
+CASO 2
+
+    Al ejecutarlo, no muestra nada por pantalla ya que no hay ningún producto en el vector
+
+##### PROCEDIMIENTO LISTADO (COMPACTO) DE PRODUCTOS
+
+ Cabecera: static void listado_prod_asoc(producto *p,int *asoc,categoria *c,int tamanio_c,int tamanio_p)
+
+ Precondicion: p y c definidas, tamanio_c y tamanio_p son equivalentes al numero de elementos de p y de c
+
+ Poscondicion: Muestra por pantalla una lista de los productos de forma mas compacta a traves de un vector que asocia las posiciones de los productos
+
+ DATOS DE ENTRADA: vector productos y vector asoc, así como sus tmaaños
+
+ DATOS DE SALIDA: ninguno
+ 
+ CASO 1
+
+    Al ejecutarlo, muetra por pantalla un listado compacto de los datos de productos
+
+CASO 2
+
+    Al ejecutarlo, no muestra nada por pantalla ya que no hay ningún producto en el vector
+
+##### PROCEDIMIENTO DAR DE BAJA PRODUCTO
+
+ Cabecera: static void baja_producto(int *asoc,sesion ses,int tamanio_asoc)
+
+ Precondición: sea asoc un puntero a entero inicializado con los valores de losínidces qasociadno categorías con productos y su tamaño en un entero, así com una estructura sesion 
+
+ Postcondición: ninguna
+
+ DATOS DE ENTRADA: vector asoc, su tamaño y una variable sesion
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+
+    Al ejecutarla, pregunta confirmación y da de baja un producto
+
+##### PROCEDIMIENTO BORRAR PRODUCTO
+
+ Cabecera: static void borrar_producto(producto **p,int *tamanio_prod,int indice)
+
+ Precondicion: *tamanio_prod debe ser el numero de indices de *p, indice<*tamanio_prod
+
+ Poscondicion: borra el elemento indice del vector p y reduce el tamaño del vector en unostatic 
+
+ DATOS DE ENTRADA: doble puntero a estructura productos, su tamaño y el indice que se desea eliminar
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+    
+    Al ejecutarlo, borra el producto en la posición del vector del índice introducido
+
+##### PROCEDIMIENTO MODIFICAR PRODUCTO
+
+ Cabecera: 
 static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc);
-static void menu_modificar_producto (int indice);
-static void listado_cat();  //compacto
-static void modificar_categoria();
 
-//Cabecera: void menu_cliente_prod (producto **p,categoria **c,int *tamanio_p, int *tamanio_c);
-//Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
-//Poscondicion: Muestra en pantalla el menu de productos para el cliente
-void menu_cliente_prod ();
+ Precondicion: array_prod y array_cat deben estar cargados mediante volcar_producto y volcar_categoria. tamanio_p y tamanio_c deben ser el numero de elementos de array_prod y arra_cat respectivamente
+
+ Poscondicion: Muestra por pantalla un menu por el que el usuario puede modificar cualquier caracteristica de los productos que tenga permiso modificar.
+ 
+ DATOS DE ENTRADA: una estructura sesión, el vector asoc y el tamaño del mismo
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+    
+    Al ejecutarlo, permite modificar independientemente todos los parámetros de productos
+
+##### PROCEDIMIENTO MENU MODIFICAR PRODUCTO
+
+ Cabecera: static void menu_modificar_producto (int indice)
+
+ Precondicion: indice menor que tamanio_p
+
+ Poscondicion: Muestra por pantalla un menu recursivo en el que el usuario puede modificar el producto de elemento indice en el vector array_prod  
+
+ DATOS DE ENTRADA: el índice del producto a modificar
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarlo, se imprime un menú con varias opciones que permiten modificar los descuentos
+
+##### PROCEDIMIENTO LISTAR CATEGORÍA
+
+ Cabecera: static void listado_cat()
+
+ Precondicion: array_categoria debe estar definido y tamanio_cat debe ser menor o igual al numero de elementos
+
+ Poscondicion: Muestra por pantalla todas las categorias de forma mas compacta
+
+ DATOS DE ENTRADA: ninguno
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarla, muestra por pantalla todas las categoras en el vector de estructuras categorías
+
+##### PROCEDIMIENTO MODIFICAR PRODUCTO
+
+ Cabecera: static void modificar_categoria();
+
+ Precondicion: el usuario debe de ser administrador
+
+ Poscondicion:  Muestra por pantalla un menu interactivo en el que el usuario puede cambiar el nombre de cualquier categoria
+ 
+ DATOS DE ENTRADA: ninguno
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+    
+    Al ejecutarlo, permite , a través de un menú, modificar el nombre de cualquier categoría
+
+##### PROCEDIMEINTO MENU PARA CLIENTE DE PRODUCTO
+
+ Cabecera: void menu_cliente_prod (producto **p,categoria **c,int *tamanio_p, int *tamanio_c);
+
+ Precondicion: p y c deben estar previamente definidos mediante las funciones volcar_producto y volcar_categoria
+
+ Poscondicion: Muestra en pantalla el menu de productos para el cliente
+
+ DATOS DE ENTRADA: dos dobles punteros a estructuras productos y categorías, así como sus tamaños
+
+ DATOS DE SALIDA: ninguno
+
+ CASO 1
+
+    Al ejecutarlo, imprime por pantalla un menú en el que se pueden listar y buscar productos
+
+##### PROCEDIMIENTO MENU PARA ADMINISTRADORES O PROVEEDORES DE PRODUCTOS
+
 //Cabecera: void menu_adminprov_prod (producto **p,categproa *c,int *tamanio_p,int tamanio_c,sesion ses)
 //Precondicion: sesion debe ser un administrador o proveedor y estar registrado en el sistema
 //Poscondicion: Muestra en pantalla el menu de productos para el administrador o proveedor y muestra los productos asociados a esa sesion
 void menu_adminprov_prod (sesion ses);
+
+
 //Cabecera: producto * volcar_producto()
 //Precondicion: 
-//poscondicion: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
+//Postcondición: Vuelca todos la informacion de los productos en el fichero "Productos.txt", devolviéndolo en un array
 void cargar_producto();
+
+
 //Cabecera: void guardar_producto(producto *v)
 //Precondicion: v debe de ser una cadena de tipo producto definida de forma dinámica
 //Poscondición: Guarda todos los miembros de producto en el fichero "Productos.txt"
 void guardar_producto();
+
+
 //Cabecera: categoria * guardar_categoria()
 //Precondicion: 
 //Poscondición: Guarda todos los miembros de categoria en el fichero "Categorias.txt"
 void guardar_categoria();
+
+
 //Cabecera: void volcar_categoria(categoria *v)
 //Precondicion: v debe de ser una cadena de tipo categoria definida de forma dinamica
 //Poscondicion: Vuelca toda la informacion de las categorias en el fichero "Categorias.txt", devolviendolo en un array
 void cargar_categoria();
+
+
 //Cabecera: void alta_producto(char *id,producto *v)
 //Precondicion: El usuario actual debe ser administrador/proveedor.
 //Poscondicion: Lee todos los campos de producto por teclado y los escribe al final del vector,
 //otorgandole la proxima id disponible
 void alta_producto();
+
+
 //Cabecera: void mod_prod(producto)
 //Precondicion: producto.id_prod=id del producto a modificar
 //Poscondicion: Cambia los datos del producto con id producto.id_prod
 void mod_prod(producto);
+
+
 //Cabecera: void Busqueda_prod_nombre(char *nombre)
 //Precondicion: nombre debe ser una cadena ya definida
 //Poscondicion: Escribe por pantalla todos los productos cuyo nombre coincida con n
 void Busqueda_prod_nombre(char *n);
-//cabecera: void Busqueda_prod_cat(char *id)
+
+
+//Cabecera: void Busqueda_prod_cat(char *id)
 //Precondicion: id debe pertenecer a una categoria
 //Poscondicion: Escribe por pantalla todos los productos 
 //que pertenecen a la categoria con identificador id
 void Busqueda_prod_cat(char *id);
+
+
 //Cabecera: alta_categoria(categoria *v)
 //Precondicion: v es un vector definido de forma dinamica que contiene todas las categorias registradas
 //Poscondicion: Introduce en el vector v una nueva categoria cuya descripcion es introducida por teclado
 //y cuya id es la proxima disponible
 void alta_categoria(); 
+
+
 //Cabecera: void baja_categoria(categoria **c,int *tamanio_c);
 //Precondicion: El usuario actual debe ser administrador
 //Poscondcion: Borra la categoria que especifique el usuario y ajusta el vector de acuerdo a ello
 void baja_categoria();
+
+
 //Cabecera: void idacat(char *descrip,categoria *c,char *id)
 //Precondicion: id deben ser 4 "digitos" sin signo, terminado en '\0'. No puede ser "0000"
 //Poscondicion: Devuelve en descrip v.descripcion del elemento de v cuya id coincida con v.id_cat.
 //Si no se encuentra, se devuelve en descrip "-\0";
 int idacat(char *descrip,char *id);
+
+
 //Cabecera: cataid(char *id,categoria *c,char *descrip,int tamanio)
 //Precondicion: descrip debe estar definido y tener 51 elementos, el final de la cadena debe terminar en '\0'
 //Poscondicion: Devuelve en id la c.id_cat de la categoria cuyo c.descrip coincida con descrip.
 void cataid(char *id,char *descrip);
+
+
 //Cabecera: menu_admin_cat();
 //Precondicion: El usuario actual debe ser un administrador
 //Poscondicion: Muestra por pantalla un menu el cual el usuario puede dar de alta, modificar o borrar cualquier categoria
 void menu_admin_cat();
+
 
 ### MODULO DESCUENTOS
 #### Pruebas de caja negra del módulo descuentos
 
 ##### crear_fichero _descuentos
 
- cabecera: void crear_fichero_descuentos()
+ Cabecera: void crear_fichero_descuentos()
 
- precondición: ninguna
+ Precondición: ninguna
 
- postcondición:crea el fichero descuentos.txt sino existe e imprime un mensaje de error si es el caso
+ Postcondición:crea el fichero descuentos.txt sino existe e imprime un mensaje de error si es el caso
 
 CASO 1
 
@@ -376,11 +651,11 @@ CASO 1
 
 ##### crear_fichero_descuenros_clientes()
 
- cabecera: void crear_fichero_descuentos_clientes()
+ Cabecera: void crear_fichero_descuentos_clientes()
 
- precondición: ninguna
+ Precondición: ninguna
 
- postcondición:crea el fichero descuentos_clientes.txt sino existe e imprime un mensaje de error si es el caso
+ Postcondición:crea el fichero descuentos_clientes.txt sino existe e imprime un mensaje de error si es el caso
 
 CASO 1
 
@@ -388,11 +663,11 @@ CASO 1
 
 ##### PROCEDIMIENTO CARGAR DESCUENTOS 
 
- cabecera:void carga_descuentos(Descuentos **d )
+ Cabecera:void carga_descuentos(Descuentos **d )
 
- precondición: recibe como doble puntero el vector de estructura
+ Precondición: recibe como doble puntero el vector de estructura
 
- postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+ Postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
 
 DATOS DE ENTRADA: el vector de estructura Descuentos 
 
@@ -404,11 +679,11 @@ CASO 1
 
 ##### PROCEDIMIENTO CARGAR DESCUENTOS CLIENTES
 
- cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
+ Cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
 
- precondición: recibe como doble puntero el vector de estructura
+ Precondición: recibe como doble puntero el vector de estructura
 
- postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+ Postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
 
 DATOS DE ENTRADA: el vector de estructura Descuentos_clientes
 
@@ -420,11 +695,11 @@ CASO 1
 
 ##### PROCEDIMIENTO VOLCADO DESCUENTOS
     
- cabecera: void volcado_descuentos(Descuentos **d)
+ Cabecera: void volcado_descuentos(Descuentos **d)
 
- precondición:  recibe como doble puntero el vector de estructuras, inicializado
+ Precondición:  recibe como doble puntero el vector de estructuras, inicializado
 
- postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt
+ Postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt
 
 DATOS DE ENTRADA: el vector de estructuras Descuentos
 
@@ -436,11 +711,11 @@ CASO 1
 
 ##### PROCEDIMIENTO VOLCADO DESCUENTOS CLIENTES
     
- cabecera: void volcado_descuentos(Descuentos_clientes **dc)
+ Cabecera: void volcado_descuentos(Descuentos_clientes **dc)
 
- precondición:  recibe como doble puntero el vector de estructuras, inicializado
+ Precondición:  recibe como doble puntero el vector de estructuras, inicializado
 
- postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos_clientes.txt
+ Postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos_clientes.txt
 
 DATOS DE ENTRADA: el vector de estructuras Descuentos_clientes
 
@@ -452,11 +727,11 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR DESCUENTOS
 
-cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
+Cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
 
-precondición: *d inicializado
+Precondición: *d inicializado
 
-postcondición: lista los descuentos actuales en el vector
+Postcondición: lista los descuentos actuales en el vector
 
 DATOS DE ENTRADA: el vector de descuentos, así como un puntero que apunta al número total de descuentos
 
@@ -467,9 +742,9 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR DESCUENTOS CON ID
 
-cabecera:void listar_descuentos_propios(char*Id_cliente)
+Cabecera:void listar_descuentos_propios(char*Id_cliente)
 
-precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
+Precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
 
 postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
 
@@ -488,11 +763,11 @@ CASO 2
 ##### FUCNIÓN COMPRIOBAR DESCUENTO
 
 
-cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
+Cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
 
-precondición: **dc inicializado e Id_cod un código de descuento válido
+Precondición: **dc inicializado e Id_cod un código de descuento válido
 
-postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
+Postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
 
 DATOS DE ENTRADA: el vector de estructuras descuentos_clientes y una cadena con el código de un descuento existente
 
@@ -509,11 +784,11 @@ CASO 2
 
 ##### PROCEDIMIENTO NUEVO DESCUENTO
 
-cabecera: void nuevo_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc,int *num_desc_clien)
+Cabecera: void nuevo_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc,int *num_desc_clien)
 
-precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+Precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
 
-postcondición: ninguna
+Postcondición: ninguna
 
 DATOS DE ENTRADA: dos vectores de estructuras y dos punteros a enteros que indican el número de elemento de los mismos
 
@@ -526,11 +801,11 @@ CASO 1
 
 ##### PROCEDIMIENTO MODIFICAR DESCUENTO
 
-cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien);
+Cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien);
 
-precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+Precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
 
-postcondición: ninguna
+Postcondición: ninguna
 
 DATOS DE ENTRADA: dos vectores de estructuras y dos punteros a enteros que indican el número de elemento de los mismos
 
@@ -542,11 +817,11 @@ CASO 1
 
 ##### PROCEDIMIENTO FECHA ACTUAL
 
-cabecera: void fecha_actual(char fecha_act[11])
+Cabecera: void fecha_actual(char fecha_act[11])
 
-precondición: fecha_act una cadena de 11 caracteres
+Precondición: fecha_act una cadena de 11 caracteres
 
-postcondición: ninguna, ya que modifica la cadena que se le pasa por parámetro
+Postcondición: ninguna, ya que modifica la cadena que se le pasa por parámetro
 
 DATOS DE ENTRADA: una cadena de 11 caracteres, si bien sólo se usará como puntero para modificarla
 
@@ -558,11 +833,11 @@ CASO 1
 
 ##### FUNCIÓN DE CADENA A FECHA
 
-cabecera: fecha de_string_a_fecha(char *cadena)
+Cabecera: fecha de_string_a_fecha(char *cadena)
 
-precondición: cadena inicializada con una fecha válida
+Precondición: cadena inicializada con una fecha válida
 
-postcondición: convierte cadena en una fecha y lo devuelve
+Postcondición: convierte cadena en una fecha y lo devuelve
 
 DATOS DE ENTRADA: una cadena de 11 caracteres
 
@@ -574,9 +849,9 @@ CASO 1
 
 ##### FUNCION COMPARAR FECHAS
 
-cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
-precondicion: fecha1 y fecha2 inicializados
-postcondicion: devuelve => =0 - fechas iguales
+Cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
+Precondición: fecha1 y fecha2 inicializados
+Postcondición: devuelve => =0 - fechas iguales
                            >0 - fechas1 mayor que fecha2
                            <0 - fecha1 menor que fecha2
 
@@ -599,11 +874,11 @@ CASO 3
 
 ##### PROCEDIMIENTO LEER CADENA
 
-cabecera: void leer_string(char * cadena, int elem)
+Cabecera: void leer_string(char * cadena, int elem)
 
-precondición: ninguna
+Precondición: ninguna
 
-postcondición: lee en cadena la cadena introducida por el usuario
+Postcondición: lee en cadena la cadena introducida por el usuario
 
 DATOS DE ENTRADA: un puntero a char que funciona como cadena y el número de elementos que se deseaan leer
 
@@ -615,11 +890,11 @@ CASO 1
 
 ##### FUNCIÓN NÚMERO DE DESCUENTOS DESDE FICHERO
 
-cabecera:int num_desc_desde_fich()
+Cabecera:int num_desc_desde_fich()
 
-precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
+Precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
 
-postcondición:devuelve el número de líneas que tiene el fichero
+Postcondición:devuelve el número de líneas que tiene el fichero
 
 DATOS DE ENTRADA: niguno
 
@@ -631,11 +906,11 @@ CASO 1
 
 ##### FUNCIÓN NÚMERO DE DESCUENTOS_CLIENTE DESDE FICHERO
 
-cabecera:int num_desc_clien_desde_fich()
+Cabecera:int num_desc_clien_desde_fich()
 
-precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
+Precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
 
-postcondición:devuelve el número de líneas que tiene el fichero
+Postcondición:devuelve el número de líneas que tiene el fichero
 
 DATOS DE ENTRADA: niguno
 
@@ -648,11 +923,11 @@ CASO 1
 ##### FUNCIÓN INDICE A PARTIR DE ID DE DESCUENTO
 
 
-cabecera:int indice_con_id_descuentos(Descuentos **vector_descuentos,char*id_desc,int num_desc)
+Cabecera:int indice_con_id_descuentos(Descuentos **vector_descuentos,char*id_desc,int num_desc)
 
-precondición: vector cliente un vector de estructura descuentos, id_desc una cadena y num_desc el número de descuentos registrados del vector
+Precondición: vector cliente un vector de estructura descuentos, id_desc una cadena y num_desc el número de descuentos registrados del vector
 
-postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+Postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
 
 DATOS DE ENTRADA: vector de estructuras descuentos, id del descuento, número de descuentos
 
@@ -669,11 +944,11 @@ CASO 2:
 ##### FUNCIÓN INDICE A PARTIR DE ID DE DESCUENTO EN DESCUENTOS_CLIENTES
 
 
-cabecera:int indice_con_id_descuentos_clien(Descuentos_clientes **vector_descuentos_cl,char*id_desc,int num_desc_cl)
+Cabecera:int indice_con_id_descuentos_clien(Descuentos_clientes **vector_descuentos_cl,char*id_desc,int num_desc_cl)
 
-precondición: vector cliente un vector de estructura descuentos_clientes, id_desc una cadena y num_desc el número de descuentos_clientes registrados del vector
+Precondición: vector cliente un vector de estructura descuentos_clientes, id_desc una cadena y num_desc el número de descuentos_clientes registrados del vector
 
-postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+Postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
 
 DATOS DE ENTRADA: vector de estructuras descuentos_clientes, id del descuento, número de descuentos_clientes
 
@@ -689,11 +964,11 @@ CASO 2:
 
 ##### PROCEDIMIENTO BORRAR DESCUENTO CON ID
 
- cabecera: void borrar_descuento_con_id(Descuentos**vector_descuento,Descuentos_clientes**dc,char *Id_descuento, int *n_descuento,int*n_descuento_cl){
+ Cabecera: void borrar_descuento_con_id(Descuentos**vector_descuento,Descuentos_clientes**dc,char *Id_descuento, int *n_descuento,int*n_descuento_cl){
 
- precondición: vectores a estructuras inicializadas, id de descuento válida y n_descuento y n_descuento_cl elementos de los respectivos vectores de estructuras
+ Precondición: vectores a estructuras inicializadas, id de descuento válida y n_descuento y n_descuento_cl elementos de los respectivos vectores de estructuras
 
- postcondición: borra el descuento con la id introducida
+ Postcondición: borra el descuento con la id introducida
 
 DATOS DE ENTRADA: vectores de estructuras descuentos y descuentos_clientes, su número de elementos y la id de un descuento
 
@@ -802,9 +1077,9 @@ Si tenemos 1 descuentos y 3 descuentos clientes, por lo que cada vector tiene 3 
 
 vector_descuentos[0].id_desc= black001              vector_descuentos_clientes[0].id_cod= black001
 
-                                                    vector_descuentos_clientes[1].id_cod= black002
+vector_descuentos[1].id_desc= no existente          vector_descuentos_clientes[1].id_cod= black002
 
-                                                    vector_descuentos_clientes[2].id_cod= black003
+vector_descuentos[2].id_desc= no existente          vector_descuentos_clientes[2].id_cod= black003
 
 
 
