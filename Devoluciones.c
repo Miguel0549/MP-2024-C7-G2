@@ -975,12 +975,105 @@ void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devolucion
 
 
 
-void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u){
+void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido **prod_ped, Devoluciones **dev,Locker  **lock ,CompartimentoLocker **c_lock, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u) {
+
+    int i, j,k,l,m, n, error;
+    char id_prod_ret[8],c;
 
 
+    system("cls");
 
-    
+    n = 0;
+    error = 1;
+
+
+    printf("---------------------- Todas sus devoluciones ---------------------\n\n");
+
+
+    for (i = 0; i < *n_dev; i++) {
+
+        j = 0;
+        while (j < *n_prod_ped && strcmp((*dev)[i].id_prod, (*prod_ped)[j].id_prod) != 0) j++;
+
+        if (strcmp(id_transp, (*prod_ped)[j].id_transp) == 0 && (*prod_ped)[j].est_pedido == enLocker) {
+
+            error = 0;
+
+            printf("[%i].%s-%s-%s", n, (*dev)[i].id_pedido, (*dev)[i].id_prod, (*dev)[i].fecha_dev);
+
+            if ((*dev)[i].est_dev == pediente) {
+
+                printf("-pendiente-%s\n", (*dev)[i].fecha_cad);
+
+            } else if ((*dev)[i].est_dev == aceptado) {
+
+                printf("-aceptado-%s\n", (*dev)[i].fecha_acp);
+
+            } else if ((*dev)[i].est_dev == denegado) {
+
+                printf("-denegado\n");
+
+            } else if ((*dev)[i].est_dev == enviado) {
+
+                printf("-enviado\n");
+
+            } else if ((*dev)[i].est_dev == recibido) {
+
+                printf("-recibido\n");
+
+            }
+            n++;
+
+        }
+
+    }
+
+    printf("---------------------------------------------------------------\n");
+
+    if (error != 1) {
+
+        do {
+
+            printf("Escribe el id del producto que quiera retornar o escriba 's' para salir: ");
+            fflush(stdin);
+            gets(id_prod_ret);
+
+            j = 0;
+            while (j < *n_prod_ped && strcmp(id_prod_ret, (*prod_ped)[j].id_prod) != 0) j++;
+
+            if (strcmp(id_transp, (*prod_ped)[j].id_transp) == 0 && (*prod_ped)[j].est_pedido == enLocker) {
+
+                system("cls");
+                printf("Confirma la devolucion de este pedido?(s/n): ");
+                fflush(stdin);
+                scanf("%c",&c);
+
+                k=0;
+                while( k<*n_dev && strcmp((*dev)[k].id_prod,id_prod_ret)!=0) k++;
+
+                (*dev)[k].est_dev = recibido;
+                fecha_actual((*prod_ped)[j].fecha_entr_dev,0);
+
+                l=0;
+                while (strcmp((*prod_ped)[j].cod_locker,(*c_lock)[l].cod_locker)!=0) l++;
+
+                (*c_lock)[l].est_locker = vacio;
+
+                strcpy((*prod_ped)[j].id_locker,"\0\0\0\0\0\0\0\0\0\0");
+                strcpy((*prod_ped)[j].cod_locker,"\0\0\0\0\0\0");
+
+                m=0;
+                while (strcmp((*lock)[m].id_locker,(*c_lock)[l].id_locker)!=0 ) m++;
+
+                (*lock)[m].Num_compOcup--;
+
+            }
+
+        } while ( (strcmp(id_transp, (*prod_ped)[j].id_transp) != 0 || (*prod_ped)[j].est_pedido != enLocker) && strcmp(id_prod_ret,"s")!=0);
+
+        (*prod_ped)[j].est_pedido = devuelto;
+
+
+    }else printf("No tiene ninguna devolucion asignados");
 
 }
-
-

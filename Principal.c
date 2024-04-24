@@ -54,7 +54,7 @@ void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transpor
                     break;
                 case 3:
 
-                    //menu_devoluciones_transportistas(ped,pr_p,dev,n_dev,n_ped,n_pr_p,transp[id_usu_act].Id_transp,transportista);
+                    menu_devoluciones_transportistas(ped,&pr_p,&dev,&lock,&c_lock,n_dev,n_ped,n_pr_p,transp[id_usu_act].Id_transp,transportista);
 
                     system("cls");
 
@@ -275,7 +275,7 @@ void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportist
                     break;
                 case 3:
 
-                    //menu_pedidos_prov(ped,pr_p,prod,n_ped,n_pr_p,n_prod,proveedor);
+                    menu_pedidos_prov(ped,&pr_p,n_ped,n_pr_p,admp[id_usu_act].Id_empresa,proveedor);
 
                     system("cls");
 
@@ -344,7 +344,7 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
                     break;
                 case 2:
 
-                    listado_cliente(client,n_cliente);
+                    listado_cliente(&client,n_cliente);
 
                     system("cls");
 
@@ -372,7 +372,7 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
                     break;
                 case 6:
 
-                    menu_pedidos_admin(ped,pr_p,n_ped,n_pr_p,admin);
+                    menu_pedidos_admin(&ped,pr_p,n_ped,n_pr_p,admin);
 
                     system("cls");
 
@@ -429,10 +429,10 @@ void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *t
 
 }
 
-void listado_cliente ( Cliente *clt , int *n_clt ){
+void listado_cliente ( Cliente **clt , int *n_clt ){
 
-    int i,j,op;
-    char c='a',resp,op_cl[8],id_cliente_borrar[8]="\0";
+    int i,j,op,n=0;
+    char op_cl[8],id_cliente_borrar[8]="\0";
 
     do{
 
@@ -440,10 +440,10 @@ void listado_cliente ( Cliente *clt , int *n_clt ){
 
         for ( i=0 ; i<*n_clt ; i++ ){
 
-            printf("[%c].%s-%s\n",c,clt[i].Id_cliente,clt[i].Nombr_cliente);
+            printf("[%i].%s-%s\n",n,(*clt)[i].Id_cliente,(*clt)[i].Nombr_cliente);
 
 
-            c++;
+            n++;
         }
 
         printf("\n\n-----------------------------------------------\n");
@@ -458,7 +458,7 @@ void listado_cliente ( Cliente *clt , int *n_clt ){
             switch (op) {
                 case 1:
 
-                    nuevo_cliente(&clt,n_clt,NULL);
+                    nuevo_cliente(clt,n_clt,NULL);
 
                     system("cls");
 
@@ -470,7 +470,7 @@ void listado_cliente ( Cliente *clt , int *n_clt ){
                     gets(id_cliente_borrar);
 
 
-                    borrar_cliente_con_id(&clt,id_cliente_borrar,n_clt);
+                    borrar_cliente_con_id(clt,id_cliente_borrar,n_clt);
 
                     system("cls");
 
@@ -484,14 +484,14 @@ void listado_cliente ( Cliente *clt , int *n_clt ){
                         gets(op_cl);
 
                         j=0;
-                        while ( j<*n_clt && strcmp(op_cl,clt[j].Id_cliente) !=0) j++;
+                        while ( j<*n_clt && strcmp(op_cl,(*clt)[j].Id_cliente) !=0) j++;
 
                         if ( j >= *n_clt) printf("\nEscribe un id valido\n");
 
                     }while ( j >= *n_clt);
 
 
-                    modificar_cliente(&clt,j,admin);
+                    modificar_cliente(clt,j,admin);
 
                     system("cls");
 
@@ -672,7 +672,7 @@ void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , i
 
 
 
-void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
+void listado_proveedores ( Adminprov **admpr , int *n_admpr ,usu tipo_usu){
 
     int i,j,op;
     char c='a',id_proveedor[5]="\0";
@@ -685,9 +685,9 @@ void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
 
         for ( i=0 ; i<*n_admpr ; i++ ){
 
-            if (strcmp(admpr[i].Nombre,"ESIZON") != 0){
+            if (strcmp((*admpr)[i].Nombre,"ESIZON") != 0){
 
-                printf("[%c].%s-%s\n",c,admpr[i].Id_empresa,admpr[i].Nombre);
+                printf("[%c].%s-%s\n",c,(*admpr)[i].Id_empresa,(*admpr)[i].Nombre);
                 c++;
 
             }
@@ -706,7 +706,7 @@ void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
             switch (op) {
                 case 1:
 
-                    nuevo_adminprov(&admpr,n_admpr,admin,NULL);
+                    nuevo_adminprov(admpr,n_admpr,admin,NULL);
 
                     system("cls");
 
@@ -717,7 +717,7 @@ void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
                     fflush(stdin);
                     gets(id_proveedor);
 
-                    borrar_adminprov_con_id(&admpr,id_proveedor,n_admpr);
+                    borrar_adminprov_con_id(admpr,id_proveedor,n_admpr);
 
                     system("cls");
 
@@ -731,14 +731,14 @@ void listado_proveedores ( Adminprov *admpr , int *n_admpr ,usu tipo_usu){
                         gets(id_proveedor);
 
                         j=0;
-                        while ( j<*n_admpr && strcmp(id_proveedor,admpr[j].Id_empresa) !=0) j++;
+                        while ( j<*n_admpr && strcmp(id_proveedor,(*admpr)[j].Id_empresa) !=0) j++;
 
                         if ( j >= *n_admpr) printf("\nEscribe un id valido\n");
 
                     }while ( j >= *n_admpr);
 
 
-                    modificar_proveedor(admpr,j);
+                    modificar_proveedor(*admpr,j);
 
                     system("cls");
 
@@ -779,7 +779,7 @@ void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , 
             switch (op) {
                 case 1:
 
-                    listado_proveedores(admpr,n_admpr,admin);
+                    listado_proveedores(&admpr,n_admpr,admin);
 
                     system("cls");
 

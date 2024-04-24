@@ -44,7 +44,7 @@ void volcado_pedidos ( Pedido *p, int *n_ped );
 void volcado_prod_pedidos ( Pedido *ped,ProductoPedido *pr_ped ,int *n_ped ,int *n_pr_ped );
 
 void hacer_pedido (Pedido **ped, ProductoPedido **pr_ped, int *n_ped ,int *n_pr_ped, int unidades , int importe ,char id_prod[8], char id_cliente[8] );
-void eliminar_pedido ( Pedido *ped, int indice_ped);
+void eliminar_pedido ( Pedido *ped,ProductoPedido *prod_ped,int indice_ped);
 void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8] , usu tipo_usu);
 void modificar_pedido ( Pedido *ped , ProductoPedido *pr_ped, int *n_ped ,int *n_pr_ped, int indice ,usu tipo_usu, char usu_act[8] );
 void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker *c_lock, int *n_pedidos,int *n_pr_ped,int *n_c_lock, char id_cliente[8] , int opcion_pedido , usu tipo_usu );
@@ -55,8 +55,7 @@ void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n
 void menu_pedidos ( Cliente *clt, Transportista *transp ,Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_cliente, int *n_transp, int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_prod_ped, usu tipo_usu ,int id_act );
 
 void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker *c_lock,int *n_pedidos, int *n_prod_ped,int *n_c_lock, char id_cliente[8] , usu tipo_usu );
-void menu_pedidos_admin(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_pr_ped , usu tipo_usu);
-void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu);
+void menu_pedidos_admin(Pedido **ped ,ProductoPedido *prod_ped,  int *n_pedidos , int *n_pr_ped , usu tipo_usu);
 void menu_pedidos_transp(Locker *lock, CompartimentoLocker *c_lock ,Pedido *ped, ProductoPedido *prod_ped,int *n_lock, int *n_c_lock, int *n_pedidos ,int *n_pr_ped,char id_tr_act[5], usu tipo_usu);
 
 void menu_prod_ped( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu);

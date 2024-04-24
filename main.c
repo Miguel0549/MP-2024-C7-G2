@@ -49,7 +49,7 @@ int main(){
 
 
     //menu_inicio_sesion(&clt,&admp,&transp,n_cliente,n_admp,n_tranp,usu_act,tipo_usu);
-    menu_principal(clt,admp,transp,l,c_l,ped,p_ped,dev,desc,desc_cl,n_cliente,n_admp,n_tranp,n_lock,n_c_lock,n_ped,n_prod_ped,n_dev,n_desc,n_desc_cl,transportista,2);
+    menu_principal(clt,admp,transp,l,c_l,ped,p_ped,dev,desc,desc_cl,n_cliente,n_admp,n_tranp,n_lock,n_c_lock,n_ped,n_prod_ped,n_dev,n_desc,n_desc_cl,admin,2);
 
 
 

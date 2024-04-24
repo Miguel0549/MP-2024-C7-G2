@@ -1304,6 +1304,173 @@ void modificar_categoria()
     }
 
 }
+
+void menu_pedidos_prov( Pedido *ped , ProductoPedido **prod_ped, int *n_pedidos ,int *n_prod_ped, char id_admpr_act[5] ,usu tipo_usu ){
+
+    int i,j,k,op,op_ped;
+    int n;
+    char id_pedido[8];
+
+    do{
+
+        n=1;
+
+        printf("---------------------- Todos los pedidos asociados a sus productos ---------------------\n\n");
+
+        for ( i=0 ; i<*n_pedidos; i++ ){
+
+            j=0;
+            while( j < *n_prod_ped && strcmp(ped[i].id_pedido,(*prod_ped)[j].id_pedido)!=0) j++;
+
+            k=0;
+            while( k < tamanio_p && strcmp(array_prod[k].id_prod,(*prod_ped)[j].id_prod)!=0 ) k++;
+
+            if (strcmp( id_admpr_act , array_prod[k].id_gestor)==0){
+
+                printf("[%i].%s-%s-%s-%s",n,ped[i].id_pedido,ped[i].fecha_ped,ped[i].id_cliente,ped[i].lugar_entrega);
+
+                if (strcmp(ped[i].lugar_entrega,"domicilio")==0 ){
+
+                    printf("-domicilio-%s\n",ped[i].id_cod_prom);
+
+                }else if ( strcmp(ped[i].lugar_entrega,"locker") ==0) {
+
+                    printf("-locker-%s-%s\n",ped[i].id_locker,ped[i].id_cod_prom);
+
+                }
+
+                n++;
+            }
+
+        }
+
+        do{
+
+            printf("\nElija una opcion:\n");
+            printf("1.Gestionar estado\n2.Asignar transportista\n3.Asignar locker\n4.Salir\n");
+            scanf("%i", &op);
+
+            switch (op) {
+                case 1:
+
+                    printf("Escribe el pedido a modificar su estado: ");
+                    fflush(stdin);
+                    gets(id_pedido);
+
+                    i=0;
+                    while ( i<*n_prod_ped && strcmp(id_pedido,(*prod_ped)[i].id_pedido)!=0) i++;
+
+                    system("cls");
+
+                    printf("Elija el estado nuevo del pedido:\n\n1.enPreparacion\n2.enviado\n3.enReparto\n4.enLocker\n5.entregado\n6.devuelto\n7.transportista\n ");
+                    scanf("%i",&op_ped);
+
+                    switch (op_ped) {
+                        case 1:
+
+                            (*prod_ped)[i].est_pedido = enPreparacion;
+
+                            break;
+                        case 2:
+
+                            (*prod_ped)[i].est_pedido = enviado;
+
+                            break;
+                        case 3:
+
+                            (*prod_ped)[i].est_pedido =enReparto;
+
+                            printf("Introduzca la id de un transportista para asignarle: ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].id_transp);
+
+                            break;
+                        case 4:
+
+                            (*prod_ped)[i].est_pedido =enLocker;
+
+                            printf("Introduzca la id de un transportista para asignarle: ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].id_transp);
+
+                            printf("Introduzca el Id de un locker: ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].id_locker);
+
+                            printf("Introduzca el codigo del locker (6 digitos): ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].cod_locker);
+
+                            fecha_actual((*prod_ped)[i].fecha_entr_dev,0);
+
+                            break;
+                        case 5:
+
+                            (*prod_ped)[i].est_pedido = entregado;
+
+                            printf("Introduzca la id de un transportista para asignarle: ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].id_transp);
+
+                            fecha_actual((*prod_ped)[i].fecha_entr_dev,0);
+
+                            break;
+                        case 6:
+
+                            (*prod_ped)[i].est_pedido = devuelto;
+
+                            printf("Introduzca la id de un transportista para asignarle: ");
+                            fflush(stdin);
+                            gets((*prod_ped)[i].id_transp);
+
+                            fecha_actual((*prod_ped)[i].fecha_entr_dev,0);
+
+                            break;
+                        case 7:
+
+                            (*prod_ped)[i].est_pedido = trasnportista;
+
+                            break;
+                    }
+
+
+                    break;
+                case 2:
+
+                    printf("Escribe el pedido a modificar su estado: ");
+                    fflush(stdin);
+                    gets(id_pedido);
+
+                    i=0;
+                    while ( i<*n_prod_ped && strcmp(id_pedido,(*prod_ped)[i].id_pedido)!=0) i++;
+
+                    printf("Introduzca la id de un transportista para asignarle: ");
+                    fflush(stdin);
+                    gets((*prod_ped)[i].id_transp);
+
+
+                    break;
+                case 3:
+                    break;
+                case 4: // salir
+                    break;
+                default:
+                    printf("Escribe un numero del 1 al 4");
+                    break;
+            }
+
+
+
+
+        }while ( op < 1 || op > 4 );
+
+
+    }while( op != 4);
+
+}
+
+
+
 //POR HACER: REMPLAZAR TODAS LAS DECLARACIONES DE LOS VECTORES DE PRODUCTO Y CATEGORIA COMO SUS TAMAÑOS POR SUS VARIABLES PUBLICAS
 //POR HACER: TESTEAR MODIFICACION DE PRODUCTO Y MENU DE CATEGORIA Y DEBUGARLO
 //POR HACER: MEJORAR LAS LIMPIEZAS DEL BUFFER DE ENTRADA

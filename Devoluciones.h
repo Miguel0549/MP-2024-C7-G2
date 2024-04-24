@@ -30,7 +30,7 @@ void menu_devoluciones ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *de
 
 void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, char id_cliente[7], usu tipo_u);
 void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u);
-void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u);
+void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido **prod_ped, Devoluciones **dev,Locker  **lock ,CompartimentoLocker **c_lock, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u);
 
 
 #endif //PROYECTO_MP_DEVOLUCIONES_H
