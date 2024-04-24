@@ -9,7 +9,6 @@ author:
     - Pablo Beato Martínez
     - Manuel Díaz de la Rocha de Castro
 ---
-
 # <span style='color:blue'> **MP-2024-C7-G2** </span>
 
 ---
@@ -36,14 +35,14 @@ author:
             -   [MODULO DESCUENTOS](#modulo-descuentos)
             -   [MODULO PEDIDOS/DEVOLUCIONES](#modulo-pedidos-devoluciones)
         -   [Prueba de integración](#prueba-de-integración)
-        -   [Plan de pruebas de aceptación](#plan-de-pruebas-de-aceptación-por-hacer)
--   [Documentación del código fuente](#documentación-del-código-fuente-por-hacer)
+        -   [Plan de pruebas de aceptación](#plan-de-pruebas-de-aceptación)
+-   [Documentación del código fuente](#documentación-del-código-fuente)
 
 ---
 
-<div id='usuario' />
+<div id='usuarios' />
 
-# Documentación de usuario
+# Documentación de usuarios
 
 Una vez ejecutado el programa, le pregutará con qué tipo de usuario desea acceder a la plataforma, siendo estos: Cliente, Administrador/Proveedor, Transportista;
 una vez seleccionado esto, podrá crear un usuario del tipo seleccionado o iniciar sesión en uno ya existente. Una vez iniciado sesión y en función del tipo de usuario escojido, podrá navegar por los distintos menús.
@@ -258,7 +257,7 @@ Este módulo es el encargado de gestionar los fichero descuentos.txt y descuento
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL
 
- Cabecera: void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act );
+ Cabecera: void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ) 
 
  Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -286,7 +285,7 @@ CASO 4
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL CLIENTE
 
- Cabecera: void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+ Cabecera: void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act) 
 
  Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -304,7 +303,7 @@ CASO 1:
  
 ##### PROCEDIMIENTO MENÚ PRINCIPAL ADMINISTRADOR
 
- Cabecera: void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+ Cabecera: void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act) 
 
 
  Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
@@ -322,7 +321,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL PROVEEDOR
 
- Cabecera: void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act );
+ Cabecera: void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act ) 
 
  Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -338,7 +337,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL TRANSPORTISTA
 
- Cabecera: void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+ Cabecera: void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act) 
 
  Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -354,7 +353,7 @@ CASO 1
 
 ##### PROCEDIMIENTO DATOS ADMINPROV
 
- Cabecera: void datos_admin_prov( Adminprov *admpr , int ind_admpr);
+ Cabecera: void datos_admin_prov( Adminprov *admpr , int ind_admpr) 
 
  Precondición: vector de adminprov inicializado
 
@@ -370,7 +369,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MODIFICAR_ADMIN
 
- Cabecera: void modificar_admin ( Adminprov **admpr , int ind_admpr);
+ Cabecera: void modificar_admin ( Adminprov **admpr , int ind_admpr) 
 
  Precondición:  vectir admin inicializado
 
@@ -389,7 +388,7 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR CLIENTES
 
- Cabecera: void listado_cliente ( Cliente *clt , int *n_clt );
+ Cabecera: void listado_cliente ( Cliente *clt , int *n_clt ) 
 
  Precondición: vector clientes inicializado, nun_clientes>0
 
@@ -405,7 +404,7 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR PROVEEDORES CON PRODUCTOS
 
- Cabecera: void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , int *n_prod );
+ Cabecera: void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , int *n_prod ) 
 
  Precondición: vectores adminprov y producto inicializados 
 
@@ -421,7 +420,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MODIfICAR PROVEEDOR
 
- Cabecera: void modificar_proveedor ( Adminprov *prov, int id_act );
+ Cabecera: void modificar_proveedor ( Adminprov *prov, int id_act ) 
 
  Precondición:  vectir admin inicializado
 
@@ -438,7 +437,7 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR PRODUCTOS EXTERNOS
 
- Cabecera: void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , int * n_prod );
+ Cabecera: void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , int * n_prod ) 
 
  Precondición: vectores adminprov y productos inicializados
 
@@ -454,7 +453,7 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTADO PROVEEDORES
 
- Cabecera: void listado_proveedores ( Adminprov *admpr , int *n_admpr , usu tipo_usu);
+ Cabecera: void listado_proveedores ( Adminprov *admpr , int *n_admpr , usu tipo_usu) 
 
  Precondición: vector adminprov inicializado
 
@@ -470,7 +469,7 @@ CASO 1
 
 ##### PROCEDIMIENTO BORAR ADMINISTRADOOR O PROVEEDOR CON ÍNDICE
 
- Cabecera: void borrar_adminprov_con_id(Adminprov**,char*,int*);
+ Cabecera: void borrar_adminprov_con_id(Adminprov**,char*,int*) 
 
  Precondición: vecto adminprov inicializado, ínidice válido
 
@@ -491,7 +490,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MENU INICIO DE SESIÓN
 
- Cabecera: void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu );
+ Cabecera: void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu ) 
 
  Precondición: vectores usaurio inicializados
 
@@ -507,7 +506,7 @@ CASO 1
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN
 
- Cabecera: void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu);
+ Cabecera: void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu) 
 
  Precondición: vectores de usuario dados de alta 
 
@@ -523,7 +522,7 @@ CASO 1
 
 ##### PROCEDIMIENTO REGISTRO DE USUARIO
 
- Cabecera: void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp );
+ Cabecera: void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp ) 
 
  Precondición: vectores de usuarios inicializados
 
@@ -539,7 +538,7 @@ CASO 1
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN CLIENTE
 
- Cabecera: void inicio_sesion_cliente ( Cliente *client , int *n_cliente , int *usu_act);
+ Cabecera: void inicio_sesion_cliente ( Cliente *client , int *n_cliente , int *usu_act) 
 
  Precondición: vector cliente inicializado
 
@@ -556,7 +555,7 @@ CASO 1
 ##### PROCEDIMIENTO INICIO DE SESIÓN ADMINISTRADOR
 
 
- Cabecera: void inicio_sesion_admin (  Adminprov *admp ,  int *n_admp , int *usu_act );
+ Cabecera: void inicio_sesion_admin (  Adminprov *admp ,  int *n_admp , int *usu_act ) 
 
  Precondición: vector adminprov inicializado
 
@@ -572,7 +571,7 @@ CASO 1
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN PPROVEEDOR
 
- Cabecera: void inicio_sesion_proveedor ( Adminprov *admp ,  int *n_admp , int *usu_act );
+ Cabecera: void inicio_sesion_proveedor ( Adminprov *admp ,  int *n_admp , int *usu_act ) 
 
  Precondición: vector adminprov inicializado
 
@@ -588,7 +587,7 @@ CASO 1
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN TRANSPORTISTA
 
- Cabecera: void inicio_sesion_transportista (  Transportista *transp , int *n_transp , int *usu_act);
+ Cabecera: void inicio_sesion_transportista (  Transportista *transp , int *n_transp , int *usu_act) 
 
  Precondición: vector transportista inicializado
 
@@ -604,7 +603,7 @@ CASO 1
 
 ##### PROCEDIMIENTO CARGA ADMINISTRADOR PROVEEEDOR
 
- Cabecera: void carga_adminprov(Adminprov **,int *);
+ Cabecera: void carga_adminprov(Adminprov **,int *) 
 
  Precondición: fichero inicializado
 
@@ -636,7 +635,7 @@ CASO 1
 
 ##### PROCEDIMIENTO NUEVO ADMINISTRADOR O PROVEEDOR
 
- Cabecera: void nuevo_adminprov(Adminprov **,int *);
+ Cabecera: void nuevo_adminprov(Adminprov **,int *) 
 
  Precondición: **a doble puntero a estructura inicializado y *n_adminprov puntero que apunta al numero actual de admin/proveedores
 
@@ -652,7 +651,7 @@ CASO 1
 
 ##### PROCEDIMIENTO CARGA CLIENTE
 
- Cabecera: void carga_cliente(Cliente **c,int *n_clien);
+ Cabecera: void carga_cliente(Cliente **c,int *n_clien) 
 
  Precondición: fichero clientes.txt existente
 
@@ -668,7 +667,7 @@ CASO 1
 
 ##### PROCEDIMIENTO VOLCADO CLIENTE
 
- Cabecera: void volcado_cliente(Cliente **c,int *n_clien);
+ Cabecera: void volcado_cliente(Cliente **c,int *n_clien) 
 
  Precondición: clientes.txt existente, vector cliente inicializado
 
@@ -684,7 +683,7 @@ CASO 1
 
 ##### PROCEDIMIENTO NUEVO CLIENTE
 
- Cabecera: void nuevo_cliente(Cliente **c,int *n_cliente);
+ Cabecera: void nuevo_cliente(Cliente **c,int *n_cliente) 
 
  Precondición: vector c de estructura cliente inicializado
 
@@ -700,7 +699,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MODIFICAR CLIENTE
 
- Cabecera: void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu );
+ Cabecera: void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu ) 
 
  Precondición: vector cliente inicializado, id_act existente
 
@@ -716,7 +715,7 @@ CASO 1
 
 ##### PROCEDIMIENTO VER DATOS CLIENTE
 
- Cabecera: void datos_cliente ( Cliente *clt , int id_act);
+ Cabecera: void datos_cliente ( Cliente *clt , int id_act) 
 
  Precondición: vector cliente inicializado
 
@@ -732,7 +731,7 @@ CASO 1
 
 ##### PROCEDIMIENTO BORRAR CLIENTE CON ID
 
- Cabecera: void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes);
+ Cabecera: void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes) 
 
  Precondición: vector al que apunta el puntero vector_cliente inicializado, id de cliente existente
 
@@ -780,7 +779,7 @@ CASO 1
 
 ##### PROCEDIMIENTO CARGA TRANSPORTISTAS
 
- Cabecera: void carga_transp(Transportista**t,int *n_trans);
+ Cabecera: void carga_transp(Transportista**t,int *n_trans) 
 
  Precondición: transportista.txt existente 
 
@@ -796,7 +795,7 @@ CASO 1
 
 ##### PROCEDIMIENTO VOLCADO TRANSPORTISTA
 
- Cabecera: void volcado_transp(Transportista **t,int *n_trans);
+ Cabecera: void volcado_transp(Transportista **t,int *n_trans) 
 
  Precondición: puntero a vector de estructura transportista incializado, Transportista.txt existente
 
@@ -812,7 +811,7 @@ CASO 1
 
 ##### PROCEDIMIENTO NUEVO TRANSPORTISTA
 
- Cabecera: void nuevo_transportista(Transportista **t,int *n_transport);
+ Cabecera: void nuevo_transportista(Transportista **t,int *n_transport) 
 
  Precondición: puntero a vector de estructura transportista incializado
 
@@ -828,7 +827,7 @@ CASO 1
 
 ##### FUNCIÓN ÍNDICE A PARTIR DE ID TRANSPORTISTA
 
- Cabecera: int indice_con_id_transp(Transportista**vector_transp,char *id_transp,int num_transp);
+ Cabecera: int indice_con_id_transp(Transportista**vector_transp,char *id_transp,int num_transp) 
 
  Precondición: puntero a vector transporte, id de un transportista válido y el número de transportistas en el vector
 
@@ -848,7 +847,7 @@ CASO 2
 
 ##### PROCEDIMIENTO BORRAR TRANSPORTISTA A PARTIR DE ID
 
- Cabecera: void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_transp);
+ Cabecera: void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_transp) 
 
  Precondición: doble puntero a transportista inicializado, id transportista válido y n_transp el número de elementos del vector
 
@@ -868,7 +867,7 @@ CASO 2
 
 ##### PROCEDIMIENTO MODIFICAR TRANSPORTISTA
 
- Cabecera: void modificar_transp ( Transportista *tranp , int indice_transp );
+ Cabecera: void modificar_transp ( Transportista *tranp , int indice_transp ) 
 
  Precondición: vector transportista inicializado, indice_transp el índice del vector donde están los datos a modificar
 
@@ -884,7 +883,7 @@ CASO 1
 
 ##### PROCEDIMIENTO LISTAR TRANSPORTISTAS
 
- Cabecera: void listado_transportista ( Transportista *transp, int *n_transp );
+ Cabecera: void listado_transportista ( Transportista *transp, int *n_transp ) 
 
  Precondición: vector transportistas inicializado, y *n_transp apunta al número de transportistas en el vector
 
@@ -900,7 +899,7 @@ CASO 1
 
 ##### PROCEDIMIENTO VER DATOS TRANSPORTISTA
 
- Cabecera: void datos_transportista ( Transportista *transp , int ind_transp );
+ Cabecera: void datos_transportista ( Transportista *transp , int ind_transp )
 
  Precondición: vector transportistra inicializado, ind_transp el ínidice del transportista cuyaos datos quieres mostrar
 
@@ -1362,6 +1361,22 @@ CASO 1
 
     Al ejecutarla, modifica la cadena id y pone la coincida con la descripción que se le pasa
 
+##### PROCEDIMIENTO MENU PRODUCTO DE CLIENTE CON PEDIDOS
+
+ Cabecera: void menu_cliente_producto_conpedido( Pedido **ped , ProductoPedido **prod_ped , int *n_ped , int *n_pr_ped , char id_cliente[8] )
+
+ Precondición: vectores pedidos y productos inicializados
+
+ Postcondición: ninguna
+
+ DATOS DE ENTRADA: puntero a vector pedidos y otro a productos pedidos
+
+ DATOS DE SALIDA: ninguno
+
+CASO 
+
+    Al ejecutarlo, se despliega un menú que permite al cliente ver sus productos pedidos y gestrionarlos
+
 ##### PROCEDIMIENTO MENU CATEGORÍAS DE ADMINISTRADOR
 
  Cabecera: menu_admin_cat()
@@ -1382,7 +1397,7 @@ CASO 1
 ##### PRUEBAS SOBRE EL PROCEMIENTO CARGAR CATEGORÍA
 
 CÓDIGO:
-
+```C
     void cargar_categoria()
     {
         FILE *f;
@@ -1417,7 +1432,7 @@ CÓDIGO:
         }                                   //9 fin_ si 1 
     }                                       //9 fin
 
-    
+```
 Complejidad computacional
 
 V(G) = número de regiones = 4
@@ -1627,7 +1642,7 @@ CASO 1
 
 ##### PROCEDIMIENTO MODIFICAR DESCUENTO
 
-Cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien);
+Cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien)
 
 Precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
 
@@ -1804,11 +1819,59 @@ CASO 1
 
         Al ejecutarla, borra de ambos vectores el descuento con la id introducida
 
+##### PROCEDIEMIENTO LISTAR CLIENTES CON DESCUENTOS ASOCIADOS
+
+ Cabecera: void lista_clientes_con_descuentos ( Descuentos *Des , Descuentos_clientes *desc_cl , int *n_desc , int *n_desc_cl )
+ 
+ Precondición: vectores descuentos y descuentos clientes inicializados
+
+ Postcondición: ninguna
+
+ DATOS DE ENTRADA: dos vectores a estructura descuentos y descuentos clientes y su número de elementos
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecurtarlo, imprime por pantalla todas las ids de los clientes con descuentos asociados
+
+##### PROCEDIEMIENTO LISTAR CLIENTES CON DESCUENTOS ASOCIADOS UTILIZADOS
+
+ Cabecera: void lista_clientes_con_descuentos_usados ( Descuentos *Des , Descuentos_clientes *desc_cl , int *n_desc , int *n_desc_cl )
+ 
+ Precondición: vectores descuentos y descuentos clientes inicializados
+
+ Postcondición: ninguna
+
+ DATOS DE ENTRADA: dos vectores a estructura descuentos y descuentos clientes y su número de elementos
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecurtarlo, imprime por pantalla todas las ids de los clientes con descuentos que han sido usados
+
+##### PROCEDIEMIENTO ASIGNAR CÓDIGO PROMOCIONAL A CLIENTE
+
+ Cabecera: void asignar_cod_prom_cliente( Descuentos_clientes **desc_cl , int *n_desc_cl , char id_desc[11] 
+
+ Precondición: vector descuentos clientes inicializado
+
+ Postcondición: ninguna
+
+ DATOS DE ENTRADA: vectora estructura  descuentos clientes y su número de elementos, así como la id a asignar
+
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecurtalo, nos permite asignar un código promocional al cliente cuya id hemos pasado por parámetro
+
 #### Prueba de caja blanca del módulo descuentos
 ##### PRUEBAS SOBRE EL PROCEDIMIENTO BORRAR DESCUENTO
 
 CÓDIGO:
-
+```c
     void borrar_descuento_con_id(Descuentos **vector_descuento, Descuentos_clientes **dc,char *Id_descuento, int *n_descuento,int *n_descuento_cl){
     int i,aux,aux2;
     aux=*n_descuento;
@@ -1836,7 +1899,7 @@ CÓDIGO:
     }                               //11 fin si 
     (*n_descuento)=aux-1;   //12 fin 
 }
-
+```
 
 ![Grafo de control de flujo del procedimiento](GCF_Descuentos.png "Grafo de control de flujo del procedimiento")
 
@@ -1947,7 +2010,7 @@ Si la cadena que pasamos por parámetro es "black001", elimininará, liberando l
 
 ##### PROCEDIMEINTO CARGAR DEVOLUCIONES
 
- Cabecera: void carga_devoluciones( Devoluciones **dev ,int *n_dev);
+ Cabecera: void carga_devoluciones( Devoluciones **dev ,int *n_dev)
 
  Precondición: **dev por inicializar y *n_dev puntero al número de devoluciones actual
 
@@ -1963,7 +2026,7 @@ CASO 1
 
 ##### PROCEDIMEINTO VOLCADO DEVOLUCIONES
 
- Cabecera: void volcado_devoluciones ( Devoluciones *d, int *n_dev );
+ Cabecera: void volcado_devoluciones ( Devoluciones *d, int *n_dev )
 
  Precondición: *d inicializad, *dev puntero al número de devoluciones en el vector
 
@@ -1979,7 +2042,7 @@ CASO 1
  
 ##### PROCEDIMEINTO CREAR DEVOLUCIÓN
 
- Cabecera: void crear_devolucion( Pedido *ped, ProductoPedido *prod_ped, Devoluciones **dev, int *n_dev, int *n_pedidos, int *n_prod_ped );
+ Cabecera: void crear_devolucion( Pedido *ped, ProductoPedido *prod_ped, Devoluciones **dev, int *n_dev, int *n_pedidos, int *n_prod_ped )
 
  Precondición: vector ped inicializado, así como prod_ped, y un doble puntero a devoluciones, el resto de punteros apuntan al tamaño de cada vector
 
@@ -1995,7 +2058,7 @@ CASO 1
 
 ##### PROCEDIMEINTO ELIMINAR DEVOLUCIONES
 
- Cabecera: void eliminar_devolucion ( Devoluciones *dev , int indice_dev);
+ Cabecera: void eliminar_devolucion ( Devoluciones *dev , int indice_dev)
 
  Precondición: vector dev inicializado, indice_dev contiene el indice del vector con la información a eliminar
 
@@ -2015,7 +2078,7 @@ CASO 2
  
 ##### PROCEDIMEINTO MENU DEVOLUCIONES
 
- Cabecera: void menu_devoluciones ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_usu );
+ Cabecera: void menu_devoluciones ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_usu )
 
  Precondición: vectores pedidos, productos pedidos y devoluciones inicializados y sus respectivos tamaños, tipo_usu en el correspondiente
 
@@ -2031,7 +2094,7 @@ CASO 1
 
 ##### PROCEDIMEINTO MENU DEVOLUCIONES DE CLIENTE 
 
- Cabecera: void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, char id_cliente[7], usu tipo_u);
+ Cabecera: void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, char id_cliente[7], usu tipo_u)
 
  Precondición: vectores pedidos,productos pedidos y devoluciones inicializados, y sus respectivos tamaños, tipo de usuario que sea y la id del cliente actual
 
@@ -2047,7 +2110,7 @@ CASO 1
 
 ##### PROCEDIMEINTO MENU DEVOLUCIONES DE ADMIN
 
- Cabecera: void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u);
+ Cabecera: void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u)
 
  Precondición: pedidos, productos pedidos y devoluciones cargados en memoria, así como ss tamaños correspondientes  el tipo de usuario
 
@@ -2063,7 +2126,7 @@ CASO 1
  
 ##### PROCEDIMEINTO MENU DEVOLUCIONES DE TRANSPORTISTAS
 
- Cabecera: void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u);
+ Cabecera: void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u)
 
 
  Precondición: vectores a estructura inicializados con sus respectivos tamaños, así como la id del transportista que accede al menu y su tipo de usuario 
@@ -2081,7 +2144,7 @@ CASO 1
     
 ##### PROCEDIMEINTO CARGAR LOCKERS
 
- Cabecera:void carga_lockers( Locker **lock ,int *n);
+ Cabecera:void carga_lockers( Locker **lock ,int *n)
 
  Precondición: fichero lokers.txt inicializado, n número de 
 
@@ -2374,25 +2437,28 @@ CASO 1
  
 
 
-##### PROCEDIMEINTO CARG
+##### PROCEDIMEINTO PEDIDOS PARA PROVEEDOR
 
- Cabecera:
+ Cabecera: void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu)
 
- Precondición:
+ Precondición:  vectores pedido y producto pedido inicializados, tipo usu válido(proveedor)
 
- Postcondición:
+ Postcondición: ninguna
 
- DATOS DE ENTRADA:
+ DATOS DE ENTRADA: dos vectores a estructura, el número de sus elementos y el tipo de usuario que llama a la función 
 
- DATOS DE SALIDA:
- 
-void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu)
+ DATOS DE SALIDA: ninguno
+
+CASO 1
+
+    Al ejecutarlo, imprime por pantalla un menu en el que nos permite modificar, listar, borrar y asignar pedidos que sean propios
+
 
 ##### PROCEDIMEINTO MENU PEDIDOS PARA ADMIN
 
  Cabecera: void menu_pedidos_transp(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , int *n_pr_ped, char id_tr_act[5], usu tipo_usu)
 
- Precondición: vectores pedido y producto pedido inicializados, tipo usu válido(proveedor)
+ Precondición: vectores pedido y producto pedido inicializados, tipo usu válido(administrador)
 
  Postcondición: ninguna
 
@@ -2402,7 +2468,7 @@ void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , 
 
 CASO 1
 
-    Al ejecutarlo, imprime por pantalla un menu en el que nos permite modificar, listar, borrar y asignar pedidos que sean propios
+    Al ejecutarlo, imprime por pantalla un menu en el que nos permite modificar, listar, borrar y asignar pedidos 
 
 ##### PROCEDIMEINTO MENU PRODUCTOS PEDIDOS 
 
@@ -2424,7 +2490,7 @@ CASO 1
 #### PRUEBAS SOBRE EL PROCEDIMIENTO ASIGNAR LOCKER
 
 CÓDIGO:
-    
+```c 
     void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n_lock, int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] ){
 
     int i,j,op,error=0;
@@ -2473,7 +2539,7 @@ CÓDIGO:
 
 }                       //15 fin 
 
-
+``` 
 
 Complejidad computacional
 
@@ -2611,7 +2677,7 @@ El usuario final debe probar el programa y aceptar que cumple con los requisitos
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL
 
-Cabecera: void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act );
+Cabecera: void menu_principal ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act )
 
 Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -2619,7 +2685,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL CLIENTE
 
-Cabecera: void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+Cabecera: void menu_principal_cliente ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act)
 
 Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -2627,7 +2693,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL ADMINISTRADOR
 
-Cabecera: void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+Cabecera: void menu_principal_admin ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act)
 
 
 Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
@@ -2636,7 +2702,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL PROVEEDOR
 
-Cabecera: void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act );
+Cabecera: void menu_principal_proveedor ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act )
 
 Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -2644,7 +2710,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MENÚ PRINCIPAL TRANSPORTISTA
 
-Cabecera: void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act);
+Cabecera: void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transportista *transp , Locker *lock , CompartimentoLocker *c_lock , Pedido *ped, ProductoPedido *pr_p , Devoluciones *dev , producto *prod, categoria *cat, Descuentos *desc, Descuentos_clientes *desc_cl, int *n_cliente, int *n_admp , int *n_transp , int *n_lock , int *n_c_lock , int *n_ped , int *n_pr_p , int *n_dev ,int *n_prod,int *n_cat,int *n_desc,int *n_desc_cl, usu tipo_usu, int id_usu_act)
 
 Precondición: vector de: clientes, adminprov, transportista, locker, compartimento locker, pedido, producto pedido, descuentos y descuentos clientes, todos ellos, inicializados, también para cada uno de ellos un puntero al número de elementos de cada tipo de vector de estructuras
 
@@ -2652,7 +2718,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO DATOS ADMINPROV
 
-Cabecera: void datos_admin_prov( Adminprov *admpr , int ind_admpr);
+Cabecera: void datos_admin_prov( Adminprov *admpr , int ind_admpr)
 
 Precondición: vector de adminprov inicializado
 
@@ -2660,7 +2726,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MODIFICAR_ADMIN
 
-Cabecera: void modificar_admin ( Adminprov **admpr , int ind_admpr);
+Cabecera: void modificar_admin ( Adminprov **admpr , int ind_admpr)
 
 Precondición:  vectir admin inicializado
 
@@ -2669,7 +2735,7 @@ Postcondición: modifica el admin cuyo índice en el vector le pasamos
 
 ##### PROCEDIMIENTO LISTAR CLIENTES
 
-Cabecera: void listado_cliente ( Cliente *clt , int *n_clt );
+Cabecera: void listado_cliente ( Cliente *clt , int *n_clt )
 
 Precondición: vector clientes inicializado, nun_clientes>0
 
@@ -2679,7 +2745,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO LISTAR PROVEEDORES CON PRODUCTOS
 
-Cabecera: void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , int *n_prod );
+Cabecera: void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , int *n_prod )
 
 Precondición: vectores adminprov y producto inicializados 
 
@@ -2688,7 +2754,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO MODIfICAR PROVEEDOR
 
-Cabecera: void modificar_proveedor ( Adminprov *prov, int id_act );
+Cabecera: void modificar_proveedor ( Adminprov *prov, int id_act )
 
 Precondición:  vectir admin inicializado
 
@@ -2697,7 +2763,7 @@ Postcondición: modifica el admin cuyo índice en el vector le pasamos
 
 ##### PROCEDIMIENTO LISTAR PRODUCTOS EXTERNOS
 
-Cabecera: void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , int * n_prod );
+Cabecera: void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , int * n_prod )
 
 Precondición: vectores adminprov y productos inicializados
 
@@ -2705,7 +2771,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO LISTADO PROVEEDORES
 
-Cabecera: void listado_proveedores ( Adminprov *admpr , int *n_admpr , usu tipo_usu);
+Cabecera: void listado_proveedores ( Adminprov *admpr , int *n_admpr , usu tipo_usu)
 
 Precondición: vector adminprov inicializado
 
@@ -2713,7 +2779,7 @@ Postcondición: ninguna
 
 ##### PROCEDIMIENTO BORAR ADMINISTRADOOR O PROVEEDOR CON ÍNDICE
 
-Cabecera: void borrar_adminprov_con_id(Adminprov**,char*,int*);
+Cabecera: void borrar_adminprov_con_id(Adminprov**,char*,int*)
 
 Precondición: vecto adminprov inicializado, ínidice válido
 
@@ -2724,10 +2790,9 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ## Módulo sesiones
 
-
 ##### PROCEDIMIENTO MENU INICIO DE SESIÓN
 
- Cabecera: void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu );
+ Cabecera: void menu_inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp , int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu )
 
  Precondición: vectores usaurio inicializados
 
@@ -2735,7 +2800,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN
 
- Cabecera: void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu);
+ Cabecera: void inicio_sesion ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp , int *usu_act , usu *tipo_usu)
 
  Precondición: vectores de usuario dados de alta 
 
@@ -2743,7 +2808,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO REGISTRO DE USUARIO
 
- Cabecera: void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp );
+ Cabecera: void registro ( Cliente *client , Adminprov *admp , Transportista *transp, int *n_cliente, int *n_admp , int *n_transp )
 
  Precondición: vectores de usuarios inicializados
 
@@ -2751,7 +2816,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN CLIENTE
 
- Cabecera: void inicio_sesion_cliente ( Cliente *client , int *n_cliente , int *usu_act);
+ Cabecera: void inicio_sesion_cliente ( Cliente *client , int *n_cliente , int *usu_act)
 
  Precondición: vector cliente inicializado
 
@@ -2760,7 +2825,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 ##### PROCEDIMIENTO INICIO DE SESIÓN ADMINISTRADOR
 
 
- Cabecera: void inicio_sesion_admin (  Adminprov *admp ,  int *n_admp , int *usu_act );
+ Cabecera: void inicio_sesion_admin (  Adminprov *admp ,  int *n_admp , int *usu_act )
 
  Precondición: vector adminprov inicializado
 
@@ -2768,7 +2833,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN PPROVEEDOR
 
- Cabecera: void inicio_sesion_proveedor ( Adminprov *admp ,  int *n_admp , int *usu_act );
+ Cabecera: void inicio_sesion_proveedor ( Adminprov *admp ,  int *n_admp , int *usu_act )
 
  Precondición: vector adminprov inicializado
 
@@ -2776,7 +2841,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO INICIO DE SESIÓN TRANSPORTISTA
 
- Cabecera: void inicio_sesion_transportista (  Transportista *transp , int *n_transp , int *usu_act);
+ Cabecera: void inicio_sesion_transportista (  Transportista *transp , int *n_transp , int *usu_act)
 
  Precondición: vector transportista inicializado
 
@@ -2784,7 +2849,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO CARGA ADMINISTRADOR PROVEEEDOR
 
- Cabecera: void carga_adminprov(Adminprov **,int *);
+ Cabecera: void carga_adminprov(Adminprov **,int *)
 
  Precondición: fichero inicializado
 
@@ -2800,7 +2865,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO NUEVO ADMINISTRADOR O PROVEEDOR
 
- Cabecera: void nuevo_adminprov(Adminprov **,int *);
+ Cabecera: void nuevo_adminprov(Adminprov **,int *)
 
  Precondición: **a doble puntero a estructura inicializado y *n_adminprov puntero que apunta al numero actual de admin/proveedores
 
@@ -2808,7 +2873,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO CARGA CLIENTE
 
- Cabecera: void carga_cliente(Cliente **c,int *n_clien);
+ Cabecera: void carga_cliente(Cliente **c,int *n_clien)
 
  Precondición: fichero clientes.txt existente
 
@@ -2816,7 +2881,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO VOLCADO CLIENTE
 
- Cabecera: void volcado_cliente(Cliente **c,int *n_clien);
+ Cabecera: void volcado_cliente(Cliente **c,int *n_clien)
 
  Precondición: clientes.txt existente, vector cliente inicializado
 
@@ -2824,7 +2889,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO NUEVO CLIENTE
 
- Cabecera: void nuevo_cliente(Cliente **c,int *n_cliente);
+ Cabecera: void nuevo_cliente(Cliente **c,int *n_cliente)
 
  Precondición: vector c de estructura cliente inicializado
 
@@ -2832,7 +2897,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO MODIFICAR CLIENTE
 
- Cabecera: void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu );
+ Cabecera: void modificar_cliente ( Cliente **clt, int id_act , usu tipo_usu )
 
  Precondición: vector cliente inicializado, id_act existente
 
@@ -2840,7 +2905,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO VER DATOS CLIENTE
 
- Cabecera: void datos_cliente ( Cliente *clt , int id_act);
+ Cabecera: void datos_cliente ( Cliente *clt , int id_act)
 
  Precondición: vector cliente inicializado
 
@@ -2848,7 +2913,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO BORRAR CLIENTE CON ID
 
- Cabecera: void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes);
+ Cabecera: void borrar_cliente_con_id(Cliente**vector_cliente,char *Id_cliente, int *n_clientes)
 
  Precondición: vector al que apunta el puntero vector_cliente inicializado, id de cliente existente
 
@@ -2872,7 +2937,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO CARGA TRANSPORTISTAS
 
- Cabecera: void carga_transp(Transportista**t,int *n_trans);
+ Cabecera: void carga_transp(Transportista**t,int *n_trans)
 
  Precondición: transportista.txt existente 
 
@@ -2880,7 +2945,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO VOLCADO TRANSPORTISTA
 
- Cabecera: void volcado_transp(Transportista **t,int *n_trans);
+ Cabecera: void volcado_transp(Transportista **t,int *n_trans)
 
  Precondición: puntero a vector de estructura transportista incializado, Transportista.txt existente
 
@@ -2888,7 +2953,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO NUEVO TRANSPORTISTA
 
- Cabecera: void nuevo_transportista(Transportista **t,int *n_transport);
+ Cabecera: void nuevo_transportista(Transportista **t,int *n_transport)
 
  Precondición: puntero a vector de estructura transportista incializado
 
@@ -2896,7 +2961,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### FUNCIÓN ÍNDICE A PARTIR DE ID TRANSPORTISTA
 
- Cabecera: int indice_con_id_transp(Transportista**vector_transp,char *id_transp,int num_transp);
+ Cabecera: int indice_con_id_transp(Transportista**vector_transp,char *id_transp,int num_transp)
 
  Precondición: puntero a vector transporte, id de un transportista válido y el número de transportistas en el vector
 
@@ -2904,7 +2969,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO BORRAR TRANSPORTISTA A PARTIR DE ID
 
- Cabecera: void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_transp);
+ Cabecera: void borrar_transp_con_id(Transportista**vector_transp,char *Id_trans, int *n_transp)
 
  Precondición: doble puntero a transportista inicializado, id transportista válido y n_transp el número de elementos del vector
 
@@ -2912,7 +2977,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO MODIFICAR TRANSPORTISTA
 
- Cabecera: void modificar_transp ( Transportista *tranp , int indice_transp );
+ Cabecera: void modificar_transp ( Transportista *tranp , int indice_transp )
 
  Precondición: vector transportista inicializado, indice_transp el índice del vector donde están los datos a modificar
 
@@ -2920,7 +2985,7 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO LISTAR TRANSPORTISTAS
 
- Cabecera: void listado_transportista ( Transportista *transp, int *n_transp );
+ Cabecera: void listado_transportista ( Transportista *transp, int *n_transp )
 
  Precondición: vector transportistas inicializado, y *n_transp apunta al número de transportistas en el vector
 
@@ -2928,14 +2993,13 @@ Postcondición: modifica el vector adminprov, eliminando la información del ín
 
 ##### PROCEDIMIENTO VER DATOS TRANSPORTISTA
 
- Cabecera: void datos_transportista ( Transportista *transp , int ind_transp );
+ Cabecera: void datos_transportista ( Transportista *transp , int ind_transp )
 
  Precondición: vector transportistra inicializado, ind_transp el ínidice del transportista cuyaos datos quieres mostrar
 
  Postcondición: ninguna
 
 ## Módulo Productos
-
 
 ##### PROCEDIMIENTO OBTENER DATO
 
@@ -3158,4 +3222,433 @@ static void modificar_producto(sesion ses,int *asoc,int tamanio_asoc)
 
 ## Módulo Descuentos
 
+##### PROCEDIMIETO CREAR FICHERO DESCUENTOS
+
+ Cabecera: void crear_fichero_descuentos()
+
+ Precondición: ninguna
+
+ Postcondición:crea el fichero descuentos.txt sino existe e imprime un mensaje de error si es el caso
+
+##### PROCEDIMIENTO CREAR FICHERO DESCUENTOS CLIENTES
+
+ Cabecera: void crear_fichero_descuentos_clientes()
+
+ Precondición: ninguna
+
+ Postcondición:crea el fichero descuentos_clientes.txt sino existe e imprime un mensaje de error si es el caso
+
+##### PROCEDIMIENTO CARGAR DESCUENTOS 
+
+ Cabecera:void carga_descuentos(Descuentos **d )
+
+ Precondición: recibe como doble puntero el vector de estructura
+
+ Postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+
+##### PROCEDIMIENTO CARGAR DESCUENTOS CLIENTES
+
+ Cabecera:void carga_descuentos_clientes(Descuentos_clientes **dc)
+
+ Precondición: recibe como doble puntero el vector de estructura
+
+ Postcondición: Carga del fichero descuentos.txt a un vector de estructuras del tipo indicado
+
+##### PROCEDIMIENTO VOLCADO DESCUENTOS
+    
+ Cabecera: void volcado_descuentos(Descuentos **d)
+
+ Precondición:  recibe como doble puntero el vector de estructuras, inicializado
+
+ Postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos.txt
+
+##### PROCEDIMIENTO VOLCADO DESCUENTOS CLIENTES
+    
+ Cabecera: void volcado_descuentos(Descuentos_clientes **dc)
+
+ Precondición:  recibe como doble puntero el vector de estructuras, inicializado
+
+ Postcondición: Vuelca el contenido del vector de estructuras al fichero descuentos_clientes.txt
+
+##### PROCEDIMIENTO LISTAR DESCUENTOS
+
+Cabecera: void listar_descuentos(Descuentos *d,int *n_desc)
+
+Precondición: *d inicializado
+
+Postcondición: lista los descuentos actuales en el vector
+
+##### PROCEDIMIENTO LISTAR DESCUENTOS CON ID
+
+Cabecera:void listar_descuentos_propios(char*Id_cliente)
+
+Precondición:sea Id cliente un punteroa  char que apunta a la información en la estructura
+
+postcomdición: imprime por pantalla la lsita de descuentos asignados a esa ID de cliente 
+
+##### FUCNIÓN COMPRIOBAR DESCUENTO
+
+
+Cabecera: int comprobar_descuento(Descuentos_clientes**dc,char Id_cod[])
+
+Precondición: **dc inicializado e Id_cod un código de descuento válido
+
+Postcondición: devuelve: 0 si está en vigor y 1 si no es válido por cualquier otra razón, además imprime por pantalla el error producido
+
+##### PROCEDIMIENTO NUEVO DESCUENTO
+
+Cabecera: void nuevo_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc,int *num_desc_clien)
+
+Precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+
+Postcondición: ninguna
+
+##### PROCEDIMIENTO MODIFICAR DESCUENTO
+
+Cabecera: modificar_descuento(Descuentos **d ,Descuentos_clientes **dc, int *num_desc , int *num_desc_clien)
+
+Precondición: **d y **dc inicializados y num_desc y num_desc_clien son punteros que apuntan respectivamente al número de descuentos/descuentos_clientes que hay
+
+Postcondición: ninguna
+
+##### PROCEDIMIENTO FECHA ACTUAL
+
+Cabecera: void fecha_actual(char fecha_act[11])
+
+Precondición: fecha_act una cadena de 11 caracteres
+
+Postcondición: ninguna, ya que modifica la cadena que se le pasa por parámetro
+
+##### FUNCIÓN DE CADENA A FECHA
+
+Cabecera: fecha de_string_a_fecha(char *cadena)
+
+Precondición: cadena inicializada con una fecha válida
+
+Postcondición: convierte cadena en una fecha y lo devuelve
+
+##### FUNCION COMPARAR FECHAS
+
+Cabecera: int comparar_fechas(fecha fecha1, fecha fecha2)
+Precondición: fecha1 y fecha2 inicializados
+Postcondición: devuelve => =0 - fechas iguales
+                           >0 - fechas1 mayor que fecha2
+                           <0 - fecha1 menor que fecha2
+
+##### PROCEDIMIENTO LEER CADENA
+
+Cabecera: void leer_string(char * cadena, int elem)
+
+Precondición: ninguna
+
+Postcondición: lee en cadena la cadena introducida por el usuario
+
+##### FUNCIÓN NÚMERO DE DESCUENTOS DESDE FICHERO
+
+Cabecera:int num_desc_desde_fich()
+
+Precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
+
+Postcondición:devuelve el número de líneas que tiene el fichero
+
+##### FUNCIÓN NÚMERO DE DESCUENTOS_CLIENTE DESDE FICHERO
+
+Cabecera:int num_desc_clien_desde_fich()
+
+Precondición: archivo .txt inicializado, preferiblemente hacer volcado antes de ejecutarla
+
+Postcondición:devuelve el número de líneas que tiene el fichero
+
+##### FUNCIÓN INDICE A PARTIR DE ID DE DESCUENTO
+
+
+Cabecera:int indice_con_id_descuentos(Descuentos **vector_descuentos,char*id_desc,int num_desc)
+
+Precondición: vector cliente un vector de estructura descuentos, id_desc una cadena y num_desc el número de descuentos registrados del vector
+
+Postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+
+##### FUNCIÓN INDICE A PARTIR DE ID DE DESCUENTO EN DESCUENTOS_CLIENTES
+
+
+Cabecera:int indice_con_id_descuentos_clien(Descuentos_clientes **vector_descuentos_cl,char*id_desc,int num_desc_cl)
+
+Precondición: vector cliente un vector de estructura descuentos_clientes, id_desc una cadena y num_desc el número de descuentos_clientes registrados del vector
+
+Postcondición: devuelve el valor del indice del vector de estructura cuya id coincide con el de la cadena
+
+##### PROCEDIMIENTO BORRAR DESCUENTO CON ID
+
+Cabecera: void borrar_descuento_con_id(Descuentos**vector_descuento,Descuentos_clientes**dc,char *Id_descuento, int *n_descuento,int*n_descuento_cl){
+
+Precondición: vectores a estructuras inicializadas, id de descuento válida y n_descuento y n_descuento_cl elementos de los respectivos vectores de estructuras
+
+Postcondición: borra el descuento con la id introducida
+
+
+##### PROCEDIEMIENTO LISTAR CLIENTES CON DESCUENTOS ASOCIADOS
+
+Cabecera: void lista_clientes_con_descuentos ( Descuentos *Des , Descuentos_clientes *desc_cl , int *n_desc , int *n_desc_cl )
+ 
+Precondición: vectores descuentos y descuentos clientes inicializados
+
+Postcondición: ninguna
+
+##### PROCEDIEMIENTO LISTAR CLIENTES CON DESCUENTOS ASOCIADOS UTILIZADOS
+
+Cabecera: void lista_clientes_con_descuentos_usados ( Descuentos *Des , Descuentos_clientes *desc_cl , int *n_desc , int *n_desc_cl )
+ 
+Precondición: vectores descuentos y descuentos clientes inicializados
+
+Postcondición: ninguna
+
+##### PROCEDIEMIENTO ASIGNAR CÓDIGO PROMOCIONAL A CLIENTE
+
+Cabecera: void asignar_cod_prom_cliente( Descuentos_clientes **desc_cl , int *n_desc_cl , char id_desc[11] 
+
+Precondición: vector descuentos clientes inicializado
+
+Postcondición: ninguna
+
 ## Módulo Pedidos
+
+
+##### PROCEDIMEINTO CARGAR DEVOLUCIONES
+
+ Cabecera: void carga_devoluciones( Devoluciones **dev ,int *n_dev)
+
+ Precondición: **dev por inicializar y *n_dev puntero al número de devoluciones actual
+
+ Postcondición: carga los datos en **dev
+
+##### PROCEDIMEINTO VOLCADO DEVOLUCIONES
+
+ Cabecera: void volcado_devoluciones ( Devoluciones *d, int *n_dev )
+
+ Precondición: *d inicializad, *dev puntero al número de devoluciones en el vector
+
+ Postcondición: n vuelca la información al fichero devoluciones.txt
+
+##### PROCEDIMEINTO CREAR DEVOLUCIÓN
+
+ Cabecera: void crear_devolucion( Pedido *ped, ProductoPedido *prod_ped, Devoluciones **dev, int *n_dev, int *n_pedidos, int *n_prod_ped )
+
+ Precondición: vector ped inicializado, así como prod_ped, y un doble puntero a devoluciones, el resto de punteros apuntan al tamaño de cada vector
+
+ Postcondición: crea una nueva devolución 
+
+##### PROCEDIMEINTO ELIMINAR DEVOLUCIONES
+
+ Cabecera: void eliminar_devolucion ( Devoluciones *dev , int indice_dev)
+
+ Precondición: vector dev inicializado, indice_dev contiene el indice del vector con la información a eliminar
+
+ Postcondición: elimina el indice del vcetor 
+
+##### PROCEDIMEINTO MENU DEVOLUCIONES
+
+ Cabecera: void menu_devoluciones ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_usu )
+
+ Precondición: vectores pedidos, productos pedidos y devoluciones inicializados y sus respectivos tamaños, tipo_usu en el correspondiente
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU DEVOLUCIONES DE CLIENTE 
+
+ Cabecera: void menu_devoluciones_clientes ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, char id_cliente[7], usu tipo_u)
+
+ Precondición: vectores pedidos,productos pedidos y devoluciones inicializados, y sus respectivos tamaños, tipo de usuario que sea y la id del cliente actual
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU DEVOLUCIONES DE ADMIN
+
+ Cabecera: void menu_devoluciones_admin ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped, usu tipo_u)
+
+ Precondición: pedidos, productos pedidos y devoluciones cargados en memoria, así como ss tamaños correspondientes  el tipo de usuario
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU DEVOLUCIONES DE TRANSPORTISTAS
+
+ Cabecera: void menu_devoluciones_transportistas ( Pedido *ped, ProductoPedido *prod_ped, Devoluciones *dev, int *n_dev, int *n_pedidos, int *n_prod_ped,char id_transp[5], usu tipo_u)
+
+ Precondición: vectores a estructura inicializados con sus respectivos tamaños, así como la id del transportista que accede al menu y su tipo de usuario 
+
+ Postcondición: ninguna
+ 
+##### PROCEDIMEINTO CARGAR LOCKERS
+
+ Cabecera:void carga_lockers( Locker **lock ,int *n)
+
+ Precondición: fichero lokers.txt inicializado, n número de 
+
+ Postcondición: carga en un vector de locker la información del fichero
+
+##### PROCEDIMEINTO CARGA COMPARTIMENTO LOCKER
+
+ Cabecera: void carga_compartimento_lockers( CompartimentoLocker **c_lock ,int *n_c_lock)
+
+ Precondición: fichero compartimentolockers.txt existente 
+
+ Postcondición: carga en el vector la información del fichero en el vector
+
+##### PROCEDIMEINTO VOLCADO LOCKERS
+
+ Cabecera: void volcado_lockers ( Locker *l, int *n_lock )
+
+ Precondición: vector locker inicializado, *n_lock número de lockers en el vector
+
+ Postcondición: vuelca los campos en el .txt correspondiente separados por '-'
+
+##### PROCEDIMEINTO VOLCADO COMPARTIMENTOS LOCKERS
+
+ Cabecera: void volcado_comp_lockers ( CompartimentoLocker *c_l, int *n_c_lock )
+
+ Precondición: vector compartimento locker inicializado, *n_lock número de compartimentos lockers en el vector
+
+ Postcondición: vuelca los campos en el .txt correspondiente separados por '-'
+
+##### PROCEDIMEINTO FECHA ACTUAL
+
+ Cabecera: void fecha_actual( char fecha_act[11])
+
+ Precondición: tipo fecha existente
+
+ Postcondición: modifica la cadena fecha_act
+
+##### PROCEDIMEINTO CARGAR PEDIDOS
+
+ Cabecera: void carga_pedidos( Pedido **ped ,int *n_ped)
+
+ Precondición: pedidos.txt existente
+
+ Postcondición: carga en memoria los contenidos del fichero
+
+##### PROCEDIMEINTO CARGAR PRODUCTOS PEDIDOS
+
+ Cabecera: void carga_prod_pedido( ProductoPedido **pr_ped ,int *n_pr_ped)
+
+ Precondición: fichero productospedidos.txt existente
+
+ Postcondición: carga en memoria los contenidos del fichero
+
+##### PROCEDIMEINTO VOLCADO PEDIDOS
+
+ Cabecera: void volcado_pedidos ( Pedido *p, int *n_ped )
+
+ Precondición: vector pedidos inicializado, y número de elementos
+
+ Postcondición: vuelca en el fichero los campos separados por '-'
+
+##### PROCEDIMEINTO VOLCADO PRODUCTOS PEDIDOS
+
+ Cabecera: void volcado_prod_pedidos ( ProductoPedido *pr_p, int *n_pr_ped )
+
+ Precondición: vector productos pedidos inicializado, y número de elementos
+
+ Postcondición: vuelca en el fichero los campos separados por '-'
+
+##### PROCEDIMEINTO ELIMINAR PEDIDO
+
+ Cabecera: void eliminar_pedido ( Pedido *ped, int indice_ped)
+
+ Precondición: vector pedido inicializado, índice del vector a borrar existente
+
+ Postcondición: borra la información del índice introducido
+
+##### PROCEDIMEINTO CREAR PEDIDO ADMIN
+
+ Cabecera: void crear_pedido ( Pedido **ped, int *n_ped , char usu_act[8] )
+
+ Precondición: doble puntero a estructura pedido inicializado, su número de elementos y una cadena con el id del usuario actual
+
+ Postcondición: añade al vector un nuevo pedido
+
+##### PROCEDIMEINTO MODIFICAR PEDIDO
+
+ Cabecera: void modificar_pedido ( Pedido *ped , ProductoPedido *pr_ped, int *n_ped ,int *n_pr_ped, int indice ,usu tipo_usu, char usu_act[8] )
+
+ Precondición: vectores pedidos y productos pedidos inicializados, así como sus tamaños pasados por punteros, cadena con usuario actual
+
+ Postcondición: ninguna, ya que permite modicar un pedido
+
+##### PROCEDIMEINTO RECOGER PEDIDO 
+
+ Cabecera:void recoger_pedido( Pedido *ped , ProductoPedido *prod_ped,CompartimentoLocker *c_lock, int *n_pedidos,int *n_pr_ped,int *n_c_lock, char id_cliente[8] , int opcion_pedido , usu tipo_usu )
+
+ Precondición: vectores a estructura inicializados, id cliente con la id actual
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO ASIGNAR TRANSPORTISTA A PEDIDO
+
+ Cabecera: void asignar_transportista( Pedido *ped ,ProductoPedido *prod_ped, Transportista *transp, int *n_transp,  int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] )
+
+ Precondición: vectores de estructura inicializados,sea índice_p el índice en el vector productos del producto que se le va a asignar al transportista
+
+ Postcondición: asgina un producto a un transportista para su reparto
+
+##### PROCEDIMEINTO ASIGNAR LOCKER A PEDIDO
+
+ Cabecera:void asignar_locker( Pedido *ped ,ProductoPedido *prod_ped, Locker *lock, int *n_lock, int *n_pedidos , int *n_pr_ped , usu tipo_usu , int indice_p , char prov_cliente[21] )
+
+ Precondición: vectores de estructura inicializados,sea índice_p el índice en el vector productos del producto que se le va a asignar al locker
+
+ Postcondición: asigna un producto a un locker determinado
+
+##### PROCEDIMEINTO CREAR LA SIGUIENTE ID
+
+ Cabecera: void crear_siguiente_id ( int num_digitos, char vect_dest[num_digitos] , char vect_id[num_digitos])
+
+ Precondición: vect_id una id válida sólo cifras
+
+ Postcondición: modifica vect_dest
+
+##### PROCEDIMEINTO MENU PEDIDOS PARA CLIENTES
+
+ Cabecera: void menu_pedidos_clientes(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_prod_ped, char id_cliente[8] , usu tipo_usu )
+
+ Precondición: vectores pedido y producto pedido inicializados, tipo usu válido(cliente)
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU PEDIDOS PARA ADMIN
+
+ Cabecera: void menu_pedidos_admin(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos, int *n_pr_ped , usu tipo_usu)
+
+ Precondición: vectores pedido y producto pedido inicializados, tipo usu válido(admin)
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO PEDIDOS PARA PROVEEDOR
+
+ Cabecera: void menu_pedidos_prov(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , usu tipo_usu)
+
+ Precondición:  vectores pedido y producto pedido inicializados, tipo usu válido(proveedor)
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU PEDIDOS PARA ADMIN
+
+ Cabecera: void menu_pedidos_transp(Pedido *ped , ProductoPedido *prod_ped, int *n_pedidos , int *n_pr_ped, char id_tr_act[5], usu tipo_usu)
+
+ Precondición: vectores pedido y producto pedido inicializados, tipo usu válido(administrador)
+
+ Postcondición: ninguna
+
+##### PROCEDIMEINTO MENU PRODUCTOS PEDIDOS 
+
+ Cabecera: void menu_prod_ped( Pedido *ped, ProductoPedido *pr_p, int *n_ped,int *n_pr_ped , char id_ped[8] ,char id_cliente[8],usu tipo_usu)
+
+ Precondición: vectores pedido y producto pedido inicializados, tipo usu válido
+
+ Postcondición: ninguna
+
+##### PROCEDIMIENTO MENU PRODUCTO DE CLIENTE CON PEDIDOS
+
+ Cabecera: void menu_cliente_producto_conpedido( Pedido **ped , ProductoPedido **prod_ped , int *n_ped , int *n_pr_ped , char id_cliente[8] )
+
+ Precondición: vectores pedidos y productos inicializados
+
+ Postcondición: ninguna
