@@ -105,4 +105,6 @@ void borrar_producto(int indice);
 void menu_cliente_producto_conpedido( Pedido **ped , ProductoPedido **prod_ped , int *n_ped , int *n_pr_ped , char id_cliente[8] );
 int reducir_stock(char *id,int resta);
 
+void menu_pedidos_prov(Pedido *ped , ProductoPedido **prod_ped, int *n_pedidos ,int *n_prod_ped, char id_admpr_act[5] ,usu tipo_usu);
+
 #endif

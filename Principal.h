@@ -11,12 +11,12 @@ void menu_principal_transportista ( Cliente *client , Adminprov *admp , Transpor
 
 void datos_admin_prov( Adminprov *admpr , int ind_admpr);
 void modificar_admin ( Adminprov **admpr , int ind_admpr);
-void listado_cliente ( Cliente *clt , int *n_clt );
+void listado_cliente ( Cliente **clt , int *n_clt );
 void listado_adminprov_prod( Adminprov *admpr , producto *prod , int *n_admpr , int *n_prod );
 void modificar_proveedor ( Adminprov *prov, int id_act );
 void listado_prod_ext ( Adminprov *adminprov , producto *prod , int *n_admpr , int * n_prod );
 void listado_prod ( Adminprov *admpr , int *n_prod ,int *n_admpr ,int ind_admpr , usu tipo_usu );
-void listado_proveedores ( Adminprov *admpr , int *n_admpr , usu tipo_usu);
+void listado_proveedores ( Adminprov **admpr , int *n_admpr , usu tipo_usu);
 
 void borrar_adminprov_con_id(Adminprov**,char*,int*);
 

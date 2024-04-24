@@ -105,7 +105,8 @@ void volcado_adminprov(Adminprov **a,int*n_admin){
 void nuevo_adminprov(Adminprov **a,int *n_adminprov, usu tipo_usu , int *ind_usu_act ){
 
     char Id[7],nomb[21];
-    *ind_usu_act = *n_adminprov;
+
+    if ( ind_usu_act != NULL) *ind_usu_act = *n_adminprov;
     (*n_adminprov)++;
     if((*a = (Adminprov *)realloc(*a, *n_adminprov * sizeof(Adminprov)))==NULL)
     {

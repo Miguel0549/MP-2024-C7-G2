@@ -177,7 +177,8 @@ void nuevo_cliente(Cliente **c,int *n_cliente , int *ind_usu_act){
     int indice;
 
     indice = *n_cliente;
-    *ind_usu_act = indice;
+
+    if ( ind_usu_act != NULL) *ind_usu_act = indice;
     (*n_cliente)++;
 
 
